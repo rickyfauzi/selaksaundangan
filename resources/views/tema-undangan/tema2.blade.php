@@ -1694,68 +1694,58 @@
             </section>
         @endif
 
-        @if (
-            $ceritacinta &&
-                ($ceritacinta->judulsatu_cerita ||
-                    $ceritacinta->juduldua_cerita ||
-                    $ceritacinta->judultiga_cerita ||
-                    $ceritacinta->judulempat_cerita))
-            <section class="section love-story-section section-bg-light py-5" id="love-story">
+        @if ($ceritacinta && ($ceritacinta->judulcerita1 || $ceritacinta->judulcerita2 || $ceritacinta->judulcerita3))
+            <section class="section love-story-section py-5" id="love-story" style="background-color: #f9f9f9;">
                 <div class="container">
-                    <h2 class="section-title-custom text-center" data-aos="fade-down">Kisah Cinta Kami</h2>
+                    <h2 class="section-title-custom text-center mb-5" data-aos="fade-down">Kisah Cinta Kami</h2>
                     <div class="timeline-container">
-                        @if ($ceritacinta->judulsatu_cerita)
-                            <div class="story-card" data-aos="fade-right" data-aos-delay="100">
-                                <div class="story-icon"><i class="fas fa-heartbeat"></i></div>
-                                @if ($ceritacinta->tanggalsatu_cerita)
-                                    <p class="story-date">
-                                        {{ \Carbon\Carbon::parse($ceritacinta->tanggalsatu_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
-                                    </p>
-                                @endif
-                                <h3 class="story-title">{{ $ceritacinta->judulsatu_cerita }}</h3>
-                                <p class="story-description">{{ $ceritacinta->deskripsisatu_cerita }}</p>
+
+                        @if ($ceritacinta->judulcerita1)
+                            <div class="row align-items-center mb-5" data-aos="fade-right" data-aos-delay="100">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover1) }}"
+                                        alt="Cerita Cinta 1" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita1 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita1 }}</p>
+                                </div>
                             </div>
                         @endif
-                        @if ($ceritacinta->juduldua_cerita)
-                            <div class="story-card" data-aos="fade-right" data-aos-delay="200">
-                                <div class="story-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                                @if ($ceritacinta->tanggaldua_cerita)
-                                    <p class="story-date">
-                                        {{ \Carbon\Carbon::parse($ceritacinta->tanggaldua_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
-                                    </p>
-                                @endif
-                                <h3 class="story-title">{{ $ceritacinta->juduldua_cerita }}</h3>
-                                <p class="story-description">{{ $ceritacinta->deskripsidua_cerita }}</p>
+
+                        @if ($ceritacinta->judulcerita2)
+                            <div class="row align-items-center mb-5 flex-md-row-reverse" data-aos="fade-left"
+                                data-aos-delay="200">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover2) }}"
+                                        alt="Cerita Cinta 2" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita2 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita2 }}</p>
+                                </div>
                             </div>
                         @endif
-                        @if ($ceritacinta->judultiga_cerita)
-                            <div class="story-card" data-aos="fade-right" data-aos-delay="300">
-                                <div class="story-icon"><i class="fas fa-ring"></i></div>
-                                @if ($ceritacinta->tanggaltiga_cerita)
-                                    <p class="story-date">
-                                        {{ \Carbon\Carbon::parse($ceritacinta->tanggaltiga_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
-                                    </p>
-                                @endif
-                                <h3 class="story-title">{{ $ceritacinta->judultiga_cerita }}</h3>
-                                <p class="story-description">{{ $ceritacinta->deskripsitiga_cerita }}</p>
+
+                        @if ($ceritacinta->judulcerita3)
+                            <div class="row align-items-center mb-5" data-aos="fade-right" data-aos-delay="300">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover3) }}"
+                                        alt="Cerita Cinta 3" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita3 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita3 }}</p>
+                                </div>
                             </div>
                         @endif
-                        @if ($ceritacinta->judulempat_cerita)
-                            <div class="story-card" data-aos="fade-right" data-aos-delay="400">
-                                <div class="story-icon"><i class="fas fa-dove"></i></div>
-                                @if ($ceritacinta->tanggalempat_cerita)
-                                    <p class="story-date">
-                                        {{ \Carbon\Carbon::parse($ceritacinta->tanggalempat_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
-                                    </p>
-                                @endif
-                                <h3 class="story-title">{{ $ceritacinta->judulempat_cerita }}</h3>
-                                <p class="story-description">{{ $ceritacinta->deskripsiempat_cerita }}</p>
-                            </div>
-                        @endif
+
                     </div>
                 </div>
             </section>
         @endif
+
+
 
         <section class="section event-details section-bg-dark py-5" id="akad">
             <div class="background-element-container element-akad-bg">
@@ -2127,12 +2117,7 @@
     <nav class="bottom-nav">
         <a href="#home" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="#akad" class="nav-item"><i class="fas fa-calendar-check"></i><span>Acara</span></a>
-        @if (
-            $ceritacinta &&
-                ($ceritacinta->judulsatu_cerita ||
-                    $ceritacinta->juduldua_cerita ||
-                    $ceritacinta->judultiga_cerita ||
-                    $ceritacinta->judulempat_cerita))
+        @if ($ceritacinta && ($ceritacinta->judulcerita1 || $ceritacinta->judulcerita2 || $ceritacinta->judulcerita3))
             <a href="#love-story" class="nav-item"><i class="fas fa-heart"></i><span>Kisah</span></a>
         @endif
         @if (isset($galeri) && $galeri->count() > 0)<a href="#gallery" class="nav-item"><i
