@@ -21,14 +21,14 @@
                     <div class="auth-logo">
                         <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo"></a>
                     </div>
-                    <h1 class="auth-title">Log in.</h1>
+                    <h1 class="auth-title">Log in cuy.</h1>
                     <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
 
                     <form id="formAuthentication" class="mb-3" method="POST" action="{{ route('login') }}">
                         @csrf
                         @if ($errors->has('email'))
                             <div class="alert alert" style="background-color: #fee7e7">
-                               <p style="color: black; opacity: 1;">{{$errors->first('email')}}</p>
+                                <p style="color: black; opacity: 1;">{{ $errors->first('email') }}</p>
                             </div>
                         @endif
 
