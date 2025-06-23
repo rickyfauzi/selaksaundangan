@@ -1807,7 +1807,7 @@
                                 data-aos-delay="{{ ($loop->index % 6) * 50 }}" data-bs-toggle="modal"
                                 data-bs-target="#galleryModal"
                                 data-img-src="{{ asset('images/galeri/' . $item->image) }}">
-                                <img src="{{ asset('images/gallery/' . $item->image) }}"
+                                <img src="{{ asset('images/galeri/' . $item->image) }}"
                                     alt="Wedding Gallery Image {{ $loop->iteration }}" class="img-fluid">
                             </div>
                         @endforeach
