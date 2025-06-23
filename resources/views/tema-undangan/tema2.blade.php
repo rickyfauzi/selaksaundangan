@@ -771,62 +771,68 @@
         }
 
         /* --- OTHER SECTIONS --- */
-        .love-story-section .timeline-container {
-            position: relative;
-            margin-top: 30px;
-        }
-
-        .love-story-section .story-card {
-            background-color: #fff;
-            border: 1px solid #e0e0e0;
-            border-left: 5px solid var(--primary-color);
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
-            position: relative;
-            transition: transform .3s ease, box-shadow .3s ease;
-        }
-
-        .love-story-section .story-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
+        .love-story-section .story-card,
         .love-story-section .story-icon {
-            background-color: var(--primary-color);
-            color: var(--text-on-dark);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            display: none;
         }
 
-        .love-story-section .story-date {
-            font-size: .85rem;
-            color: var(--accent-color-1);
-            margin-bottom: 5px;
-            font-weight: 500;
+        /* Style baru yang diadaptasi dari Tema 1/7 */
+        .love-story-section {
+            background-color: var(--app-bg-soft);
+            /* Warna latar dari Tema 2 agar konsisten */
+        }
+
+        .love-story-section .story-item {
+            margin-bottom: 3.5rem;
+            /* Memberi jarak antar cerita */
+            align-items: center;
+            /* Membuat gambar dan teks sejajar di tengah */
+        }
+
+        .love-story-section .story-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            /* Sudut sedikit melengkung */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            /* Bayangan lembut */
+        }
+
+        .love-story-section .story-item .text-content {
+            padding: 0 1rem;
         }
 
         .love-story-section .story-title {
             font-family: var(--font-serif-display);
-            font-size: 1.4rem;
+            /* Menggunakan font dari Tema 2 */
+            font-size: 1rem;
             color: var(--accent-color-1);
-            margin-bottom: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .love-story-section .story-date {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 1rem;
+            font-style: italic;
         }
 
         .love-story-section .story-description {
-            font-size: .9rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
+            line-height: 1.7;
             color: var(--text-on-light);
+        }
+
+        /* Penyesuaian untuk layar kecil */
+        @media (max-width: 767px) {
+            .love-story-section .story-item {
+                text-align: center;
+            }
+
+            .love-story-section .story-item .text-content {
+                margin-top: 1.5rem;
+            }
         }
 
         .btn-custom-primary {
@@ -1694,48 +1700,87 @@
             </section>
         @endif
 
-        @if ($ceritacinta && ($ceritacinta->judulcerita1 || $ceritacinta->judulcerita2 || $ceritacinta->judulcerita3))
-            <section class="section love-story-section py-5" id="love-story" style="background-color: #f9f9f9;">
-                <div class="container">
-                    <h2 class="section-title-custom text-center mb-5" data-aos="fade-down">Kisah Cinta Kami</h2>
-                    <div class="timeline-container">
 
-                        @if ($ceritacinta->judulcerita1)
-                            <div class="row align-items-center mb-5" data-aos="fade-right" data-aos-delay="100">
+
+        @if (
+            $ceritacinta &&
+                ($ceritacinta->judulsatu_cerita ||
+                    $ceritacinta->juduldua_cerita ||
+                    $ceritacinta->judultiga_cerita ||
+                    $ceritacinta->judulempat_cerita))
+            <section class="section love-story-section py-5" id="love-story">
+                <div class="container">
+                    <h2 class="section-title-custom text-center" data-aos="fade-down">Kisah Cinta Kami</h2>
+                    <div class="timeline-container mt-5">
+
+                        @if ($ceritacinta->judulsatu_cerita && $ceritacinta->cover1)
+                            <div class="row story-item" data-aos="fade-right">
                                 <div class="col-md-6">
                                     <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover1) }}"
-                                        alt="Cerita Cinta 1" class="img-fluid rounded shadow">
+                                        alt="Kisah Pertama">
                                 </div>
-                                <div class="col-md-6 mt-3 mt-md-0">
-                                    <h3 class="story-title">{{ $ceritacinta->judulcerita1 }}</h3>
-                                    <p class="story-description">{{ $ceritacinta->cerita1 }}</p>
+                                <div class="col-md-6 text-content">
+                                    @if ($ceritacinta->tanggalsatu_cerita)
+                                        <p class="story-date">
+                                            {{ \Carbon\Carbon::parse($ceritacinta->tanggalsatu_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
+                                        </p>
+                                    @endif
+                                    <h3 class="story-title">{{ $ceritacinta->judulsatu_cerita }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->deskripsisatu_cerita }}</p>
                                 </div>
                             </div>
                         @endif
 
-                        @if ($ceritacinta->judulcerita2)
-                            <div class="row align-items-center mb-5 flex-md-row-reverse" data-aos="fade-left"
-                                data-aos-delay="200">
+                        @if ($ceritacinta->juduldua_cerita && $ceritacinta->cover2)
+                            <div class="row story-item flex-md-row-reverse" data-aos="fade-left">
                                 <div class="col-md-6">
                                     <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover2) }}"
-                                        alt="Cerita Cinta 2" class="img-fluid rounded shadow">
+                                        alt="Kisah Kedua">
                                 </div>
-                                <div class="col-md-6 mt-3 mt-md-0">
-                                    <h3 class="story-title">{{ $ceritacinta->judulcerita2 }}</h3>
-                                    <p class="story-description">{{ $ceritacinta->cerita2 }}</p>
+                                <div class="col-md-6 text-content">
+                                    @if ($ceritacinta->tanggaldua_cerita)
+                                        <p class="story-date">
+                                            {{ \Carbon\Carbon::parse($ceritacinta->tanggaldua_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
+                                        </p>
+                                    @endif
+                                    <h3 class="story-title">{{ $ceritacinta->juduldua_cerita }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->deskripsidua_cerita }}</p>
                                 </div>
                             </div>
                         @endif
 
-                        @if ($ceritacinta->judulcerita3)
-                            <div class="row align-items-center mb-5" data-aos="fade-right" data-aos-delay="300">
+                        @if ($ceritacinta->judultiga_cerita && $ceritacinta->cover3)
+                            <div class="row story-item" data-aos="fade-right">
                                 <div class="col-md-6">
                                     <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover3) }}"
-                                        alt="Cerita Cinta 3" class="img-fluid rounded shadow">
+                                        alt="Kisah Ketiga">
                                 </div>
-                                <div class="col-md-6 mt-3 mt-md-0">
-                                    <h3 class="story-title">{{ $ceritacinta->judulcerita3 }}</h3>
-                                    <p class="story-description">{{ $ceritacinta->cerita3 }}</p>
+                                <div class="col-md-6 text-content">
+                                    @if ($ceritacinta->tanggaltiga_cerita)
+                                        <p class="story-date">
+                                            {{ \Carbon\Carbon::parse($ceritacinta->tanggaltiga_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
+                                        </p>
+                                    @endif
+                                    <h3 class="story-title">{{ $ceritacinta->judultiga_cerita }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->deskripsitiga_cerita }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($ceritacinta->judulempat_cerita && $ceritacinta->cover4)
+                            <div class="row story-item flex-md-row-reverse" data-aos="fade-left">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover4) }}"
+                                        alt="Kisah Keempat">
+                                </div>
+                                <div class="col-md-6 text-content">
+                                    @if ($ceritacinta->tanggalempat_cerita)
+                                        <p class="story-date">
+                                            {{ \Carbon\Carbon::parse($ceritacinta->tanggalempat_cerita)->locale('id')->isoFormat('DD MMMM YYYY') }}
+                                        </p>
+                                    @endif
+                                    <h3 class="story-title">{{ $ceritacinta->judulempat_cerita }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->deskripsiempat_cerita }}</p>
                                 </div>
                             </div>
                         @endif
@@ -1744,7 +1789,6 @@
                 </div>
             </section>
         @endif
-
 
 
         <section class="section event-details section-bg-dark py-5" id="akad">
