@@ -77,9 +77,9 @@
                                                         <div class="card-body">
                                                             <div class="kirimtamu">
                                                                 {{-- Blade akan mencetak URL dasar yang benar di sini --}}
-                                                                <a href="selaksadigital.com/wedding/{{ $order ? $order->domain : '' }}?to="
+                                                                <a href="https://blanchedalmond-elk-754408.hostingersite.com/wedding/{{ $order ? $order->domain : '' }}?to="
                                                                     target="_BLANK" id="tautan" style="font-weight: 700">
-                                                                    selaksadigital.com/wedding/{{ $order ? $order->domain : '' }}?to=
+                                                                    https://blanchedalmond-elk-754408.hostingersite.com/wedding/{{ $order ? $order->domain : '' }}?to=
                                                                 </a>
                                                             </div>
                                                             <label for="judulcerita1"
@@ -448,7 +448,8 @@
             showTamu()
             $('#namatamu').on('input', function() {
                 // 1. Ambil URL dasar yang sudah benar dari Blade
-                const baseUrl = 'selaksadigital.com/wedding/{{ $order ? $order->domain : '' }}?to=';
+                const baseUrl =
+                    'https://blanchedalmond-elk-754408.hostingersite.com/wedding/{{ $order ? $order->domain : '' }}?to=';
 
                 // 2. Ambil nama tamu dari input dan pastikan aman untuk URL
                 const guestName = encodeURIComponent($(this).val());
@@ -678,7 +679,7 @@
                 .replace(/{nama_group}/g, group)
                 .replace(/{kode_tamu}/g, kodetamu)
                 .replace(/{link_undangan}/g,
-                    'selaksadigital.com/wedding/{{ $order ? $order->domain : '' }}' +
+                    'https://blanchedalmond-elk-754408.hostingersite.com/wedding/{{ $order ? $order->domain : '' }}' +
                     nama);
 
             const convertedValue = pesanLinkUndangan.replace(/\\n/g, '\n\n');
@@ -700,7 +701,8 @@
 
             // 3. Buat link undangan yang benar dan dinamis
             //    Ini adalah bagian utama yang diperbaiki
-            const linkUndangan = 'selaksadigital.com/wedding/{{ $order ? $order->domain : '' }}?to=' +
+            const linkUndangan =
+                'https://blanchedalmond-elk-754408.hostingersite.com/wedding/{{ $order ? $order->domain : '' }}?to=' +
                 encodeURIComponent(nama);
 
             // 4. Ganti semua variabel di dalam template
