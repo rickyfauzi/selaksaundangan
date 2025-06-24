@@ -2112,16 +2112,14 @@
         </div>
     </footer>
 
-    @if ($musik && $musik->musikMaster && $musik->musikMaster->musik)
-        <div class="music-button-container">
-            <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
-            <audio id="musicPlayer">
-                <source
-                    src="{{ isset($musik) && isset($musik->musikMaster) ? asset('musik/' . $musik->musikMaster->musik) : '/tema2/music/sepatu.mp3' }}"
-                    type="audio/mpeg">
-            </audio>
-        </div>
-    @endif
+    <div class="music-button-container">
+        <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
+        <audio id="musicPlayer">
+            <source
+                src="{{ isset($musik) && isset($musik->musikMaster) ? asset('musik/' . $musik->musikMaster->musik) : '/tema2/music/sepatu.mp3' }}"
+                type="audio/mpeg">
+        </audio>
+    </div>
 
 
 
