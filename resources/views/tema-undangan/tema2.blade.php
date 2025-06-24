@@ -2116,8 +2116,9 @@
         <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
         <audio id="musicPlayer">
             <source
-                src="{{ isset($musik) && isset($musik->musikMaster) ? asset('musik/' . $musik->musikMaster->musik) : '/tema2/music/sepatu.mp3' }}"
-                type="audio/mpeg">
+                src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '') : '' }}"
+                type="audio/mpeg" />
+            Your browser does not support the audio element.
         </audio>
     </div>
 
