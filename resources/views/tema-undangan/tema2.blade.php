@@ -2536,7 +2536,7 @@
                 const description =
                     "Jangan lupa datang ke acara pernikahan kami! {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}.";
                 const icsContent =
-                    `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SelaksaDigital//WeddingInvitation//EN\nBEGIN:VEVENT\nUID:${new Date().getTime()}@https://blanchedalmond-elk-754408.hostingersite.com/wedding\nDTSTAMP:${new Date().toISOString().replace(/-|:|\.\d{3}/g, '')}\nDTSTART:${startTime}\nDTEND:${endTime}\nSUMMARY:${eventName}\nDESCRIPTION:${description}\nLOCATION:${location}\nEND:VEVENT\nEND:VCALENDAR`;
+                    `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SelaksaDigital//WeddingInvitation//EN\nBEGIN:VEVENT\nUID:${new Date().getTime()}@selaksadigital.com\nDTSTAMP:${new Date().toISOString().replace(/-|:|\.\d{3}/g, '')}\nDTSTART:${startTime}\nDTEND:${endTime}\nSUMMARY:${eventName}\nDESCRIPTION:${description}\nLOCATION:${location}\nEND:VEVENT\nEND:VCALENDAR`;
                 const blob = new Blob([icsContent], {
                     type: 'text/calendar;charset=utf-8'
                 });
