@@ -2115,12 +2115,13 @@
     @if ($musik && $musik->musikMaster && $musik->musikMaster->musik)
         <div class="music-button-container">
             <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
-            <audio id="music-audio" loop preload="auto">
-                <source src="{{ asset('musik/' . $musik->musikMaster->musik) }}" type="audio/mpeg" />
-                Your browser does not support the audio element.
+            <audio id="musicPlayer" class="d-none"
+                src="{{ isset($musik) && isset($musik->musikMaster) ? asset('musik/' . $musik->musikMaster->musik) : '/tema1/music/sample-music.mp3' }}">
             </audio>
         </div>
     @endif
+
+
 
     <nav class="bottom-nav">
         <a href="#home" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
