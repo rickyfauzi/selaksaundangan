@@ -1702,7 +1702,56 @@
 
 
 
+        @if ($ceritacinta && ($ceritacinta->judulcerita1 || $ceritacinta->judulcerita2 || $ceritacinta->judulcerita3))
+            <section class="section love-story-section py-5" id="love-story" style="background-color: #f9f9f9;">
+                <div class="container">
+                    <h2 class="section-title-custom text-center" data-aos="fade-down">Kisah Cinta Kami</h2>
+                    <div class="timeline-container mt-5">
 
+                        @if ($ceritacinta->judulcerita1 && $ceritacinta->cover1)
+                            <div class="row story-item align-items-center mb-5" data-aos="fade-right">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover1) }}"
+                                        alt="Cerita Cinta 1" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita1 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita1 }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($ceritacinta->judulcerita2 && $ceritacinta->cover2)
+                            <div class="row story-item align-items-center mb-5 flex-md-row-reverse"
+                                data-aos="fade-left">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover2) }}"
+                                        alt="Cerita Cinta 2" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita2 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita2 }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($ceritacinta->judulcerita3 && $ceritacinta->cover3)
+                            <div class="row story-item align-items-center mb-5" data-aos="fade-right">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover3) }}"
+                                        alt="Cerita Cinta 3" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita3 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita3 }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                    </div>
+                </div>
+            </section>
+        @endif
 
 
 
@@ -1746,6 +1795,24 @@
             </div>
         </section>
 
+        @if (isset($galeri) && $galeri->count() > 0)
+            <section class="section gallery-section section-bg-light py-5" id="gallery">
+                <div class="container">
+                    <h2 class="section-title-custom text-center" data-aos="fade-down">Gallery</h2>
+                    <div class="gallery-container">
+                        @foreach ($galeri as $item)
+                            <div class="gallery-item" data-aos="zoom-in"
+                                data-aos-delay="{{ ($loop->index % 6) * 50 }}" data-bs-toggle="modal"
+                                data-bs-target="#galleryModal"
+                                data-img-src="{{ asset('images/galeri/' . $item->foto) }}">
+                                <img src="{{ asset('images/galeri/' . $item->foto) }}"
+                                    alt="Wedding Gallery Image {{ $loop->iteration }}" class="img-fluid">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+        @endif
 
         @if ($prewed && $prewed->vidio)
             <section class="section video-section section-bg-light py-5" id="video">
