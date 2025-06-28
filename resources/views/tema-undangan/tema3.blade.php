@@ -2142,7 +2142,7 @@
         </div>
     </footer>
 
-    <div class="music-button-container">
+    {{-- <div class="music-button-container">
         <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
         <audio controls autoplay class="d-none" id="music-audio">
             <source
@@ -2150,7 +2150,7 @@
                 type="audio/mpeg" />
             Your browser does not support the audio element.
         </audio>
-    </div>
+    </div> --}}
 
 
 
@@ -2182,11 +2182,21 @@
         </div>
     </div>
 
+    <section style="position: fixed; bottom: 0; left: 0; z-index: 9999;" class="music-outer" data-aos="fade-up"
+        data-aos-duration="1000" data-aos-delay="300">
+        <!-- <div class="music-box auto" id="music-box"></div> -->
+        <img class="music-box" src="/tema5/img/musicPlayer.png" alt="">
+    </section>
+    <audio id="musicPlayer" class="d-none"
+        src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema5/music/sample-music.mp3') : '/tema5/music/sample-music.mp3' }}">
+    </audio>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/assets/vendors/jquery-toast-plugin-master/src/jquery.toast.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="/tema3/js/index.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -2199,70 +2209,9 @@
 
             const openButton = $('#open-invitation');
             const coverContainer = $('#cover-container');
-            const audio = $('#music-audio')[0];
-            const musicToggleButton = $('#music-toggle-button');
 
-            function playAudio() {
-                if (audio && audio.paused) {
-                    // Cek dulu apakah src ada
-                    if (!audio.src || audio.src === '') {
-                        console.error("Music source is empty");
-                        return;
-                    }
 
-                    // Coba play dengan promise
-                    audio.play().then(() => {
-                        if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-music')
-                            .addClass('fa-pause');
-                    }).catch(error => {
-                        console.warn("Autoplay prevented:", error);
-                        // Tampilkan pesan ke user bahwa mereka perlu interaksi
-                        $.toast({
-                            heading: 'Info',
-                            text: 'Klik tombol musik untuk memulai audio',
-                            position: 'top-right',
-                            loaderBg: 'var(--warning-color)',
-                            icon: 'info',
-                            hideAfter: 3000
-                        });
 
-                        if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-pause')
-                            .addClass('fa-music');
-                    });
-                }
-            }
-
-            if (openButton.length && coverContainer.length) {
-                openButton.on('click', function() {
-                    playAudio();
-                    coverContainer.css('top', '-100vh');
-                    setTimeout(() => {
-                        coverContainer.hide();
-                        $('body').css('overflow-y', 'auto');
-                        AOS.refresh();
-                        $(window).trigger('scroll');
-                    }, 1000);
-                });
-            }
-
-            if (musicToggleButton.length && audio) {
-                musicToggleButton.on('click', () => {
-                    if (audio.paused) {
-                        playAudio();
-                    } else {
-                        audio.pause();
-                        musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
-                    }
-                });
-                $(audio).on('pause ended', function() {
-                    if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-pause')
-                        .addClass('fa-music');
-                });
-                $(audio).on('play playing', function() {
-                    if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-music')
-                        .addClass('fa-pause');
-                });
-            }
 
             const targetDateString = $('#ori_tanggal_acara').val();
             if (targetDateString) {
