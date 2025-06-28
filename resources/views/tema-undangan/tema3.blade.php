@@ -1471,39 +1471,48 @@
             color: var(--primary-color);
         }
 
-        .music-button-container {
-            position: fixed;
-            bottom: 80px;
-            right: 15px;
-            z-index: 1001;
+        .music-outer {
+            right: 20px;
+            /* Posisi dari kanan */
+            left: auto;
+            /* Menonaktifkan posisi left */
+            bottom: 20px;
+            /* Jarak dari bawah */
+            width: auto;
+            /* Lebar menyesuaikan konten */
         }
 
-        .music-button {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            font-size: 1.2em;
+        .music-box {
+            width: 50px;
+            /* Ukuran kecil */
+            height: 50px;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color .3s ease, transform .3s ease;
+            transition: transform 0.3s ease;
         }
 
-        .music-button:hover {
-            background-color: var(--primary-color);
+        .music-box:hover {
+            transform: scale(1.1);
+            /* Efek membesar saat hover */
         }
 
-        .music-button.playing i::before {
-            content: "\f04c";
+        /* Optional: tambahkan animasi untuk membuat lebih menarik */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
-        .music-button i::before {
-            content: "\f001";
+        .music-box.playing {
+            animation: pulse 1.5s infinite;
+            /* Animasi saat musik diputar */
         }
 
         .bottom-nav {
