@@ -2205,7 +2205,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="/tema3/js/index.js"></script>
+    {{-- <script src="/tema3/js/index.js"></script> --}}
 
     <script>
         $(document).ready(function() {
@@ -2497,16 +2497,16 @@
                         '<span class="attendance-badge attendance-hadir">Hadir</span>' :
                         (item.attendance === 'tidak-hadir' ?
                             '<span class="attendance-badge attendance-tidak-hadir">Tidak Hadir</span>' : ''
-                            );
+                        );
 
                     let formattedDate = item.created_at ? new Date(item.created_at).toLocaleString(
-                    'id-ID', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    }) : '';
+                        'id-ID', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) : '';
 
                     commentListContainer.append(
                         `<div class="comment-item-layout"><div class="row"><div class="col comment-details-col"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div></div></div>`
@@ -2621,7 +2621,7 @@
                         $('#kirim-ucapan').prop('disabled', true)
                             .html(
                                 '<span class="spinner-border spinner-border-sm"></span> Mengirim...'
-                                );
+                            );
                     },
                     success: function(response) {
                         if (response.code === 1) {
