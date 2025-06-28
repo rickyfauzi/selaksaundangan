@@ -68,10 +68,10 @@
         }
 
         :root {
-            --primary-color: #2973B2;
+            --primary-color: #2D336B;
             --accent-color-1: #5d534a;
-            --app-bg-light: #F2EFE7;
-            --app-bg-soft: #fdfaf7;
+            --app-bg-light: #FFF2F2;
+            --app-bg-soft: #ffffff;
             --text-on-dark: #ffffff;
             --text-on-light: #495057;
             --text-on-primary: #ffffff;
@@ -84,10 +84,10 @@
             --cover-gradient-start: #f8f0f2;
             --cover-gradient-end: #e9dce0;
             --cover-text-color: #5d534a;
-            --cover-names-color: #7c4b57;
-            --cover-button-bg: #7c4b57;
+            --cover-names-color: #2D336B;
+            --cover-button-bg: #2D336B;
             --cover-button-text: #ffffff;
-            --cover-button-hover-bg: #6b3a46;
+            --cover-button-hover-bg: #1a1f4d;
         }
 
         /* --- FONT FACES (from template - adjust paths if hosting locally) --- */
@@ -96,13 +96,13 @@
         @font-face {
             font-family: 'OCRAStd';
             /*
-              src: url('{{ asset('fonts/OCRAStd.eot') }}');
-              src: url('{{ asset('fonts/OCRAStd.eot?#iefix') }}') format('embedded-opentype'),
-                   url('{{ asset('fonts/OCRAStd.woff2') }}') format('woff2'),
-                   url('{{ asset('fonts/OCRAStd.woff') }}') format('woff'),
-                   url('{{ asset('fonts/OCRAStd.ttf') }}') format('truetype'),
-                   url('{{ asset('fonts/OCRAStd.svg#OCRAStd') }}') format('svg');
-              */
+      src: url('{{ asset('fonts/OCRAStd.eot') }}');
+      src: url('{{ asset('fonts/OCRAStd.eot?#iefix') }}') format('embedded-opentype'),
+           url('{{ asset('fonts/OCRAStd.woff2') }}') format('woff2'),
+           url('{{ asset('fonts/OCRAStd.woff') }}') format('woff'),
+           url('{{ asset('fonts/OCRAStd.ttf') }}') format('truetype'),
+           url('{{ asset('fonts/OCRAStd.svg#OCRAStd') }}') format('svg');
+      */
             src: local('Courier New'), local('Courier'), monospace;
             /* Fallback */
             font-weight: normal;
@@ -355,7 +355,6 @@
             font-size: 0.95rem;
             line-height: 1.7;
         }
-
 
 
         /* --- HEADER SECTION (Home) --- */
