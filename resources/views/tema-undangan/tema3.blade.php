@@ -310,7 +310,7 @@
         }
 
         .section-bg-dark {
-            background-color: var(--accent-color-1);
+            background-color: var(--primary-color);
             color: var(--text-on-dark);
         }
 
@@ -652,7 +652,7 @@
         }
 
         .quran-verse .verse-box.semi-transparent-card {
-            background-color: rgba(132, 118, 101, 0.85);
+            background-color: var(--primary-color);
         }
 
         .quran-verse .verse-box {
