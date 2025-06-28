@@ -1732,56 +1732,57 @@
 
 
 
-        @if ($ceritacinta)
-            <div class="section-6 row text-center animated">
-                <div class="padder my-5"></div>
-                <div class="col 12">
-                    <h3 class="os-text section-title mb-5">Our Story</h3>
-                    @if ($ceritacinta->cover1)
-                        <div class="row animated" anim="slide-left">
-                            <div class="col-6" style="height: 300px">
-                                <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover1) }}" alt=""
-                                    class="img-os" style="width: 100%" />
+        @if ($ceritacinta && ($ceritacinta->judulcerita1 || $ceritacinta->judulcerita2 || $ceritacinta->judulcerita3))
+            <section class="section love-story-section py-5" id="love-story" style="background-color: #f9f9f9;">
+                <div class="container">
+                    <h2 class="section-title-custom text-center" data-aos="fade-down">Kisah Cinta Kami</h2>
+                    <div class="timeline-container mt-5">
+
+                        @if ($ceritacinta->judulcerita1 && $ceritacinta->cover1)
+                            <div class="row story-item align-items-center mb-5" data-aos="fade-right">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover1) }}"
+                                        alt="Cerita Cinta 1" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita1 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita1 }}</p>
+                                </div>
                             </div>
-                            <div class="col-6 text-start">
-                                <h5 class="o-text">
-                                    {{ $ceritacinta ? ($ceritacinta->judulcerita1 ? $ceritacinta->judulcerita1 : '') : '' }}
-                                </h5>
-                                <p class="story-description">{{ $ceritacinta->cerita1 }}</p>
+                        @endif
+
+                        @if ($ceritacinta->judulcerita2 && $ceritacinta->cover2)
+                            <div class="row story-item align-items-center mb-5 flex-md-row-reverse"
+                                data-aos="fade-left">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover2) }}"
+                                        alt="Cerita Cinta 2" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita2 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita2 }}</p>
+                                </div>
                             </div>
-                        </div>
-                    @endif
-                    @if ($ceritacinta->cover2)
-                        <div class="row animated" anim="slide-right">
-                            <div class="col-6" style="height: 300px">
-                                <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover2) }}" alt=""
-                                    style="width: 100%" class="img-os" />
+                        @endif
+
+                        @if ($ceritacinta->judulcerita3 && $ceritacinta->cover3)
+                            <div class="row story-item align-items-center mb-5" data-aos="fade-right">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover3) }}"
+                                        alt="Cerita Cinta 3" class="img-fluid rounded shadow">
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <h3 class="story-title">{{ $ceritacinta->judulcerita3 }}</h3>
+                                    <p class="story-description">{{ $ceritacinta->cerita3 }}</p>
+                                </div>
                             </div>
-                            <div class="col-6 text-start">
-                                <h5 class="o-text">
-                                    {{ $ceritacinta ? ($ceritacinta->judulcerita2 ? $ceritacinta->judulcerita2 : '') : '' }}
-                                </h5>
-                                <p class="story-description">{{ $ceritacinta->cerita2 }}</p>
-                            </div>
-                        </div>
-                    @endif
-                    @if ($ceritacinta->cover3)
-                        <div class="row animated" anim="slide-right">
-                            <div class="col-6" style="height: 300px">
-                                <img src="{{ asset('images/ceritacinta/' . $ceritacinta->cover3) }}" alt=""
-                                    style="width: 100%" class="img-os" />
-                            </div>
-                            <div class="col-6 text-start">
-                                <h5 class="o-text">
-                                    {{ $ceritacinta ? ($ceritacinta->judulcerita3 ? $ceritacinta->judulcerita3 : '') : '' }}
-                                </h5>
-                                <p class="story-description">{{ $ceritacinta->cerita3 }}</p>
-                            </div>
-                        </div>
-                    @endif
+                        @endif
+
+                    </div>
                 </div>
-            </div>
+            </section>
         @endif
+
 
 
         <section class="section event-details section-bg-dark py-5" id="akad">
@@ -2181,6 +2182,14 @@
         </div>
     </div>
 
+    {{-- <section style="position: fixed; bottom: 0; left: 0; z-index: 9999;" class="music-outer" data-aos="fade-up"
+        data-aos-duration="1000" data-aos-delay="300">
+        <!-- <div class="music-box auto" id="music-box"></div> -->
+        <img class="music-box" src="/tema5/img/musicPlayer.png" alt="">
+    </section>
+    <audio id="musicPlayer" class="d-none"
+        src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema5/music/sample-music.mp3') : '/tema5/music/sample-music.mp3' }}">
+    </audio> --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/assets/vendors/jquery-toast-plugin-master/src/jquery.toast.js"></script>
