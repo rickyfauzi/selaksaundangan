@@ -63,7 +63,7 @@
     <link rel="stylesheet" href="/assets/vendors/jquery-toast-plugin-master/src/jquery.toast.css" />
     <style>
         html {
-            font-size: 90%;
+            font-size: 75%;
             /* Global font size adjustment */
         }
 
