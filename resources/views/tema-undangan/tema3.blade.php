@@ -414,20 +414,20 @@
 
         .ornament-top-left {
             top: 15px;
-            left: 15px;
-            width: 150px;
-            height: 150px;
+            left: 5px;
+            width: 250px;
+            height: 250px;
             background-image: url("{{ asset('tema3/img/left.png') }}");
             animation: float-subtle 6s ease-in-out infinite;
         }
 
         .ornament-bottom-right {
             bottom: 15px;
-            right: 15px;
-            width: 150px;
-            height: 150px;
+            right: 5px;
+            width: 250px;
+            height: 250px;
             background-image: url("{{ asset('tema3/img/right.png') }}");
-            transform: rotate(180deg);
+            /* transform: rotate(180deg); */
             animation: float-subtle-rotated 6s ease-in-out infinite .5s;
         }
 
