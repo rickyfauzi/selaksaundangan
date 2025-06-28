@@ -349,7 +349,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             margin: 1.5rem auto;
             text-align: center;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             font-size: 0.95rem;
             line-height: 1.7;
         }
@@ -413,7 +413,7 @@
         }
 
         .ornament-top-left {
-            top: 15px;
+            top: 5px;
             left: 0;
             width: 250px;
             height: 250px;
@@ -422,12 +422,12 @@
         }
 
         .ornament-bottom-right {
-            bottom: 15px;
+            top: 5px;
             right: 0px;
             width: 250px;
             height: 250px;
-            background-image: url("{{ asset('tema3/img/left.png') }}");
-            transform: rotate(180deg);
+            background-image: url("{{ asset('tema3/img/right.png') }}");
+            /* transform: rotate(180deg); */
             animation: float-subtle-rotated 6s ease-in-out infinite .5s;
         }
 
@@ -509,7 +509,7 @@
 
         .hope-text {
             font-family: var(--font-primary);
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             font-size: .95rem;
             margin-bottom: 20px;
             font-weight: 400;
@@ -632,8 +632,9 @@
 
         .btn-instagram {
             font-family: var(--font-primary);
+            background-color: var(--primary-color);
             border-color: var(--accent-color-1);
-            color: var(--accent-color-1);
+            color: white;
             border-radius: 20px;
             padding: 6px 15px;
             font-size: .85rem;
