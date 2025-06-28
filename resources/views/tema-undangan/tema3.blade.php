@@ -2204,11 +2204,28 @@
 
             function playAudio() {
                 if (audio && audio.paused) {
+                    // Cek dulu apakah src ada
+                    if (!audio.src || audio.src === '') {
+                        console.error("Music source is empty");
+                        return;
+                    }
+
+                    // Coba play dengan promise
                     audio.play().then(() => {
                         if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-music')
                             .addClass('fa-pause');
                     }).catch(error => {
                         console.warn("Autoplay prevented:", error);
+                        // Tampilkan pesan ke user bahwa mereka perlu interaksi
+                        $.toast({
+                            heading: 'Info',
+                            text: 'Klik tombol musik untuk memulai audio',
+                            position: 'top-right',
+                            loaderBg: 'var(--warning-color)',
+                            icon: 'info',
+                            hideAfter: 3000
+                        });
+
                         if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-pause')
                             .addClass('fa-music');
                     });
