@@ -138,7 +138,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-end;
+            /* Konten di bagian bawah */
             align-items: center;
             z-index: 2000;
             transition: top 1s ease-in-out, opacity 1s ease-in-out;
@@ -146,21 +147,36 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
-            background: linear-gradient(135deg, var(--cover-gradient-start) 0%, var(--cover-gradient-end) 100%);
             opacity: 1;
         }
 
-        /* Overlay Gradient dengan Warna Primary */
-        .color-overlay {
+        /* Background Image */
+        .cover-background-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg,
-                    rgba(46, 64, 83, 0.15) 0%,
-                    rgba(255, 255, 255, 0.85) 50%,
-                    rgba(46, 64, 83, 0.15) 100%);
+            background-image: url('{{ $informasiacara && $informasiacara->sampul ? asset('images/sampul/' . $informasiacara->sampul) : asset('images/default/default_couple_illustration_transparent.png') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+        }
+
+        /* Overlay Gradient dari bawah ke tengah */
+        .bottom-gradient-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            /* Menutupi 70% dari bawah */
+            background: linear-gradient(to top,
+                    var(--primary-color) 0%,
+                    rgba(46, 64, 83, 0.8) 30%,
+                    rgba(46, 64, 83, 0.4) 60%,
+                    transparent 100%);
             z-index: -1;
         }
 
@@ -177,13 +193,10 @@
             align-items: center;
             width: 100%;
             max-width: 450px;
-            background-color: var(--app-bg-soft);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            /* Jarak dari bawah */
             position: relative;
             z-index: 2;
-            border: 1px solid rgba(46, 64, 83, 0.1);
         }
 
         .cover-image-and-frame-wrapper {
@@ -196,13 +209,13 @@
 
         .cover-couple-illustration {
             display: block;
-            max-width: 75%;
-            max-height: 45vh;
+            max-width: 60%;
+            max-height: 35vh;
             height: auto;
             object-fit: contain;
             position: relative;
             z-index: 2;
-            filter: drop-shadow(0 5px 15px rgba(46, 64, 83, 0.2));
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
         }
 
         .rotating-frame-overlay-cover {
@@ -216,7 +229,7 @@
             animation: spin-frame 35s linear infinite;
             z-index: 1;
             pointer-events: none;
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
         @keyframes spin-frame {
@@ -231,16 +244,19 @@
 
         .cover-text-content {
             width: 100%;
+            color: var(--text-on-dark);
+            /* Warna teks terang untuk kontras */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .cover-intro-text {
             font-family: var(--font-primary);
-            font-size: 0.8em;
-            letter-spacing: 1px;
+            font-size: 0.9em;
+            letter-spacing: 2px;
             margin-bottom: 5px;
             text-transform: uppercase;
-            color: var(--cover-text-color);
-            font-weight: 600;
+            color: var(--text-on-dark);
+            font-weight: 500;
         }
 
         .cover-couple-names {
@@ -250,20 +266,20 @@
             line-height: 1.2;
             margin-top: 0;
             margin-bottom: 15px;
-            color: var(--primary-color);
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            color: var(--text-on-dark);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
         }
 
         .cover-couple-names span {
             font-size: 0.9em;
-            color: var(--cover-names-color);
+            color: var(--accent-color-1);
         }
 
         .cover-guest-name {
             font-family: var(--font-primary);
-            font-size: 0.9em;
-            line-height: 1.5;
-            color: var(--cover-text-color);
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: var(--text-on-dark);
             margin-bottom: 25px;
             word-break: break-word;
         }
@@ -272,20 +288,20 @@
             font-weight: 600;
             display: block;
             margin-top: 4px;
-            color: var(--primary-color);
+            color: var(--text-on-dark);
         }
 
         #open-invitation.open-invitation-button {
-            background-color: var(--cover-button-bg);
-            color: var(--cover-button-text);
+            background-color: var(--accent-color-1);
+            color: var(--primary-color);
             font-family: var(--font-primary);
             border: none;
             border-radius: 25px;
-            padding: 10px 25px;
+            padding: 12px 30px;
             font-size: 1em;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 0.5px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
             cursor: pointer;
         }
@@ -295,16 +311,17 @@
         }
 
         #open-invitation.open-invitation-button:hover {
-            background-color: var(--cover-button-hover-bg);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background-color: var(--text-on-dark);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* Responsive Design */
         @media (max-width: 480px) {
             .cover-content-wrapper {
-                padding: 20px;
                 max-width: 90%;
+                margin-bottom: 20px;
             }
 
             .cover-couple-names {
@@ -312,13 +329,18 @@
             }
 
             .cover-couple-illustration {
-                max-width: 80%;
-                max-height: 40vh;
+                max-width: 70%;
+                max-height: 30vh;
             }
 
             .rotating-frame-overlay-cover {
                 width: clamp(200px, 85vw, 300px);
                 height: clamp(200px, 85vw, 300px);
+            }
+
+            .bottom-gradient-overlay {
+                height: 80%;
+                /* Lebih banyak overlay di mobile */
             }
         }
 
@@ -1539,21 +1561,20 @@
 <body>
 
     <div id="cover-container">
-        <!-- Overlay Warna Gradient -->
-        <div class="color-overlay"></div>
+        <!-- Background Image -->
+        <div class="cover-background-image"></div>
 
-        <!-- Ornamen Dekoratif -->
-        <div class="header-ornament ornament-bottom-right cover-ornament" data-aos="fade-up-left" data-aos-delay="150">
-        </div>
+        <!-- Overlay Gradient dari bawah ke setengah layar -->
+        <div class="bottom-gradient-overlay"></div>
 
         <!-- Konten Utama -->
         <div class="cover-content-wrapper">
             <!-- Gambar Pasangan dengan Bingkai -->
             <div class="cover-image-and-frame-wrapper" data-aos="zoom-in" data-aos-delay="100">
-                <img src="{{ $informasiacara && $informasiacara->sampul ? asset('images/sampul/' . $informasiacara->sampul) : asset('images/default/default_couple_illustration_transparent.png') }}"
-                    alt="Ilustrasi Pasangan" class="cover-couple-illustration" />
                 <img src="{{ asset('tema2/img/bingkai.png') }}" alt="Decorative Frame Cover"
                     class="rotating-frame-overlay-cover" />
+                <img src="{{ $informasiacara && $informasiacara->sampul ? asset('images/sampul/' . $informasiacara->sampul) : asset('images/default/default_couple_illustration_transparent.png') }}"
+                    alt="Ilustrasi Pasangan" class="cover-couple-illustration" />
             </div>
 
             <!-- Teks Undangan -->
@@ -1580,6 +1601,7 @@
             </div>
         </div>
     </div>
+
     <main>
         <section class="section header-section py-5" id="home">
             <div class="header-ornament ornament-top-left" data-aos="fade-down-right" data-aos-delay="150"></div>
