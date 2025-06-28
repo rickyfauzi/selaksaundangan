@@ -68,9 +68,9 @@
         }
 
         :root {
-            --primary-color: #847665;
+            --primary-color: #2973B2;
             --accent-color-1: #5d534a;
-            --app-bg-light: #ffffff;
+            --app-bg-light: #F2EFE7;
             --app-bg-soft: #fdfaf7;
             --text-on-dark: #ffffff;
             --text-on-light: #495057;
