@@ -68,26 +68,57 @@
         }
 
         :root {
-            --primary-color: #2e4053;
-            --accent-color-1: #aab7b8;
-            --app-bg-light: #d5d8dc;
+            /* Luxury Color Palette */
+            --primary-color: #1a2332;
+            /* Deep Navy Blue */
+            --accent-color-1: #b8860b;
+            /* Dark Golden Rod */
+            --accent-color-2: #cd853f;
+            /* Peru Gold */
+            --luxury-gold: #ffd700;
+            /* Pure Gold */
+            --deep-burgundy: #722f37;
+            /* Deep Wine Red */
+            --champagne: #f7e7ce;
+            /* Champagne/Ivory */
+            --rose-gold: #e8b4a0;
+            /* Rose Gold */
+            --midnight-blue: #0f1419;
+            /* Darker Navy */
+            --pearl-white: #faf8f5;
+            /* Pearl White */
+            --copper: #b87333;
+            /* Copper Accent */
+
+            /* Application Colors */
+            --app-bg-light: #faf8f5;
+            /* Pearl White background */
             --app-bg-soft: #ffffff;
-            --text-on-dark: #ffffff;
-            --text-on-light: #495057;
-            --text-on-primary: #ffffff;
-            --warning-color: #ffc107;
+            /* Pure white */
+            --text-on-dark: #faf8f5;
+            /* Pearl white text */
+            --text-on-light: #2c2c2c;
+            /* Dark charcoal text */
+            --text-on-primary: #faf8f5;
+            /* Pearl white on primary */
+            --warning-color: #ffd700;
+            /* Gold warning */
+
+            /* Fonts */
             --font-primary: "Poppins", sans-serif;
             --font-decorative: "Great Vibes", cursive;
             --font-script: "Dancing Script", cursive;
             --font-heading: "Photograph", cursive;
             --font-serif-display: "Playfair Display", serif;
-            --cover-gradient-start: #f8f0f2;
-            --cover-gradient-end: #e9dce0;
-            --cover-text-color: #5d534a;
-            --cover-names-color: #2e4053;
-            --cover-button-bg: #2e4053;
+
+            /* Cover specific colors */
+            --cover-gradient-start: #1a2332;
+            --cover-gradient-end: #faf8f5;
+            --cover-text-color: #b8860b;
+            --cover-names-color: #ffd700;
+            --cover-button-bg: #b8860b;
             --cover-button-text: #ffffff;
-            --cover-button-hover-bg: #1a2633;
+            --cover-button-hover-bg: #cd853f;
         }
 
         /* --- FONT FACES (from template - adjust paths if hosting locally) --- */
@@ -96,19 +127,18 @@
         @font-face {
             font-family: 'OCRAStd';
             /*
-      src: url('{{ asset('fonts/OCRAStd.eot') }}');
-      src: url('{{ asset('fonts/OCRAStd.eot?#iefix') }}') format('embedded-opentype'),
-           url('{{ asset('fonts/OCRAStd.woff2') }}') format('woff2'),
-           url('{{ asset('fonts/OCRAStd.woff') }}') format('woff'),
-           url('{{ asset('fonts/OCRAStd.ttf') }}') format('truetype'),
-           url('{{ asset('fonts/OCRAStd.svg#OCRAStd') }}') format('svg');
-      */
+  src: url('{{ asset('fonts/OCRAStd.eot') }}');
+  src: url('{{ asset('fonts/OCRAStd.eot?#iefix') }}') format('embedded-opentype'),
+       url('{{ asset('fonts/OCRAStd.woff2') }}') format('woff2'),
+       url('{{ asset('fonts/OCRAStd.woff') }}') format('woff'),
+       url('{{ asset('fonts/OCRAStd.ttf') }}') format('truetype'),
+       url('{{ asset('fonts/OCRAStd.svg#OCRAStd') }}') format('svg');
+  */
             src: local('Courier New'), local('Courier'), monospace;
             /* Fallback */
             font-weight: normal;
             font-style: normal;
         }
-
 
         body {
             margin: 0;
@@ -146,7 +176,7 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
-            background: linear-gradient(to bottom, var(--primary-color) 0%, white 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--midnight-blue) 30%, var(--deep-burgundy) 70%, var(--champagne) 100%);
             opacity: 1;
         }
 
@@ -181,6 +211,8 @@
             object-fit: contain;
             position: relative;
             z-index: 2;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(184, 134, 11, 0.3);
         }
 
         .rotating-frame-overlay-cover {
@@ -194,9 +226,12 @@
             animation: spin-frame 35s linear infinite;
             z-index: 1;
             pointer-events: none;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
         }
 
         @keyframes spin-frame {
+
+            /* For Cover Frame */
             from {
                 transform: translate(-50%, -50%) rotate(0deg);
             }
@@ -216,8 +251,9 @@
             letter-spacing: 1px;
             margin-bottom: 5px;
             text-transform: uppercase;
-            color: var(--cover-text-color);
+            color: var(--luxury-gold);
             font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .cover-couple-names {
@@ -227,19 +263,20 @@
             line-height: 1.2;
             margin-top: 0;
             margin-bottom: 15px;
-            color: var(--primary-color);
+            color: var(--luxury-gold);
+            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
         }
 
         .cover-couple-names span {
             font-size: 0.9em;
-            color: var(--cover-names-color);
+            color: var(--champagne);
         }
 
         .cover-guest-name {
             font-family: var(--font-primary);
             font-size: 0.9em;
             line-height: 1.5;
-            color: var(--cover-text-color);
+            color: var(--champagne);
             margin-bottom: 25px;
             word-break: break-word;
         }
@@ -248,21 +285,22 @@
             font-weight: 600;
             display: block;
             margin-top: 4px;
-            color: var(--cover-text-color);
+            color: var(--rose-gold);
         }
 
         #open-invitation.open-invitation-button {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
             color: var(--text-on-primary);
             font-family: var(--font-primary);
             border: none;
             border-radius: 25px;
-            padding: 10px 25px;
+            padding: 12px 30px;
             font-size: 1em;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 0.5px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(184, 134, 11, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
 
         #open-invitation.open-invitation-button i {
@@ -270,8 +308,9 @@
         }
 
         #open-invitation.open-invitation-button:hover {
-            background-color: var(--accent-color-1);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, var(--accent-color-2), var(--copper));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.6);
         }
 
         @media (max-width: 480px) {
@@ -290,7 +329,7 @@
             }
         }
 
-        /* --- MAIN CONTENT STYLING --- */
+        /* --- STYLING KONTEN UTAMA --- */
         .section {
             position: relative;
             overflow: hidden;
@@ -305,23 +344,24 @@
         }
 
         .section-bg-light {
-            background-color: var(--app-bg-light);
+            background: linear-gradient(135deg, var(--app-bg-light) 0%, var(--champagne) 100%);
             color: var(--text-on-light);
         }
 
         .section-bg-dark {
-            background-color: var(--accent-color-1);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--midnight-blue) 100%);
             color: var(--text-on-dark);
         }
 
         .section-title-custom {
             font-family: var(--font-heading);
             font-size: 2.8rem;
-            color: var(--primary-color);
+            color: var(--accent-color-1);
             margin-bottom: 2.5rem;
             position: relative;
             padding-bottom: 10px;
             text-align: center;
+            text-shadow: 0 2px 10px rgba(184, 134, 11, 0.2);
         }
 
         .section-title-custom::after {
@@ -329,27 +369,28 @@
             display: block;
             width: 70px;
             height: 3px;
-            background-color: var(--accent-color-1);
+            background: linear-gradient(90deg, var(--accent-color-1), var(--luxury-gold));
             margin: 10px auto 0;
+            border-radius: 2px;
         }
 
         .section-bg-dark .section-title-custom {
-            color: var(--text-on-dark);
+            color: var(--luxury-gold);
         }
 
         .section-bg-dark .section-title-custom::after {
-            background-color: var(--primary-color);
+            background: linear-gradient(90deg, var(--luxury-gold), var(--rose-gold));
         }
 
         .message-box {
-            background-color: var(--app-bg-soft);
+            background: linear-gradient(135deg, var(--app-bg-soft) 0%, var(--champagne) 100%);
             padding: 25px;
-            border-radius: 12px;
-            border-left: 5px solid var(--primary-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 15px;
+            border-left: 5px solid var(--accent-color-1);
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.15);
             margin: 1.5rem auto;
             text-align: center;
-            color: var(--accent-color-1);
+            color: var(--text-on-light);
             font-size: 0.95rem;
             line-height: 1.7;
         }
@@ -361,10 +402,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--accent-color-1);
+            color: var(--text-on-light);
             position: relative;
             z-index: 1;
-            background-color: var(--app-bg-light);
+            background: linear-gradient(135deg, var(--app-bg-light) 0%, var(--champagne) 50%, var(--pearl-white) 100%);
             padding-top: 80px;
             padding-bottom: 40px;
         }
@@ -403,7 +444,7 @@
             position: absolute;
             background-repeat: no-repeat;
             background-size: contain;
-            opacity: 0.5;
+            opacity: 0.3;
             pointer-events: none;
             z-index: 0;
         }
@@ -419,6 +460,7 @@
             height: 150px;
             background-image: url("{{ asset('tema2/img/element1.png') }}");
             animation: float-subtle 6s ease-in-out infinite;
+            filter: sepia(100%) saturate(200%) hue-rotate(30deg) brightness(1.2);
         }
 
         .ornament-bottom-right {
@@ -429,19 +471,21 @@
             background-image: url("{{ asset('tema2/img/element1.png') }}");
             transform: rotate(180deg);
             animation: float-subtle-rotated 6s ease-in-out infinite .5s;
+            filter: sepia(100%) saturate(200%) hue-rotate(30deg) brightness(1.2);
         }
 
         .wedding-title {
             font-family: var(--font-primary);
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            color: var(--primary-color);
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--accent-color-1);
             margin-bottom: 10px;
             font-size: 0.9em;
             text-transform: uppercase;
         }
 
         .couple-frame-container {
+            /* For Header Section Frame */
             position: relative;
             width: 220px;
             height: 220px;
@@ -452,6 +496,7 @@
         }
 
         .rotating-frame-image {
+            /* For Header Section Frame Image */
             position: absolute;
             top: 0;
             left: 0;
@@ -460,9 +505,12 @@
             object-fit: contain;
             animation: spin-frame-header 30s linear infinite;
             z-index: 1;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
         }
 
         @keyframes spin-frame-header {
+
+            /* For Header Frame rotation */
             from {
                 transform: rotate(0deg);
             }
@@ -475,13 +523,13 @@
         .couple-circle {
             width: 160px;
             height: 160px;
-            border: 5px solid var(--primary-color);
+            border: 5px solid var(--accent-color-1);
             border-radius: 50%;
             background: var(--app-bg-light);
             position: relative;
             overflow: hidden;
             z-index: 2;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 25px rgba(184, 134, 11, 0.3);
         }
 
         .couple-illustration {
@@ -501,15 +549,15 @@
         .header-section .couple-names-display {
             font-family: var(--font-heading);
             font-size: 3rem;
-            color: var(--primary-color);
+            color: var(--accent-color-1);
             margin-top: 10px;
             margin-bottom: 10px;
-            text-shadow: none;
+            text-shadow: 0 3px 15px rgba(184, 134, 11, 0.2);
         }
 
         .hope-text {
             font-family: var(--font-primary);
-            color: var(--accent-color-1);
+            color: var(--deep-burgundy);
             font-size: .95rem;
             margin-bottom: 20px;
             font-weight: 400;
@@ -527,21 +575,23 @@
         }
 
         .countdown-box {
-            background: var(--primary-color);
-            color: var(--text-on-dark);
+            background: linear-gradient(135deg, var(--primary-color), var(--midnight-blue));
+            color: var(--luxury-gold);
             border-radius: 12px;
             padding: 12px 10px;
             min-width: 60px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 20px rgba(26, 35, 50, 0.3);
             transition: transform .3s ease;
             display: inline-flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            border: 1px solid var(--accent-color-1);
         }
 
         .countdown-box:hover {
             transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(26, 35, 50, 0.4);
         }
 
         .countdown-number {
@@ -558,7 +608,7 @@
 
         .wedding-date {
             font-family: var(--font-primary);
-            color: var(--accent-color-1);
+            color: var(--deep-burgundy);
             font-size: 1em;
             margin-top: 15px;
             margin-bottom: 25px;
@@ -566,30 +616,31 @@
         }
 
         .save-date-btn {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
             color: var(--text-on-dark);
             border: none;
             border-radius: 25px;
-            padding: 10px 28px;
+            padding: 12px 30px;
             font-family: var(--font-primary);
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 1px;
             transition: all .3s ease;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
             font-size: .9em;
+            text-transform: uppercase;
         }
 
         .save-date-btn:hover {
-            background: var(--accent-color-1);
+            background: linear-gradient(135deg, var(--accent-color-2), var(--copper));
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(184, 134, 11, 0.4);
         }
 
         /* --- INVITATION MESSAGE & COUPLE DETAILS --- */
         .invitation-message .subtitle {
             font-family: var(--font-script);
             font-size: 1.8rem;
-            color: var(--primary-color);
+            color: var(--accent-color-1);
             margin-bottom: 1rem;
         }
 
@@ -599,8 +650,8 @@
             border-radius: 50%;
             overflow: hidden;
             margin: 0 auto 15px;
-            border: 4px solid var(--primary-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 4px solid var(--accent-color-1);
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.2);
         }
 
         .couple-details .person-detail .bride-illustration img {
@@ -612,7 +663,7 @@
         .couple-details .person-name {
             font-family: var(--font-decorative);
             font-size: 2.2rem;
-            color: var(--accent-color-1);
+            color: var(--deep-burgundy);
             margin-bottom: 8px;
         }
 
@@ -625,24 +676,30 @@
         .couple-details .ampersand {
             font-family: var(--font-decorative);
             font-size: 3.5rem;
-            color: var(--primary-color);
+            color: var(--accent-color-1);
             margin: 1rem 0;
             line-height: 1;
         }
 
         .btn-instagram {
             font-family: var(--font-primary);
-            border-color: var(--accent-color-1);
+            border: 2px solid var(--accent-color-1);
             color: var(--accent-color-1);
+            background: transparent;
             border-radius: 20px;
-            padding: 6px 15px;
+            padding: 8px 18px;
             font-size: .85rem;
             text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .btn-instagram:hover {
-            background-color: var(--accent-color-1);
+            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
             color: var(--text-on-dark);
+            border-color: var(--accent-color-2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
         }
 
         /* --- SEMI-TRANSPARENT CARDS & BACKGROUND ELEMENTS --- */
@@ -652,7 +709,8 @@
         }
 
         .quran-verse .verse-box.semi-transparent-card {
-            background-color: rgba(132, 118, 101, 0.85);
+            background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(15, 20, 25, 0.85));
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
 
         .quran-verse .verse-box {
@@ -662,7 +720,7 @@
             text-align: center;
             margin: 20px auto;
             max-width: 90%;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .quran-verse .verse-text {
@@ -671,29 +729,31 @@
             font-size: 1.1rem;
             line-height: 1.8;
             margin-bottom: 15px;
+            color: var(--champagne);
         }
 
         .quran-verse .verse-ref {
             font-size: .9rem;
             font-weight: 500;
+            color: var(--luxury-gold);
         }
 
         .section-bg-dark .event-box.semi-transparent-card {
-            background-color: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(184, 134, 11, 0.15));
             color: var(--text-on-dark);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
 
         .section-bg-dark .event-box.semi-transparent-card .event-date,
         .section-bg-dark .event-box.semi-transparent-card .event-time,
         .section-bg-dark .event-box.semi-transparent-card .event-location {
-            color: var(--text-on-dark);
+            color: var(--champagne);
         }
 
         .event-details .event-box {
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             margin-top: 1.5rem;
             text-align: center;
         }
@@ -709,15 +769,22 @@
         .event-details .event-date {
             font-weight: 600;
             font-size: 1.1rem;
+            color: var(--luxury-gold);
+        }
+
+        .event-details .event-time {
+            color: var(--rose-gold);
         }
 
         .event-details .event-location {
             font-style: italic;
+            color: var(--champagne);
         }
 
         .closing-message .message-box.semi-transparent-card,
         #digital-gift-dropdown-section .message-box.semi-transparent-card {
-            background-color: rgba(253, 250, 247, 0.85);
+            background: linear-gradient(135deg, rgba(250, 248, 245, 0.95), rgba(247, 231, 206, 0.9));
+            border-left: 5px solid var(--accent-color-1);
         }
 
         .background-element-container {
@@ -738,7 +805,8 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            opacity: .15;
+            opacity: .1;
+            filter: sepia(100%) saturate(150%) hue-rotate(30deg) brightness(1.1);
         }
 
         .element-quran-verse-bg img {
@@ -757,7 +825,7 @@
 
         .element-closing-bg img {
             width: clamp(250px, 50%, 350px);
-            opacity: .1;
+            opacity: .08;
             align-self: flex-end;
             margin-bottom: 1rem;
         }
@@ -768,8 +836,9 @@
             display: none;
         }
 
+        /* Style baru yang diadaptasi dari Tema 1/7 */
         .love-story-section {
-            background-color: var(--app-bg-soft);
+            background: linear-gradient(135deg, var(--app-bg-soft) 0%, var(--champagne) 100%);
         }
 
         .love-story-section .story-item {
@@ -781,8 +850,9 @@
             width: 100%;
             height: 300px;
             object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.15);
+            border: 2px solid var(--accent-color-1);
         }
 
         .love-story-section .story-item .text-content {
@@ -794,11 +864,12 @@
             font-size: 1rem;
             color: var(--accent-color-1);
             margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
         .love-story-section .story-date {
             font-size: 0.9rem;
-            color: #888;
+            color: var(--deep-burgundy);
             margin-bottom: 1rem;
             font-style: italic;
         }
@@ -809,6 +880,7 @@
             color: var(--text-on-light);
         }
 
+        /* Penyesuaian untuk layar kecil */
         @media (max-width: 767px) {
             .love-story-section .story-item {
                 text-align: center;
@@ -820,49 +892,53 @@
         }
 
         .btn-custom-primary {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
             color: var(--text-on-primary);
             border: none;
             border-radius: 25px;
-            padding: 10px 25px;
+            padding: 12px 28px;
             font-family: var(--font-primary);
-            font-weight: 500;
+            font-weight: 600;
             transition: all .3s ease;
             text-decoration: none;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-custom-primary:hover {
-            background-color: var(--accent-color-1);
+            background: linear-gradient(135deg, var(--accent-color-2), var(--copper));
             color: var(--text-on-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
         }
 
         .section-bg-dark .btn-custom-primary {
-            background-color: var(--primary-color);
-            color: var(--text-on-primary);
+            background: linear-gradient(135deg, var(--luxury-gold), var(--accent-color-1));
+            color: var(--midnight-blue);
         }
 
         .section-bg-dark .btn-custom-primary:hover {
-            background-color: #8a9798;
+            background: linear-gradient(135deg, var(--rose-gold), var(--champagne));
+            color: var(--midnight-blue);
         }
 
         .gallery-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
+            gap: 15px;
             margin-top: 20px;
         }
 
         .gallery-item {
             overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(184, 134, 11, 0.2);
             cursor: pointer;
-            transition: transform .3s ease, box-shadow .3s ease;
+            transition: all .3s ease;
             aspect-ratio: 1 / 1;
+            border: 2px solid var(--accent-color-1);
         }
 
         .gallery-item img {
@@ -875,7 +951,7 @@
 
         .gallery-item:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(184, 134, 11, 0.4);
         }
 
         .gallery-item:hover img {
@@ -890,6 +966,7 @@
         #galleryModal .modal-body {
             padding: 0;
         }
+
 
         #galleryModal .btn-close {
             position: absolute;
