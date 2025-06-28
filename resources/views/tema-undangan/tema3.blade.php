@@ -68,9 +68,9 @@
         }
 
         :root {
-            --primary-color: #2D336B;
-            --accent-color-1: #5d534a;
-            --app-bg-light: #FFF2F2;
+            --primary-color: #2e4053;
+            --accent-color-1: #aab7b8;
+            --app-bg-light: #d5d8dc;
             --app-bg-soft: #ffffff;
             --text-on-dark: #ffffff;
             --text-on-light: #495057;
@@ -84,10 +84,10 @@
             --cover-gradient-start: #f8f0f2;
             --cover-gradient-end: #e9dce0;
             --cover-text-color: #5d534a;
-            --cover-names-color: #2D336B;
-            --cover-button-bg: #2D336B;
+            --cover-names-color: #2e4053;
+            --cover-button-bg: #2e4053;
             --cover-button-text: #ffffff;
-            --cover-button-hover-bg: #1a1f4d;
+            --cover-button-hover-bg: #1a2633;
         }
 
         /* --- FONT FACES (from template - adjust paths if hosting locally) --- */
@@ -197,8 +197,6 @@
         }
 
         @keyframes spin-frame {
-
-            /* For Cover Frame */
             from {
                 transform: translate(-50%, -50%) rotate(0deg);
             }
@@ -292,7 +290,7 @@
             }
         }
 
-        /* --- STYLING KONTEN UTAMA --- */
+        /* --- MAIN CONTENT STYLING --- */
         .section {
             position: relative;
             overflow: hidden;
@@ -355,7 +353,6 @@
             font-size: 0.95rem;
             line-height: 1.7;
         }
-
 
         /* --- HEADER SECTION (Home) --- */
         .header-section {
@@ -445,7 +442,6 @@
         }
 
         .couple-frame-container {
-            /* For Header Section Frame */
             position: relative;
             width: 220px;
             height: 220px;
@@ -456,7 +452,6 @@
         }
 
         .rotating-frame-image {
-            /* For Header Section Frame Image */
             position: absolute;
             top: 0;
             left: 0;
@@ -468,8 +463,6 @@
         }
 
         @keyframes spin-frame-header {
-
-            /* For Header Frame rotation */
             from {
                 transform: rotate(0deg);
             }
@@ -775,17 +768,13 @@
             display: none;
         }
 
-        /* Style baru yang diadaptasi dari Tema 1/7 */
         .love-story-section {
             background-color: var(--app-bg-soft);
-            /* Warna latar dari Tema 2 agar konsisten */
         }
 
         .love-story-section .story-item {
             margin-bottom: 3.5rem;
-            /* Memberi jarak antar cerita */
             align-items: center;
-            /* Membuat gambar dan teks sejajar di tengah */
         }
 
         .love-story-section .story-item img {
@@ -793,9 +782,7 @@
             height: 300px;
             object-fit: cover;
             border-radius: 8px;
-            /* Sudut sedikit melengkung */
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            /* Bayangan lembut */
         }
 
         .love-story-section .story-item .text-content {
@@ -804,7 +791,6 @@
 
         .love-story-section .story-title {
             font-family: var(--font-serif-display);
-            /* Menggunakan font dari Tema 2 */
             font-size: 1rem;
             color: var(--accent-color-1);
             margin-bottom: 0.5rem;
@@ -823,7 +809,6 @@
             color: var(--text-on-light);
         }
 
-        /* Penyesuaian untuk layar kecil */
         @media (max-width: 767px) {
             .love-story-section .story-item {
                 text-align: center;
@@ -861,7 +846,7 @@
         }
 
         .section-bg-dark .btn-custom-primary:hover {
-            background-color: #A08F7B;
+            background-color: #8a9798;
         }
 
         .gallery-container {
@@ -943,7 +928,7 @@
             margin: 5px 0;
         }
 
-        /* --- STYLES FOR GIFT CARD COLLAPSE (Inspired by external template) --- */
+        /* --- GIFT CARD STYLES --- */
         #digital-gift-dropdown-section .message-box p {
             margin-bottom: 1rem;
         }
@@ -966,11 +951,10 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .gift-cardKirim Hadiah {
+        .gift-card-item {
             margin: 10px auto;
             border: 1px solid #ddd;
             padding: 15px 20px;
-            Kirim Hadiah;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             position: relative;
@@ -1027,8 +1011,6 @@
             max-height: 30px;
             width: auto;
         }
-
-        /* For actual img logos */
 
         .gift-card-item .gift-card-account-number {
             margin-bottom: 20px;
@@ -1278,7 +1260,9 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .btn-send-comment {
+
+
+        padding: 8px .btn-send-comment {
             background-color: var(--primary-color);
             color: var(--text-on-primary);
             border: none;
