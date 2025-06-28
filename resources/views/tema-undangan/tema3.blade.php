@@ -68,38 +68,26 @@
         }
 
         :root {
-            /* === LUXURY COLOR PALETTE === */
-            --primary-color: #1a1a1a;
-            /* Rich Black / Deepest Charcoal */
-            --accent-color-1: #C0A062;
-            /* Antique Gold */
-            --app-bg-light: #FDFBF6;
-            /* Warm Off-White / Cream */
+            --primary-color: #2e4053;
+            --accent-color-1: #aab7b8;
+            --app-bg-light: #d5d8dc;
             --app-bg-soft: #ffffff;
-            /* Pure White (for cards) */
-            --text-on-dark: #F0EAD6;
-            /* Soft Cream White (for text on dark bg) */
-            --text-on-light: #333333;
-            /* Dark Gray (for text on light bg) */
-            --text-on-primary: #F0EAD6;
-            /* Soft Cream White (for text on black primary bg) */
-            --warning-color: #D4AF37;
-            /* Brighter Gold (for active states) */
+            --text-on-dark: #ffffff;
+            --text-on-light: #495057;
+            --text-on-primary: #ffffff;
+            --warning-color: #ffc107;
             --font-primary: "Poppins", sans-serif;
             --font-decorative: "Great Vibes", cursive;
             --font-script: "Dancing Script", cursive;
             --font-heading: "Photograph", cursive;
             --font-serif-display: "Playfair Display", serif;
-
-            /* Cover specific vars */
-            --cover-gradient-start: #2a2a2a;
-            --cover-gradient-end: #1a1a1a;
-            --cover-text-color: #F0EAD6;
-            --cover-names-color: #C0A062;
-            --cover-button-bg: #C0A062;
-            --cover-button-text: #1a1a1a;
-            --cover-button-hover-bg: #a88a4e;
-            /* Darker Gold */
+            --cover-gradient-start: #f8f0f2;
+            --cover-gradient-end: #e9dce0;
+            --cover-text-color: #5d534a;
+            --cover-names-color: #2e4053;
+            --cover-button-bg: #2e4053;
+            --cover-button-text: #ffffff;
+            --cover-button-hover-bg: #1a2633;
         }
 
         /* --- FONT FACES (from template - adjust paths if hosting locally) --- */
@@ -158,7 +146,7 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
-            background: linear-gradient(to bottom, var(--cover-gradient-start) 0%, var(--cover-gradient-end) 100%);
+            background: linear-gradient(to bottom, var(--primary-color) 0%, white 100%);
             opacity: 1;
         }
 
@@ -209,8 +197,6 @@
         }
 
         @keyframes spin-frame {
-
-            /* For Cover Frame */
             from {
                 transform: translate(-50%, -50%) rotate(0deg);
             }
@@ -241,7 +227,7 @@
             line-height: 1.2;
             margin-top: 0;
             margin-bottom: 15px;
-            color: var(--cover-names-color);
+            color: var(--primary-color);
         }
 
         .cover-couple-names span {
@@ -266,8 +252,8 @@
         }
 
         #open-invitation.open-invitation-button {
-            background-color: var(--cover-button-bg);
-            color: var(--cover-button-text);
+            background-color: var(--primary-color);
+            color: var(--text-on-primary);
             font-family: var(--font-primary);
             border: none;
             border-radius: 25px;
@@ -284,7 +270,7 @@
         }
 
         #open-invitation.open-invitation-button:hover {
-            background-color: var(--cover-button-hover-bg);
+            background-color: var(--accent-color-1);
             transform: translateY(-2px);
         }
 
@@ -304,7 +290,7 @@
             }
         }
 
-        /* --- STYLING KONTEN UTAMA --- */
+        /* --- MAIN CONTENT STYLING --- */
         .section {
             position: relative;
             overflow: hidden;
@@ -324,14 +310,14 @@
         }
 
         .section-bg-dark {
-            background-color: var(--primary-color);
+            background-color: var(--accent-color-1);
             color: var(--text-on-dark);
         }
 
         .section-title-custom {
             font-family: var(--font-heading);
             font-size: 2.8rem;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             margin-bottom: 2.5rem;
             position: relative;
             padding-bottom: 10px;
@@ -348,26 +334,25 @@
         }
 
         .section-bg-dark .section-title-custom {
-            color: var(--accent-color-1);
+            color: var(--text-on-dark);
         }
 
         .section-bg-dark .section-title-custom::after {
-            background-color: var(--accent-color-1);
+            background-color: var(--primary-color);
         }
 
         .message-box {
             background-color: var(--app-bg-soft);
             padding: 25px;
             border-radius: 12px;
-            border-left: 5px solid var(--accent-color-1);
+            border-left: 5px solid var(--primary-color);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             margin: 1.5rem auto;
             text-align: center;
-            color: var(--text-on-light);
+            color: var(--accent-color-1);
             font-size: 0.95rem;
             line-height: 1.7;
         }
-
 
         /* --- HEADER SECTION (Home) --- */
         .header-section {
@@ -376,7 +361,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--text-on-light);
+            color: var(--accent-color-1);
             position: relative;
             z-index: 1;
             background-color: var(--app-bg-light);
@@ -450,14 +435,13 @@
             font-family: var(--font-primary);
             font-weight: 500;
             letter-spacing: 1.5px;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             margin-bottom: 10px;
             font-size: 0.9em;
             text-transform: uppercase;
         }
 
         .couple-frame-container {
-            /* For Header Section Frame */
             position: relative;
             width: 220px;
             height: 220px;
@@ -468,7 +452,6 @@
         }
 
         .rotating-frame-image {
-            /* For Header Section Frame Image */
             position: absolute;
             top: 0;
             left: 0;
@@ -480,8 +463,6 @@
         }
 
         @keyframes spin-frame-header {
-
-            /* For Header Frame rotation */
             from {
                 transform: rotate(0deg);
             }
@@ -494,7 +475,7 @@
         .couple-circle {
             width: 160px;
             height: 160px;
-            border: 5px solid var(--accent-color-1);
+            border: 5px solid var(--primary-color);
             border-radius: 50%;
             background: var(--app-bg-light);
             position: relative;
@@ -520,7 +501,7 @@
         .header-section .couple-names-display {
             font-family: var(--font-heading);
             font-size: 3rem;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             margin-top: 10px;
             margin-bottom: 10px;
             text-shadow: none;
@@ -528,7 +509,7 @@
 
         .hope-text {
             font-family: var(--font-primary);
-            color: var(--text-on-light);
+            color: var(--accent-color-1);
             font-size: .95rem;
             margin-bottom: 20px;
             font-weight: 400;
@@ -577,7 +558,7 @@
 
         .wedding-date {
             font-family: var(--font-primary);
-            color: var(--text-on-light);
+            color: var(--accent-color-1);
             font-size: 1em;
             margin-top: 15px;
             margin-bottom: 25px;
@@ -585,8 +566,8 @@
         }
 
         .save-date-btn {
-            background: var(--accent-color-1);
-            color: var(--primary-color);
+            background: var(--primary-color);
+            color: var(--text-on-dark);
             border: none;
             border-radius: 25px;
             padding: 10px 28px;
@@ -599,7 +580,7 @@
         }
 
         .save-date-btn:hover {
-            background: var(--cover-button-hover-bg);
+            background: var(--accent-color-1);
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
@@ -608,7 +589,7 @@
         .invitation-message .subtitle {
             font-family: var(--font-script);
             font-size: 1.8rem;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             margin-bottom: 1rem;
         }
 
@@ -618,7 +599,7 @@
             border-radius: 50%;
             overflow: hidden;
             margin: 0 auto 15px;
-            border: 4px solid var(--accent-color-1);
+            border: 4px solid var(--primary-color);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
@@ -631,7 +612,7 @@
         .couple-details .person-name {
             font-family: var(--font-decorative);
             font-size: 2.2rem;
-            color: var(--text-on-light);
+            color: var(--accent-color-1);
             margin-bottom: 8px;
         }
 
@@ -644,14 +625,14 @@
         .couple-details .ampersand {
             font-family: var(--font-decorative);
             font-size: 3.5rem;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             margin: 1rem 0;
             line-height: 1;
         }
 
         .btn-instagram {
             font-family: var(--font-primary);
-            border: 1px solid var(--accent-color-1);
+            border-color: var(--accent-color-1);
             color: var(--accent-color-1);
             border-radius: 20px;
             padding: 6px 15px;
@@ -661,7 +642,7 @@
 
         .btn-instagram:hover {
             background-color: var(--accent-color-1);
-            color: var(--primary-color);
+            color: var(--text-on-dark);
         }
 
         /* --- SEMI-TRANSPARENT CARDS & BACKGROUND ELEMENTS --- */
@@ -671,8 +652,7 @@
         }
 
         .quran-verse .verse-box.semi-transparent-card {
-            background-color: rgba(26, 26, 26, 0.85);
-            /* transparent primary color */
+            background-color: rgba(132, 118, 101, 0.85);
         }
 
         .quran-verse .verse-box {
@@ -699,9 +679,9 @@
         }
 
         .section-bg-dark .event-box.semi-transparent-card {
-            background-color: rgba(255, 255, 255, 0.10);
+            background-color: rgba(255, 255, 255, 0.15);
             color: var(--text-on-dark);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .section-bg-dark .event-box.semi-transparent-card .event-date,
@@ -737,7 +717,7 @@
 
         .closing-message .message-box.semi-transparent-card,
         #digital-gift-dropdown-section .message-box.semi-transparent-card {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(253, 250, 247, 0.85);
         }
 
         .background-element-container {
@@ -788,17 +768,13 @@
             display: none;
         }
 
-        /* Style baru yang diadaptasi dari Tema 1/7 */
         .love-story-section {
             background-color: var(--app-bg-soft);
-            /* Warna latar dari Tema 2 agar konsisten */
         }
 
         .love-story-section .story-item {
             margin-bottom: 3.5rem;
-            /* Memberi jarak antar cerita */
             align-items: center;
-            /* Membuat gambar dan teks sejajar di tengah */
         }
 
         .love-story-section .story-item img {
@@ -806,9 +782,7 @@
             height: 300px;
             object-fit: cover;
             border-radius: 8px;
-            /* Sudut sedikit melengkung */
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            /* Bayangan lembut */
         }
 
         .love-story-section .story-item .text-content {
@@ -817,8 +791,7 @@
 
         .love-story-section .story-title {
             font-family: var(--font-serif-display);
-            /* Menggunakan font dari Tema 2 */
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: var(--accent-color-1);
             margin-bottom: 0.5rem;
         }
@@ -836,7 +809,6 @@
             color: var(--text-on-light);
         }
 
-        /* Penyesuaian untuk layar kecil */
         @media (max-width: 767px) {
             .love-story-section .story-item {
                 text-align: center;
@@ -848,8 +820,8 @@
         }
 
         .btn-custom-primary {
-            background-color: var(--accent-color-1);
-            color: var(--primary-color);
+            background-color: var(--primary-color);
+            color: var(--text-on-primary);
             border: none;
             border-radius: 25px;
             padding: 10px 25px;
@@ -862,19 +834,19 @@
         }
 
         .btn-custom-primary:hover {
-            background-color: var(--cover-button-hover-bg);
-            color: var(--primary-color);
+            background-color: var(--accent-color-1);
+            color: var(--text-on-dark);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .section-bg-dark .btn-custom-primary {
-            background-color: var(--accent-color-1);
-            color: var(--primary-color);
+            background-color: var(--primary-color);
+            color: var(--text-on-primary);
         }
 
         .section-bg-dark .btn-custom-primary:hover {
-            background-color: var(--cover-button-hover-bg);
+            background-color: #8a9798;
         }
 
         .gallery-container {
@@ -949,14 +921,14 @@
         }
 
         .ig-filter-section .filter-box strong {
-            color: var(--text-on-light);
+            color: var(--accent-color-1);
             font-family: var(--font-serif-display);
             font-size: 1.1rem;
             display: block;
             margin: 5px 0;
         }
 
-        /* --- STYLES FOR GIFT CARD COLLAPSE (Inspired by external template) --- */
+        /* --- GIFT CARD STYLES --- */
         #digital-gift-dropdown-section .message-box p {
             margin-bottom: 1rem;
         }
@@ -988,7 +960,7 @@
             position: relative;
             overflow: hidden;
             font-family: 'Open Sans', sans-serif;
-            color: var(--text-on-light);
+            color: #666;
             transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
         }
 
@@ -1011,7 +983,7 @@
             line-height: 1.5;
             font-weight: 600;
             margin: 0;
-            color: var(--text-on-light);
+            color: #555;
         }
 
         .gift-card-item .bank-logo-placeholder {
@@ -1040,8 +1012,6 @@
             width: auto;
         }
 
-        /* For actual img logos */
-
         .gift-card-item .gift-card-account-number {
             margin-bottom: 20px;
             text-align: left;
@@ -1052,7 +1022,7 @@
             line-height: 1.5;
             letter-spacing: 3px;
             font-family: 'OCRAStd', 'Courier New', Courier, monospace;
-            color: var(--primary-color);
+            color: #333;
             display: block;
         }
 
@@ -1077,7 +1047,7 @@
             font-family: 'Open Sans', sans-serif;
             font-size: .9rem;
             font-weight: 600;
-            color: var(--text-on-light);
+            color: #555;
             display: block;
         }
 
@@ -1290,9 +1260,11 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .btn-send-comment {
-            background-color: var(--accent-color-1);
-            color: var(--primary-color);
+
+
+        padding: 8px .btn-send-comment {
+            background-color: var(--primary-color);
+            color: var(--text-on-primary);
             border: none;
             border-radius: 20px;
             padding: 8px 20px;
@@ -1302,7 +1274,7 @@
         }
 
         .btn-send-comment:hover {
-            background-color: var(--cover-button-hover-bg);
+            background-color: #A08F7B;
         }
 
         .comment-list-container {
@@ -1322,7 +1294,7 @@
         }
 
         .comment-list-container::-webkit-scrollbar-thumb {
-            background: var(--accent-color-1);
+            background: var(--primary-color);
             border-radius: 3px;
         }
 
@@ -1331,7 +1303,7 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 15px;
-            border-left: 3px solid var(--accent-color-1);
+            border-left: 3px solid var(--primary-color);
         }
 
         .comment-item-layout .comment-name {
@@ -1390,9 +1362,9 @@
         }
 
         #pagination-container .page-item.active .page-link {
-            background-color: var(--accent-color-1);
-            border-color: var(--accent-color-1);
-            color: var(--primary-color);
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--text-on-primary);
         }
 
         #pagination-container .page-item.disabled .page-link {
@@ -1409,13 +1381,13 @@
         .closing-message .subtitle {
             font-family: var(--font-script);
             font-size: 1.8rem;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
         }
 
         .closing-message .couple-names-display {
             font-family: var(--font-heading);
             font-size: 2.5rem;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             margin-top: 1rem;
             margin-bottom: 0;
         }
@@ -1430,18 +1402,18 @@
         }
 
         .footer .made-with i {
-            color: var(--accent-color-1);
+            color: var(--primary-color);
         }
 
         .footer .social-icons a {
-            color: var(--text-on-light);
+            color: var(--accent-color-1);
             margin: 0 8px;
             font-size: 1.3rem;
             transition: color .3s ease;
         }
 
         .footer .social-icons a:hover {
-            color: var(--accent-color-1);
+            color: var(--primary-color);
         }
 
         .music-button-container {
@@ -1468,7 +1440,7 @@
         }
 
         .music-button:hover {
-            background-color: var(--accent-color-1);
+            background-color: var(--primary-color);
         }
 
         .music-button.playing i::before {
