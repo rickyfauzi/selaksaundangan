@@ -904,68 +904,37 @@
             background-color: #8a9798;
         }
 
-        .gallery-section {
-            background-color: #f9f9f9;
-        }
-
-        .section-title-custom {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #333;
-            position: relative;
-        }
-
         .gallery-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .gallery-item {
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-thumb {
-            position: relative;
             overflow: hidden;
-            border-radius: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform .3s ease, box-shadow .3s ease;
+            aspect-ratio: 1 / 1;
         }
 
-        .gallery-thumb img {
+        .gallery-item img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
-            transition: transform 0.4s ease;
+            transition: transform .3s ease;
         }
 
-        .gallery-thumb:hover img {
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover img {
             transform: scale(1.1);
-        }
-
-        .gallery-thumb .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.4s ease;
-            border-radius: 12px;
-        }
-
-        .gallery-thumb:hover .overlay {
-            opacity: 1;
-        }
-
-        .gallery-thumb .overlay i {
-            color: #fff;
-            font-size: 2rem;
         }
 
         #galleryModal .modal-content {
@@ -1859,28 +1828,21 @@
         @if (isset($galeri) && $galeri->count() > 0)
             <section class="section gallery-section section-bg-light py-5" id="gallery">
                 <div class="container">
-                    <h2 class="section-title-custom text-center mb-5" data-aos="fade-down">Gallery</h2>
-                    <div class="gallery-container row g-4 justify-content-center">
+                    <h2 class="section-title-custom text-center" data-aos="fade-down">Gallery</h2>
+                    <div class="gallery-container">
                         @foreach ($galeri as $item)
-                            <div class="gallery-item col-6 col-md-4 col-lg-3" data-aos="zoom-in"
+                            <div class="gallery-item" data-aos="zoom-in"
                                 data-aos-delay="{{ ($loop->index % 6) * 50 }}" data-bs-toggle="modal"
                                 data-bs-target="#galleryModal"
                                 data-img-src="{{ asset('images/galeri/' . $item->foto) }}">
-                                <div class="gallery-thumb">
-                                    <img src="{{ asset('images/galeri/' . $item->foto) }}"
-                                        alt="Gallery Image {{ $loop->iteration }}"
-                                        class="img-fluid rounded shadow-sm">
-                                    <div class="overlay">
-                                        <i class='bx bx-search-alt-2'></i>
-                                    </div>
-                                </div>
+                                <img src="{{ asset('images/galeri/' . $item->foto) }}"
+                                    alt="Wedding Gallery Image {{ $loop->iteration }}" class="img-fluid">
                             </div>
                         @endforeach
                     </div>
                 </div>
             </section>
         @endif
-
 
         @if ($prewed && $prewed->vidio)
             <section class="section video-section section-bg-light py-5" id="video">
