@@ -480,7 +480,7 @@
             right: 0px;
             width: 250px;
             height: 250px;
-            background-image: url("{{ asset('tema3/img/right.png') }}");
+            background-image: url("{{ asset('tema3/img/left.png') }}");
             /* transform: rotate(180deg); */
             animation: float-subtle-rotated 6s ease-in-out infinite .5s;
         }
