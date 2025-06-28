@@ -68,57 +68,38 @@
         }
 
         :root {
-            /* Luxury Color Palette */
-            --primary-color: #1a2332;
-            /* Deep Navy Blue */
-            --accent-color-1: #b8860b;
-            /* Dark Golden Rod */
-            --accent-color-2: #cd853f;
-            /* Peru Gold */
-            --luxury-gold: #ffd700;
-            /* Pure Gold */
-            --deep-burgundy: #722f37;
-            /* Deep Wine Red */
-            --champagne: #f7e7ce;
-            /* Champagne/Ivory */
-            --rose-gold: #e8b4a0;
-            /* Rose Gold */
-            --midnight-blue: #0f1419;
-            /* Darker Navy */
-            --pearl-white: #faf8f5;
-            /* Pearl White */
-            --copper: #b87333;
-            /* Copper Accent */
-
-            /* Application Colors */
-            --app-bg-light: #faf8f5;
-            /* Pearl White background */
+            /* === LUXURY COLOR PALETTE === */
+            --primary-color: #1a1a1a;
+            /* Rich Black / Deepest Charcoal */
+            --accent-color-1: #C0A062;
+            /* Antique Gold */
+            --app-bg-light: #FDFBF6;
+            /* Warm Off-White / Cream */
             --app-bg-soft: #ffffff;
-            /* Pure white */
-            --text-on-dark: #faf8f5;
-            /* Pearl white text */
-            --text-on-light: #2c2c2c;
-            /* Dark charcoal text */
-            --text-on-primary: #faf8f5;
-            /* Pearl white on primary */
-            --warning-color: #ffd700;
-            /* Gold warning */
-
-            /* Fonts */
+            /* Pure White (for cards) */
+            --text-on-dark: #F0EAD6;
+            /* Soft Cream White (for text on dark bg) */
+            --text-on-light: #333333;
+            /* Dark Gray (for text on light bg) */
+            --text-on-primary: #F0EAD6;
+            /* Soft Cream White (for text on black primary bg) */
+            --warning-color: #D4AF37;
+            /* Brighter Gold (for active states) */
             --font-primary: "Poppins", sans-serif;
             --font-decorative: "Great Vibes", cursive;
             --font-script: "Dancing Script", cursive;
             --font-heading: "Photograph", cursive;
             --font-serif-display: "Playfair Display", serif;
 
-            /* Cover specific colors */
-            --cover-gradient-start: #1a2332;
-            --cover-gradient-end: #faf8f5;
-            --cover-text-color: #b8860b;
-            --cover-names-color: #ffd700;
-            --cover-button-bg: #b8860b;
-            --cover-button-text: #ffffff;
-            --cover-button-hover-bg: #cd853f;
+            /* Cover specific vars */
+            --cover-gradient-start: #2a2a2a;
+            --cover-gradient-end: #1a1a1a;
+            --cover-text-color: #F0EAD6;
+            --cover-names-color: #C0A062;
+            --cover-button-bg: #C0A062;
+            --cover-button-text: #1a1a1a;
+            --cover-button-hover-bg: #a88a4e;
+            /* Darker Gold */
         }
 
         /* --- FONT FACES (from template - adjust paths if hosting locally) --- */
@@ -127,18 +108,19 @@
         @font-face {
             font-family: 'OCRAStd';
             /*
-  src: url('{{ asset('fonts/OCRAStd.eot') }}');
-  src: url('{{ asset('fonts/OCRAStd.eot?#iefix') }}') format('embedded-opentype'),
-       url('{{ asset('fonts/OCRAStd.woff2') }}') format('woff2'),
-       url('{{ asset('fonts/OCRAStd.woff') }}') format('woff'),
-       url('{{ asset('fonts/OCRAStd.ttf') }}') format('truetype'),
-       url('{{ asset('fonts/OCRAStd.svg#OCRAStd') }}') format('svg');
-  */
+      src: url('{{ asset('fonts/OCRAStd.eot') }}');
+      src: url('{{ asset('fonts/OCRAStd.eot?#iefix') }}') format('embedded-opentype'),
+           url('{{ asset('fonts/OCRAStd.woff2') }}') format('woff2'),
+           url('{{ asset('fonts/OCRAStd.woff') }}') format('woff'),
+           url('{{ asset('fonts/OCRAStd.ttf') }}') format('truetype'),
+           url('{{ asset('fonts/OCRAStd.svg#OCRAStd') }}') format('svg');
+      */
             src: local('Courier New'), local('Courier'), monospace;
             /* Fallback */
             font-weight: normal;
             font-style: normal;
         }
+
 
         body {
             margin: 0;
@@ -176,7 +158,7 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--midnight-blue) 30%, var(--deep-burgundy) 70%, var(--champagne) 100%);
+            background: linear-gradient(to bottom, var(--cover-gradient-start) 0%, var(--cover-gradient-end) 100%);
             opacity: 1;
         }
 
@@ -211,8 +193,6 @@
             object-fit: contain;
             position: relative;
             z-index: 2;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(184, 134, 11, 0.3);
         }
 
         .rotating-frame-overlay-cover {
@@ -226,7 +206,6 @@
             animation: spin-frame 35s linear infinite;
             z-index: 1;
             pointer-events: none;
-            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
         }
 
         @keyframes spin-frame {
@@ -251,9 +230,8 @@
             letter-spacing: 1px;
             margin-bottom: 5px;
             text-transform: uppercase;
-            color: var(--luxury-gold);
+            color: var(--cover-text-color);
             font-weight: 600;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .cover-couple-names {
@@ -263,20 +241,19 @@
             line-height: 1.2;
             margin-top: 0;
             margin-bottom: 15px;
-            color: var(--luxury-gold);
-            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+            color: var(--cover-names-color);
         }
 
         .cover-couple-names span {
             font-size: 0.9em;
-            color: var(--champagne);
+            color: var(--cover-names-color);
         }
 
         .cover-guest-name {
             font-family: var(--font-primary);
             font-size: 0.9em;
             line-height: 1.5;
-            color: var(--champagne);
+            color: var(--cover-text-color);
             margin-bottom: 25px;
             word-break: break-word;
         }
@@ -285,22 +262,21 @@
             font-weight: 600;
             display: block;
             margin-top: 4px;
-            color: var(--rose-gold);
+            color: var(--cover-text-color);
         }
 
         #open-invitation.open-invitation-button {
-            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
-            color: var(--text-on-primary);
+            background-color: var(--cover-button-bg);
+            color: var(--cover-button-text);
             font-family: var(--font-primary);
             border: none;
             border-radius: 25px;
-            padding: 12px 30px;
+            padding: 10px 25px;
             font-size: 1em;
-            font-weight: 600;
+            font-weight: 500;
             letter-spacing: 0.5px;
-            box-shadow: 0 5px 20px rgba(184, 134, 11, 0.4);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         #open-invitation.open-invitation-button i {
@@ -308,9 +284,8 @@
         }
 
         #open-invitation.open-invitation-button:hover {
-            background: linear-gradient(135deg, var(--accent-color-2), var(--copper));
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.6);
+            background-color: var(--cover-button-hover-bg);
+            transform: translateY(-2px);
         }
 
         @media (max-width: 480px) {
@@ -344,12 +319,12 @@
         }
 
         .section-bg-light {
-            background: linear-gradient(135deg, var(--app-bg-light) 0%, var(--champagne) 100%);
+            background-color: var(--app-bg-light);
             color: var(--text-on-light);
         }
 
         .section-bg-dark {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--midnight-blue) 100%);
+            background-color: var(--primary-color);
             color: var(--text-on-dark);
         }
 
@@ -361,7 +336,6 @@
             position: relative;
             padding-bottom: 10px;
             text-align: center;
-            text-shadow: 0 2px 10px rgba(184, 134, 11, 0.2);
         }
 
         .section-title-custom::after {
@@ -369,31 +343,31 @@
             display: block;
             width: 70px;
             height: 3px;
-            background: linear-gradient(90deg, var(--accent-color-1), var(--luxury-gold));
+            background-color: var(--accent-color-1);
             margin: 10px auto 0;
-            border-radius: 2px;
         }
 
         .section-bg-dark .section-title-custom {
-            color: var(--luxury-gold);
+            color: var(--accent-color-1);
         }
 
         .section-bg-dark .section-title-custom::after {
-            background: linear-gradient(90deg, var(--luxury-gold), var(--rose-gold));
+            background-color: var(--accent-color-1);
         }
 
         .message-box {
-            background: linear-gradient(135deg, var(--app-bg-soft) 0%, var(--champagne) 100%);
+            background-color: var(--app-bg-soft);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 12px;
             border-left: 5px solid var(--accent-color-1);
-            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             margin: 1.5rem auto;
             text-align: center;
             color: var(--text-on-light);
             font-size: 0.95rem;
             line-height: 1.7;
         }
+
 
         /* --- HEADER SECTION (Home) --- */
         .header-section {
@@ -405,7 +379,7 @@
             color: var(--text-on-light);
             position: relative;
             z-index: 1;
-            background: linear-gradient(135deg, var(--app-bg-light) 0%, var(--champagne) 50%, var(--pearl-white) 100%);
+            background-color: var(--app-bg-light);
             padding-top: 80px;
             padding-bottom: 40px;
         }
@@ -444,7 +418,7 @@
             position: absolute;
             background-repeat: no-repeat;
             background-size: contain;
-            opacity: 0.3;
+            opacity: 0.5;
             pointer-events: none;
             z-index: 0;
         }
@@ -460,7 +434,6 @@
             height: 150px;
             background-image: url("{{ asset('tema2/img/element1.png') }}");
             animation: float-subtle 6s ease-in-out infinite;
-            filter: sepia(100%) saturate(200%) hue-rotate(30deg) brightness(1.2);
         }
 
         .ornament-bottom-right {
@@ -471,13 +444,12 @@
             background-image: url("{{ asset('tema2/img/element1.png') }}");
             transform: rotate(180deg);
             animation: float-subtle-rotated 6s ease-in-out infinite .5s;
-            filter: sepia(100%) saturate(200%) hue-rotate(30deg) brightness(1.2);
         }
 
         .wedding-title {
             font-family: var(--font-primary);
-            font-weight: 600;
-            letter-spacing: 2px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
             color: var(--accent-color-1);
             margin-bottom: 10px;
             font-size: 0.9em;
@@ -505,7 +477,6 @@
             object-fit: contain;
             animation: spin-frame-header 30s linear infinite;
             z-index: 1;
-            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
         }
 
         @keyframes spin-frame-header {
@@ -529,7 +500,7 @@
             position: relative;
             overflow: hidden;
             z-index: 2;
-            box-shadow: 0 0 25px rgba(184, 134, 11, 0.3);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
         .couple-illustration {
@@ -552,12 +523,12 @@
             color: var(--accent-color-1);
             margin-top: 10px;
             margin-bottom: 10px;
-            text-shadow: 0 3px 15px rgba(184, 134, 11, 0.2);
+            text-shadow: none;
         }
 
         .hope-text {
             font-family: var(--font-primary);
-            color: var(--deep-burgundy);
+            color: var(--text-on-light);
             font-size: .95rem;
             margin-bottom: 20px;
             font-weight: 400;
@@ -575,23 +546,21 @@
         }
 
         .countdown-box {
-            background: linear-gradient(135deg, var(--primary-color), var(--midnight-blue));
-            color: var(--luxury-gold);
+            background: var(--primary-color);
+            color: var(--text-on-dark);
             border-radius: 12px;
             padding: 12px 10px;
             min-width: 60px;
-            box-shadow: 0 6px 20px rgba(26, 35, 50, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             transition: transform .3s ease;
             display: inline-flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--accent-color-1);
         }
 
         .countdown-box:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(26, 35, 50, 0.4);
         }
 
         .countdown-number {
@@ -608,7 +577,7 @@
 
         .wedding-date {
             font-family: var(--font-primary);
-            color: var(--deep-burgundy);
+            color: var(--text-on-light);
             font-size: 1em;
             margin-top: 15px;
             margin-bottom: 25px;
@@ -616,24 +585,23 @@
         }
 
         .save-date-btn {
-            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
-            color: var(--text-on-dark);
+            background: var(--accent-color-1);
+            color: var(--primary-color);
             border: none;
             border-radius: 25px;
-            padding: 12px 30px;
+            padding: 10px 28px;
             font-family: var(--font-primary);
-            font-weight: 600;
+            font-weight: 500;
             letter-spacing: 1px;
             transition: all .3s ease;
-            box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             font-size: .9em;
-            text-transform: uppercase;
         }
 
         .save-date-btn:hover {
-            background: linear-gradient(135deg, var(--accent-color-2), var(--copper));
+            background: var(--cover-button-hover-bg);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(184, 134, 11, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         /* --- INVITATION MESSAGE & COUPLE DETAILS --- */
@@ -651,7 +619,7 @@
             overflow: hidden;
             margin: 0 auto 15px;
             border: 4px solid var(--accent-color-1);
-            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .couple-details .person-detail .bride-illustration img {
@@ -663,7 +631,7 @@
         .couple-details .person-name {
             font-family: var(--font-decorative);
             font-size: 2.2rem;
-            color: var(--deep-burgundy);
+            color: var(--text-on-light);
             margin-bottom: 8px;
         }
 
@@ -683,23 +651,17 @@
 
         .btn-instagram {
             font-family: var(--font-primary);
-            border: 2px solid var(--accent-color-1);
+            border: 1px solid var(--accent-color-1);
             color: var(--accent-color-1);
-            background: transparent;
             border-radius: 20px;
-            padding: 8px 18px;
+            padding: 6px 15px;
             font-size: .85rem;
             text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
         }
 
         .btn-instagram:hover {
-            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
-            color: var(--text-on-dark);
-            border-color: var(--accent-color-2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+            background-color: var(--accent-color-1);
+            color: var(--primary-color);
         }
 
         /* --- SEMI-TRANSPARENT CARDS & BACKGROUND ELEMENTS --- */
@@ -709,8 +671,8 @@
         }
 
         .quran-verse .verse-box.semi-transparent-card {
-            background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(15, 20, 25, 0.85));
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            background-color: rgba(26, 26, 26, 0.85);
+            /* transparent primary color */
         }
 
         .quran-verse .verse-box {
@@ -720,7 +682,7 @@
             text-align: center;
             margin: 20px auto;
             max-width: 90%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         .quran-verse .verse-text {
@@ -729,31 +691,29 @@
             font-size: 1.1rem;
             line-height: 1.8;
             margin-bottom: 15px;
-            color: var(--champagne);
         }
 
         .quran-verse .verse-ref {
             font-size: .9rem;
             font-weight: 500;
-            color: var(--luxury-gold);
         }
 
         .section-bg-dark .event-box.semi-transparent-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(184, 134, 11, 0.15));
+            background-color: rgba(255, 255, 255, 0.10);
             color: var(--text-on-dark);
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .section-bg-dark .event-box.semi-transparent-card .event-date,
         .section-bg-dark .event-box.semi-transparent-card .event-time,
         .section-bg-dark .event-box.semi-transparent-card .event-location {
-            color: var(--champagne);
+            color: var(--text-on-dark);
         }
 
         .event-details .event-box {
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             margin-top: 1.5rem;
             text-align: center;
         }
@@ -769,22 +729,15 @@
         .event-details .event-date {
             font-weight: 600;
             font-size: 1.1rem;
-            color: var(--luxury-gold);
-        }
-
-        .event-details .event-time {
-            color: var(--rose-gold);
         }
 
         .event-details .event-location {
             font-style: italic;
-            color: var(--champagne);
         }
 
         .closing-message .message-box.semi-transparent-card,
         #digital-gift-dropdown-section .message-box.semi-transparent-card {
-            background: linear-gradient(135deg, rgba(250, 248, 245, 0.95), rgba(247, 231, 206, 0.9));
-            border-left: 5px solid var(--accent-color-1);
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
         .background-element-container {
@@ -805,8 +758,7 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            opacity: .1;
-            filter: sepia(100%) saturate(150%) hue-rotate(30deg) brightness(1.1);
+            opacity: .15;
         }
 
         .element-quran-verse-bg img {
@@ -825,7 +777,7 @@
 
         .element-closing-bg img {
             width: clamp(250px, 50%, 350px);
-            opacity: .08;
+            opacity: .1;
             align-self: flex-end;
             margin-bottom: 1rem;
         }
@@ -838,21 +790,25 @@
 
         /* Style baru yang diadaptasi dari Tema 1/7 */
         .love-story-section {
-            background: linear-gradient(135deg, var(--app-bg-soft) 0%, var(--champagne) 100%);
+            background-color: var(--app-bg-soft);
+            /* Warna latar dari Tema 2 agar konsisten */
         }
 
         .love-story-section .story-item {
             margin-bottom: 3.5rem;
+            /* Memberi jarak antar cerita */
             align-items: center;
+            /* Membuat gambar dan teks sejajar di tengah */
         }
 
         .love-story-section .story-item img {
             width: 100%;
             height: 300px;
             object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.15);
-            border: 2px solid var(--accent-color-1);
+            border-radius: 8px;
+            /* Sudut sedikit melengkung */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            /* Bayangan lembut */
         }
 
         .love-story-section .story-item .text-content {
@@ -861,15 +817,15 @@
 
         .love-story-section .story-title {
             font-family: var(--font-serif-display);
-            font-size: 1rem;
+            /* Menggunakan font dari Tema 2 */
+            font-size: 1.2rem;
             color: var(--accent-color-1);
             margin-bottom: 0.5rem;
-            font-weight: 600;
         }
 
         .love-story-section .story-date {
             font-size: 0.9rem;
-            color: var(--deep-burgundy);
+            color: #888;
             margin-bottom: 1rem;
             font-style: italic;
         }
@@ -892,53 +848,49 @@
         }
 
         .btn-custom-primary {
-            background: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-2));
-            color: var(--text-on-primary);
+            background-color: var(--accent-color-1);
+            color: var(--primary-color);
             border: none;
             border-radius: 25px;
-            padding: 12px 28px;
+            padding: 10px 25px;
             font-family: var(--font-primary);
-            font-weight: 600;
+            font-weight: 500;
             transition: all .3s ease;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             display: inline-block;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .btn-custom-primary:hover {
-            background: linear-gradient(135deg, var(--accent-color-2), var(--copper));
-            color: var(--text-on-dark);
+            background-color: var(--cover-button-hover-bg);
+            color: var(--primary-color);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .section-bg-dark .btn-custom-primary {
-            background: linear-gradient(135deg, var(--luxury-gold), var(--accent-color-1));
-            color: var(--midnight-blue);
+            background-color: var(--accent-color-1);
+            color: var(--primary-color);
         }
 
         .section-bg-dark .btn-custom-primary:hover {
-            background: linear-gradient(135deg, var(--rose-gold), var(--champagne));
-            color: var(--midnight-blue);
+            background-color: var(--cover-button-hover-bg);
         }
 
         .gallery-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 15px;
+            gap: 10px;
             margin-top: 20px;
         }
 
         .gallery-item {
             overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(184, 134, 11, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            transition: all .3s ease;
+            transition: transform .3s ease, box-shadow .3s ease;
             aspect-ratio: 1 / 1;
-            border: 2px solid var(--accent-color-1);
         }
 
         .gallery-item img {
@@ -951,7 +903,7 @@
 
         .gallery-item:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(184, 134, 11, 0.4);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .gallery-item:hover img {
@@ -966,7 +918,6 @@
         #galleryModal .modal-body {
             padding: 0;
         }
-
 
         #galleryModal .btn-close {
             position: absolute;
@@ -998,14 +949,14 @@
         }
 
         .ig-filter-section .filter-box strong {
-            color: var(--accent-color-1);
+            color: var(--text-on-light);
             font-family: var(--font-serif-display);
             font-size: 1.1rem;
             display: block;
             margin: 5px 0;
         }
 
-        /* --- GIFT CARD STYLES --- */
+        /* --- STYLES FOR GIFT CARD COLLAPSE (Inspired by external template) --- */
         #digital-gift-dropdown-section .message-box p {
             margin-bottom: 1rem;
         }
@@ -1037,7 +988,7 @@
             position: relative;
             overflow: hidden;
             font-family: 'Open Sans', sans-serif;
-            color: #666;
+            color: var(--text-on-light);
             transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
         }
 
@@ -1060,7 +1011,7 @@
             line-height: 1.5;
             font-weight: 600;
             margin: 0;
-            color: #555;
+            color: var(--text-on-light);
         }
 
         .gift-card-item .bank-logo-placeholder {
@@ -1089,6 +1040,8 @@
             width: auto;
         }
 
+        /* For actual img logos */
+
         .gift-card-item .gift-card-account-number {
             margin-bottom: 20px;
             text-align: left;
@@ -1099,7 +1052,7 @@
             line-height: 1.5;
             letter-spacing: 3px;
             font-family: 'OCRAStd', 'Courier New', Courier, monospace;
-            color: #333;
+            color: var(--primary-color);
             display: block;
         }
 
@@ -1124,7 +1077,7 @@
             font-family: 'Open Sans', sans-serif;
             font-size: .9rem;
             font-weight: 600;
-            color: #555;
+            color: var(--text-on-light);
             display: block;
         }
 
@@ -1337,11 +1290,9 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-
-
-        padding: 8px .btn-send-comment {
-            background-color: var(--primary-color);
-            color: var(--text-on-primary);
+        .btn-send-comment {
+            background-color: var(--accent-color-1);
+            color: var(--primary-color);
             border: none;
             border-radius: 20px;
             padding: 8px 20px;
@@ -1351,7 +1302,7 @@
         }
 
         .btn-send-comment:hover {
-            background-color: #A08F7B;
+            background-color: var(--cover-button-hover-bg);
         }
 
         .comment-list-container {
@@ -1371,7 +1322,7 @@
         }
 
         .comment-list-container::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
+            background: var(--accent-color-1);
             border-radius: 3px;
         }
 
@@ -1380,7 +1331,7 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 15px;
-            border-left: 3px solid var(--primary-color);
+            border-left: 3px solid var(--accent-color-1);
         }
 
         .comment-item-layout .comment-name {
@@ -1439,9 +1390,9 @@
         }
 
         #pagination-container .page-item.active .page-link {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: var(--text-on-primary);
+            background-color: var(--accent-color-1);
+            border-color: var(--accent-color-1);
+            color: var(--primary-color);
         }
 
         #pagination-container .page-item.disabled .page-link {
@@ -1458,13 +1409,13 @@
         .closing-message .subtitle {
             font-family: var(--font-script);
             font-size: 1.8rem;
-            color: var(--primary-color);
+            color: var(--accent-color-1);
         }
 
         .closing-message .couple-names-display {
             font-family: var(--font-heading);
             font-size: 2.5rem;
-            color: var(--primary-color);
+            color: var(--accent-color-1);
             margin-top: 1rem;
             margin-bottom: 0;
         }
@@ -1479,18 +1430,18 @@
         }
 
         .footer .made-with i {
-            color: var(--primary-color);
+            color: var(--accent-color-1);
         }
 
         .footer .social-icons a {
-            color: var(--accent-color-1);
+            color: var(--text-on-light);
             margin: 0 8px;
             font-size: 1.3rem;
             transition: color .3s ease;
         }
 
         .footer .social-icons a:hover {
-            color: var(--primary-color);
+            color: var(--accent-color-1);
         }
 
         .music-button-container {
@@ -1517,7 +1468,7 @@
         }
 
         .music-button:hover {
-            background-color: var(--primary-color);
+            background-color: var(--accent-color-1);
         }
 
         .music-button.playing i::before {
