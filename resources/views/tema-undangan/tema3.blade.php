@@ -476,7 +476,7 @@
         }
 
         .ornament-bottom-right {
-            top: 5px;
+            bottom: 5px;
             right: 0px;
             width: 250px;
             height: 250px;
@@ -612,7 +612,7 @@
 
         .wedding-date {
             font-family: var(--font-primary);
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             font-size: 1em;
             margin-top: 15px;
             margin-bottom: 25px;
@@ -666,7 +666,7 @@
         .couple-details .person-name {
             font-family: var(--font-decorative);
             font-size: 2.2rem;
-            color: var(--accent-color-1);
+            color: var(--primary-color);
             margin-bottom: 8px;
         }
 
