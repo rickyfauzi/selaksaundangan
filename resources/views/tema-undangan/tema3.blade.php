@@ -2209,6 +2209,7 @@
 
     <script>
         $(document).ready(function() {
+            // Initialize AOS animation
             AOS.init({
                 duration: 800,
                 once: false,
@@ -2216,12 +2217,82 @@
                 offset: 30
             });
 
+            // Music Setup
+            const musicBox = $(".music-box");
+            const musicPlayer = $("#musicPlayer")[0];
             const openButton = $('#open-invitation');
             const coverContainer = $('#cover-container');
+            let isFirstClick = true;
 
+            // Function to handle music play with autoplay restrictions
+            function playMusic() {
+                // For browsers that require user interaction
+                const playPromise = musicPlayer.play();
 
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        musicBox.addClass("music-box-rotating");
+                        musicBox.css("opacity", "1");
+                    }).catch(error => {
+                        console.log("Autoplay prevented:", error);
+                        // Show music box but let user click to play
+                        musicBox.css("opacity", "1");
+                    });
+                }
+            }
 
+            // Function to toggle music play/pause
+            function toggleMusic() {
+                musicBox.animate({
+                    opacity: "1"
+                }, 200);
+                if (musicPlayer.paused) {
+                    musicPlayer.play();
+                    musicBox.addClass("music-box-rotating");
+                } else {
+                    musicPlayer.pause();
+                    musicBox.removeClass("music-box-rotating");
+                }
+            }
 
+            // Open invitation handler
+            openButton.on('click', function(e) {
+                e.preventDefault();
+
+                // Animate cover removal
+                coverContainer.fadeOut(800, function() {
+                    $('body').css('overflow', 'auto');
+
+                    // Play music on first open
+                    if (isFirstClick) {
+                        playMusic();
+                        isFirstClick = false;
+                    }
+                });
+            });
+
+            // Music box click handler
+            musicBox.on('click', function() {
+                toggleMusic();
+            });
+
+            // Fallback for autoplay restrictions
+            document.addEventListener('click', function firstInteraction() {
+                document.removeEventListener('click', firstInteraction);
+                if (musicPlayer.paused && !isFirstClick) {
+                    playMusic();
+                }
+            });
+
+            // Pause music when tab is inactive
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    musicPlayer.pause();
+                    musicBox.removeClass("music-box-rotating");
+                }
+            });
+
+            // Countdown Timer
             const targetDateString = $('#ori_tanggal_acara').val();
             if (targetDateString) {
                 const targetDate = new Date(targetDateString.replace(/-/g, '/')).getTime();
@@ -2249,27 +2320,25 @@
                 $('.countdown-container').hide();
             }
 
-            var lastId;
+            // Navigation Setup
+            let lastId;
             const bottomNav = $(".bottom-nav");
             const navMenuItemsForScroll = bottomNav.find("a[href^='#']").not('[data-bs-toggle="collapse"]');
             let navScrollItems = [];
+
             if (navMenuItemsForScroll.length > 0) {
                 navScrollItems = navMenuItemsForScroll.map(function() {
-                    var item = $($(this).attr("href"));
-                    if (item.length) {
-                        return item;
-                    }
-                    return undefined;
+                    const item = $($(this).attr("href"));
+                    return item.length ? item : undefined;
                 }).get().filter(item => item !== undefined);
             }
 
+            // Navigation click handler
             bottomNav.on('click', 'a[href^="#"]', function(e) {
-                if ($(this).data('bs-toggle') === 'collapse') {
-                    return;
-                }
+                if ($(this).data('bs-toggle') === 'collapse') return;
                 e.preventDefault();
-                var targetId = $(this).attr("href");
-                var targetElement = $(targetId);
+                const targetId = $(this).attr("href");
+                const targetElement = $(targetId);
                 if (targetElement.length) {
                     $('html, body').animate({
                         scrollTop: targetElement.offset().top - 30
@@ -2277,14 +2346,17 @@
                 }
             });
 
+            // Navigation scroll handler
             $(window).scroll(function() {
                 let fromTop = $(this).scrollTop() + (bottomNav.is(':visible') ? bottomNav.outerHeight() :
                     0) + 75;
                 let currentSectionId = "home";
+
                 if (navScrollItems.length > 0) {
                     let activeItems = navScrollItems.filter(function(item) {
                         return $(item).offset().top < fromTop;
                     });
+
                     if (activeItems.length > 0) {
                         currentSectionId = $(activeItems[activeItems.length - 1]).attr("id");
                     } else {
@@ -2295,10 +2367,12 @@
                             currentSectionId = $(navScrollItems[0]).attr("id");
                         }
                     }
+
                     if ($(this).scrollTop() < 50) {
                         currentSectionId = "home";
                     }
                 }
+
                 if (lastId !== currentSectionId) {
                     lastId = currentSectionId;
                     bottomNav.find("a[href^='#']").removeClass("active");
@@ -2306,20 +2380,13 @@
                 }
             }).trigger('scroll');
 
+            // Copy to Clipboard Functionality
             function copyToClipboard(text) {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
+                if (navigator.clipboard?.writeText) {
                     navigator.clipboard.writeText(text).then(() => {
-                        $.toast({
-                            heading: 'Berhasil',
-                            text: 'Nomor rekening disalin!',
-                            position: 'top-right',
-                            loaderBg: 'var(--primary-color)',
-                            icon: 'success',
-                            hideAfter: 2000,
-                            stack: 5
-                        });
+                        showToast('Berhasil', 'Nomor rekening disalin!', 'success');
                     }).catch(err => {
-                        console.warn('Copy fallback: ', err);
+                        console.warn('Copy fallback:', err);
                         fallbackCopyTextToClipboard(text);
                     });
                 } else {
@@ -2328,7 +2395,7 @@
             }
 
             function fallbackCopyTextToClipboard(text) {
-                var textArea = document.createElement("textarea");
+                const textArea = document.createElement("textarea");
                 textArea.value = text;
                 Object.assign(textArea.style, {
                     position: "fixed",
@@ -2342,53 +2409,54 @@
                     boxShadow: "none",
                     background: "transparent"
                 });
+
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
+
                 try {
                     if (document.execCommand('copy')) {
-                        $.toast({
-                            heading: 'Berhasil',
-                            text: 'Nomor rekening disalin!',
-                            position: 'top-right',
-                            loaderBg: 'var(--primary-color)',
-                            icon: 'success',
-                            hideAfter: 2000,
-                            stack: 5
-                        });
+                        showToast('Berhasil', 'Nomor rekening disalin!', 'success');
                     } else {
-                        $.toast({
-                            heading: 'Gagal',
-                            text: 'Gagal menyalin.',
-                            position: 'top-right',
-                            loaderBg: '#ff6849',
-                            icon: 'error',
-                            hideAfter: 3000,
-                            stack: 5
-                        });
+                        showToast('Gagal', 'Gagal menyalin.', 'error');
                     }
                 } catch (err) {
-                    $.toast({
-                        heading: 'Gagal',
-                        text: 'Gagal menyalin.',
-                        position: 'top-right',
-                        loaderBg: '#ff6849',
-                        icon: 'error',
-                        hideAfter: 3000,
-                        stack: 5
-                    });
+                    showToast('Gagal', 'Gagal menyalin.', 'error');
                 }
+
                 document.body.removeChild(textArea);
             }
+
+            // Toast notification helper
+            function showToast(heading, text, icon) {
+                $.toast({
+                    heading: heading,
+                    text: text,
+                    position: 'top-right',
+                    loaderBg: icon === 'success' ? 'var(--primary-color)' : '#ff6849',
+                    icon: icon,
+                    hideAfter: icon === 'success' ? 2000 : 3000,
+                    stack: 5
+                });
+            }
+
+            // Copy account button handler
             $('body').on('click', '.btn-copy-account', function(e) {
                 e.preventDefault();
                 copyToClipboard($(this).data('text'));
             });
 
+            // Gallery Modal
             $('#galleryModal').on('show.bs.modal', function(event) {
                 $(this).find('#galleryModalImage').attr('src', $(event.relatedTarget).data('img-src'));
             });
 
+            // Guestbook Functionality
+            let allComments = [];
+            const commentsPerPage = 10;
+            let currentPage = 1;
+
+            // Initialize guestbook
             const ucapanUndangan = () => {
                 const userId = $('#user_id').val();
                 if (!userId) {
@@ -2400,250 +2468,19 @@
                     $('.rsvp-summary').hide();
                     return;
                 }
+
                 $('#guestbookForm').show();
                 $('.rsvp-summary').show();
-                const showUrl = `{{ route('ucapan.show', ['id' => ':id']) }}`.replace(':id', userId);
-                $.ajax({
-                    url: showUrl,
-                    type: 'GET',
-                    success: function(res) {
-                        const commentListContainer = $('#dynamic-comment-list');
-                        commentListContainer.html('');
-                        const comments = res.ucapan;
-                        let totalCount = 0,
-                            hadirCount = 0,
-                            tidakHadirCount = 0;
-                        if (comments && Array.isArray(comments) && comments.length > 0) {
-                            totalCount = comments.length;
-                            comments.forEach(item => {
-                                if (item.attendance === 'hadir') hadirCount++;
-                                else if (item.attendance === 'tidak-hadir')
-                                    tidakHadirCount++;
-                            });
-                            comments.sort((a, b) => new Date(b.created_at) - new Date(a
-                                .created_at));
-                            comments.forEach((item, index) => {
-                                let attendanceBadge = '';
-                                if (item.attendance === 'hadir') {
-                                    attendanceBadge =
-                                        '<span class="attendance-badge attendance-hadir">Hadir</span>';
-                                } else if (item.attendance === 'tidak-hadir') {
-                                    attendanceBadge =
-                                        '<span class="attendance-badge attendance-tidak-hadir">Tidak Hadir</span>';
-                                }
-                                let formattedDate = item.created_at ? new Date(item
-                                    .created_at).toLocaleString('id-ID', {
-                                    day: 'numeric',
-                                    month: 'long',
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }) : '';
-                                commentListContainer.append(
-                                    `<div class="comment-item-layout"><div class="row"><div class="col comment-details-col"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div></div></div>`
-                                );
-                            });
-                        } else {
-                            commentListContainer.html(
-                                '<p class="text-center" style="color: rgba(255,255,255,0.7); padding: 10px 0;">Belum ada ucapan.</p>'
-                            );
-                        }
-                        const numRenderedComments = commentListContainer.children(
-                            '.comment-item-layout').length;
-                        if (numRenderedComments === 0) {
-                            commentListContainer.css('max-height', '70px');
-                        } else if (numRenderedComments <= 3) {
-                            commentListContainer.css('max-height', 'none');
-                        } else {
-                            commentListContainer.css('max-height', '400px');
-                        }
-                        $('#comment-count').text(totalCount);
-                        $('#rsvp-hadir-count').text(hadirCount);
-                        $('#rsvp-tidak-hadir-count').text(tidakHadirCount);
-                    },
-                    error: function(xhr) {
-                        console.error("Error fetching comments:", xhr.responseText);
-                        $('#dynamic-comment-list').html(
-                            '<p class="text-center" style="color: rgba(255,255,255,0.7);">Gagal memuat ucapan.</p>'
-                        ).css('max-height', '60px');
-                    }
-                });
+                fetchInitialData();
             };
-            $('#guestbookForm').on('submit', function(e) {
-                e.preventDefault();
-                const userId = $('#user_id').val(),
-                    nama = $('#nama-ucapan').val().trim(),
-                    ucapan = $('#pesan-ucapan').val().trim(),
-                    attendance = $('select[name="attendance"]').val();
-                if (!userId) {
-                    $.toast({
-                        heading: 'Error',
-                        text: 'User ID tidak ditemukan.',
-                        position: 'top-right',
-                        loaderBg: '#ff6849',
-                        icon: 'error',
-                        hideAfter: 3500
-                    });
-                    return;
-                }
-                if (!nama) {
-                    $.toast({
-                        heading: 'Perhatian',
-                        text: 'Nama tidak boleh kosong.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'warning',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                if (!ucapan) {
-                    $.toast({
-                        heading: 'Perhatian',
-                        text: 'Ucapan tidak boleh kosong.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'warning',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                if (!attendance) {
-                    $.toast({
-                        heading: 'Perhatian',
-                        text: 'Pilih status kehadiran.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'warning',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                const storeUrl = `{{ route('ucapan.store', ['id' => ':id']) }}`.replace(':id', userId);
-                $.ajax({
-                    url: storeUrl,
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: () => $('#kirim-ucapan').prop('disabled', true).html(
-                        '<span class="spinner-border spinner-border-sm"></span> Mengirim...'),
-                    success: function(response) {
-                        if (response.code === 1) {
-                            // $.toast({ heading: 'Berhasil', text: response.message || 'Ucapan berhasil dikirim!', position: 'top-right', loaderBg: 'var(--primary-color)', icon: 'success', hideAfter: 3000, stack: 5 });
-                            $('#guestbookForm')[0].reset();
-                            const prefilledName = "";
-                            if (prefilledName) $('#nama-ucapan').val(prefilledName);
-                            ucapanUndangan();
-                        } else {
-                            $.toast({
-                                heading: 'Gagal',
-                                text: response.message || 'Gagal mengirim ucapan.',
-                                position: 'top-right',
-                                loaderBg: '#ff6849',
-                                icon: 'error',
-                                hideAfter: 3500,
-                                stack: 5
-                            });
-                        }
-                    },
-                    error: (xhr) => {
-                        let errMsg = 'Gagal mengirim ucapan.';
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            errMsg = xhr.responseJSON.message;
-                        } else if (xhr.status === 419) {
-                            errMsg = 'Sesi berakhir. Segarkan halaman.';
-                        }
-                        $.toast({
-                            heading: 'Error',
-                            text: errMsg,
-                            position: 'top-right',
-                            loaderBg: '#ff6849',
-                            icon: 'error',
-                            hideAfter: 4500,
-                            stack: 5
-                        });
-                    },
-                    complete: () => $('#kirim-ucapan').prop('disabled', false).text('KIRIM')
-                });
-            });
-            ucapanUndangan();
 
-            $('.save-date-btn').on('click', function() {
-                const eventName =
-                    "Pernikahan {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}";
-                const eventDateVal = $('#ori_tanggal_acara').val();
-                if (!eventDateVal) {
-                    $.toast({
-                        heading: 'Info',
-                        text: 'Tanggal acara belum ditentukan.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'info',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                const formattedDateVal = eventDateVal.replace(/-/g, '/');
-                const eventDate = new Date(formattedDateVal);
-                if (isNaN(eventDate.getTime())) {
-                    $.toast({
-                        heading: 'Error',
-                        text: 'Format tanggal tidak valid.',
-                        position: 'top-right',
-                        loaderBg: '#ff6849',
-                        icon: 'error',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                const startTime = eventDate.toISOString().replace(/-|:|\.\d{3}/g, '');
-                const endDate = new Date(eventDate.getTime() + (2 * 60 * 60 * 1000));
-                const endTime = endDate.toISOString().replace(/-|:|\.\d{3}/g, '');
-                const location =
-                    "{{ $informasiacara->lokasiakadnikah ?? ($informasiacara->lokasiresepsi ?? 'Detail Lokasi Menyusul') }}";
-                const description =
-                    "Jangan lupa datang ke acara pernikahan kami! {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}.";
-                const icsContent =
-                    `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SelaksaDigital//WeddingInvitation//EN\nBEGIN:VEVENT\nUID:${new Date().getTime()}@selaksadigital.com\nDTSTAMP:${new Date().toISOString().replace(/-|:|\.\d{3}/g, '')}\nDTSTART:${startTime}\nDTEND:${endTime}\nSUMMARY:${eventName}\nDESCRIPTION:${description}\nLOCATION:${location}\nEND:VEVENT\nEND:VCALENDAR`;
-                const blob = new Blob([icsContent], {
-                    type: 'text/calendar;charset=utf-8'
-                });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'save-the-date-pernikahan.ics';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                $.toast({
-                    heading: 'Berhasil',
-                    text: 'File kalender (ICS) telah diunduh.',
-                    position: 'top-right',
-                    loaderBg: 'var(--primary-color)',
-                    icon: 'success',
-                    hideAfter: 3000
-                });
-            });
-
-            var giftCardCollapseElement = document.getElementById('giftCardCollapse');
-            if (giftCardCollapseElement) {
-                giftCardCollapseElement.addEventListener('shown.bs.collapse', function() {
-                    AOS.refresh();
-                });
-            }
-
-            let allComments = []; // Variabel global untuk menyimpan SEMUA komentar dari server
-            const commentsPerPage = 10; // Atur jumlah komentar per halaman
-            let currentPage = 1; // Halaman yang sedang aktif
-
-            // Fungsi untuk menampilkan komentar pada halaman tertentu
+            // Display comments for current page
             function displayComments(page) {
                 currentPage = page;
                 const commentListContainer = $('#dynamic-comment-list');
                 const paginationContainer = $('#pagination-container');
-                commentListContainer.html(''); // Kosongkan daftar sebelum diisi
-                paginationContainer.html(''); // Kosongkan tombol paginasi
+                commentListContainer.html('');
+                paginationContainer.html('');
 
                 if (!allComments || allComments.length === 0) {
                     commentListContainer.html(
@@ -2651,53 +2488,50 @@
                     return;
                 }
 
-                // Memotong array `allComments` sesuai halaman yang aktif
                 const startIndex = (page - 1) * commentsPerPage;
                 const endIndex = startIndex + commentsPerPage;
                 const paginatedComments = allComments.slice(startIndex, endIndex);
 
-                // Menampilkan komentar yang sudah dipotong
                 paginatedComments.forEach(item => {
                     let attendanceBadge = item.attendance === 'hadir' ?
-                        '<span class="attendance-badge attendance-hadir">Hadir</span>' : (item
-                            .attendance === 'tidak-hadir' ?
+                        '<span class="attendance-badge attendance-hadir">Hadir</span>' :
+                        (item.attendance === 'tidak-hadir' ?
                             '<span class="attendance-badge attendance-tidak-hadir">Tidak Hadir</span>' : ''
-                        );
-                    let formattedDate = new Date(item.created_at).toLocaleString('id-ID', {
+                            );
+
+                    let formattedDate = item.created_at ? new Date(item.created_at).toLocaleString(
+                    'id-ID', {
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric',
                         hour: '2-digit',
                         minute: '2-digit'
-                    });
+                    }) : '';
+
                     commentListContainer.append(
-                        `<div class="comment-item-layout"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div>`
+                        `<div class="comment-item-layout"><div class="row"><div class="col comment-details-col"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div></div></div>`
                     );
                 });
 
-                // Membuat dan menampilkan tombol-tombol paginasi
                 displayPagination();
             }
 
-            // Fungsi untuk membuat tombol-tombol paginasi berdasarkan jumlah total komentar
+            // Display pagination controls
             function displayPagination() {
                 const paginationContainer = $('#pagination-container');
                 const pageCount = Math.ceil(allComments.length / commentsPerPage);
 
-                if (pageCount <= 1) return; // Jangan tampilkan paginasi jika hanya 1 halaman
+                if (pageCount <= 1) return;
 
                 let paginationHTML = '<nav><ul class="pagination">';
-                // Tombol "Previous"
                 paginationHTML +=
                     `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage - 1}">«</a></li>`;
 
-                // Tombol nomor halaman
                 for (let i = 1; i <= pageCount; i++) {
                     paginationHTML +=
                         `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
                 }
 
-                // Tombol "Next"
                 paginationHTML +=
                     `<li class="page-item ${currentPage === pageCount ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage + 1}">»</a></li>`;
                 paginationHTML += '</ul></nav>';
@@ -2705,13 +2539,10 @@
                 paginationContainer.html(paginationHTML);
             }
 
-            // Fungsi untuk mengambil SEMUA data ucapan dari server SEKALI SAJA
-            const fetchInitialData = () => {
+            // Fetch initial guestbook data
+            function fetchInitialData() {
                 const userId = $('#user_id').val();
-                if (!userId) {
-                    /* ... handle no user id ... */
-                    return;
-                }
+                if (!userId) return;
 
                 const showUrl = `{{ route('ucapan.show', ['id' => ':id']) }}`.replace(':id', userId);
 
@@ -2719,30 +2550,30 @@
                     url: showUrl,
                     type: 'GET',
                     success: function(res) {
-                        // Simpan SEMUA ucapan ke variabel global
                         allComments = res.ucapan || [];
-
-                        // Mengurutkan komentar dari yang terbaru
                         allComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-                        // Menghitung total hadir/tidak hadir dari semua data
                         const totalCount = allComments.length;
                         const hadirCount = allComments.filter(c => c.attendance === 'hadir').length;
-                        const tidakHadirCount = allComments.filter(c => c.attendance ===
-                            'tidak-hadir').length;
+                        const tidakHadirCount = allComments.filter(c => c.attendance === 'tidak-hadir')
+                            .length;
 
                         $('#comment-count').text(totalCount);
                         $('#rsvp-hadir-count').text(hadirCount);
                         $('#rsvp-tidak-hadir-count').text(tidakHadirCount);
 
-                        // Setelah semua data didapat, tampilkan halaman pertama
                         displayComments(1);
                     },
-                    error: (xhr) => console.error("Error fetching comments:", xhr.responseText)
+                    error: (xhr) => {
+                        console.error("Error fetching comments:", xhr.responseText);
+                        $('#dynamic-comment-list').html(
+                            '<p class="text-center" style="color: rgba(255,255,255,0.7);">Gagal memuat ucapan.</p>'
+                        ).css('max-height', '60px');
+                    }
                 });
-            };
+            }
 
-            // Event listener untuk klik pada tombol paginasi
+            // Pagination click handler
             $('body').on('click', '#pagination-container .page-link', function(e) {
                 e.preventDefault();
                 const page = $(this).data('page');
@@ -2752,13 +2583,33 @@
                 }
             });
 
-            // Event listener untuk submit form
+            // Guestbook form submission
             $('#guestbookForm').on('submit', function(e) {
                 e.preventDefault();
-                // ... (validasi form)
+                const userId = $('#user_id').val();
+                const nama = $('#nama-ucapan').val().trim();
+                const ucapan = $('#pesan-ucapan').val().trim();
+                const attendance = $('select[name="attendance"]').val();
 
-                const storeUrl = `{{ route('ucapan.store', ['id' => ':id']) }}`.replace(':id', $(
-                    '#user_id').val());
+                if (!userId) {
+                    showToast('Error', 'User ID tidak ditemukan.', 'error');
+                    return;
+                }
+                if (!nama) {
+                    showToast('Perhatian', 'Nama tidak boleh kosong.', 'warning');
+                    return;
+                }
+                if (!ucapan) {
+                    showToast('Perhatian', 'Ucapan tidak boleh kosong.', 'warning');
+                    return;
+                }
+                if (!attendance) {
+                    showToast('Perhatian', 'Pilih status kehadiran.', 'warning');
+                    return;
+                }
+
+                const storeUrl = `{{ route('ucapan.store', ['id' => ':id']) }}`.replace(':id', userId);
+
                 $.ajax({
                     url: storeUrl,
                     method: 'POST',
@@ -2766,38 +2617,101 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    beforeSend: () => $('#kirim-ucapan').prop('disabled', true).html(
-                        '<span class="spinner-border spinner-border-sm"></span>'),
+                    beforeSend: () => {
+                        $('#kirim-ucapan').prop('disabled', true)
+                            .html(
+                                '<span class="spinner-border spinner-border-sm"></span> Mengirim...'
+                                );
+                    },
                     success: function(response) {
                         if (response.code === 1) {
-                            $.toast({
-                                heading: 'Berhasil',
-                                text: 'Ucapan Anda telah terkirim!',
-                                position: 'top-right',
-                                loaderBg: 'var(--primary-color)',
-                                icon: 'success'
-                            });
+                            showToast('Berhasil', 'Ucapan berhasil dikirim!', 'success');
                             $('#guestbookForm')[0].reset();
-                            const prefilledName = "{{ $kodeTamu->nama ?? '' }}";
-                            if (prefilledName) $('#nama-ucapan').val(prefilledName);
-
-                            // Ambil ulang SEMUA data agar komentar baru masuk dan tampil di halaman pertama
                             fetchInitialData();
                         } else {
-                            /* ... handle error ... */
+                            showToast('Gagal', response.message || 'Gagal mengirim ucapan.',
+                                'error');
                         }
                     },
                     error: (xhr) => {
-                        /* ... handle error ... */
+                        let errMsg = 'Gagal mengirim ucapan.';
+                        if (xhr.responseJSON?.message) {
+                            errMsg = xhr.responseJSON.message;
+                        } else if (xhr.status === 419) {
+                            errMsg = 'Sesi berakhir. Segarkan halaman.';
+                        }
+                        showToast('Error', errMsg, 'error');
                     },
-                    complete: () => $('#kirim-ucapan').prop('disabled', false).text('KIRIM')
+                    complete: () => {
+                        $('#kirim-ucapan').prop('disabled', false).text('KIRIM');
+                    }
                 });
             });
 
-            // Panggilan awal untuk memulai semuanya
-            fetchInitialData();
+            // Save to Calendar Function
+            $('.save-date-btn').on('click', function() {
+                const eventName =
+                    "Pernikahan {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}";
+                const eventDateVal = $('#ori_tanggal_acara').val();
 
+                if (!eventDateVal) {
+                    showToast('Info', 'Tanggal acara belum ditentukan.', 'info');
+                    return;
+                }
 
+                const formattedDateVal = eventDateVal.replace(/-/g, '/');
+                const eventDate = new Date(formattedDateVal);
+
+                if (isNaN(eventDate.getTime())) {
+                    showToast('Error', 'Format tanggal tidak valid.', 'error');
+                    return;
+                }
+
+                const startTime = eventDate.toISOString().replace(/-|:|\.\d{3}/g, '');
+                const endDate = new Date(eventDate.getTime() + (2 * 60 * 60 * 1000));
+                const endTime = endDate.toISOString().replace(/-|:|\.\d{3}/g, '');
+                const location =
+                    "{{ $informasiacara->lokasiakadnikah ?? ($informasiacara->lokasiresepsi ?? 'Detail Lokasi Menyusul') }}";
+                const description =
+                    "Jangan lupa datang ke acara pernikahan kami! {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}.";
+
+                const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SelaksaDigital//WeddingInvitation//EN
+BEGIN:VEVENT
+UID:${new Date().getTime()}@selaksadigital.com
+DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d{3}/g, '')}
+DTSTART:${startTime}
+DTEND:${endTime}
+SUMMARY:${eventName}
+DESCRIPTION:${description}
+LOCATION:${location}
+END:VEVENT
+END:VCALENDAR`;
+
+                const blob = new Blob([icsContent], {
+                    type: 'text/calendar;charset=utf-8'
+                });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'save-the-date-pernikahan.ics';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showToast('Berhasil', 'File kalender (ICS) telah diunduh.', 'success');
+            });
+
+            // Initialize AOS when gift card is shown
+            const giftCardCollapseElement = document.getElementById('giftCardCollapse');
+            if (giftCardCollapseElement) {
+                giftCardCollapseElement.addEventListener('shown.bs.collapse', function() {
+                    AOS.refresh();
+                });
+            }
+
+            // Initialize guestbook
+            ucapanUndangan();
         });
     </script>
 </body>
