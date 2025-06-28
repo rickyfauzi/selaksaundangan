@@ -1561,6 +1561,16 @@
 <body>
 
     <div id="cover-container">
+
+        <div class="music-cont">
+            <audio controls autoplay class="d-none" id="music-audio">
+                <source
+                    src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '') : '' }}"
+                    type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+            <img src="/tema7/img/vinyl.png" alt="" id="disk-player" class="spining" onclick="toggleMusic()" />
+        </div>
         <!-- Background Image -->
         <div class="cover-background-image"></div>
 
@@ -2142,7 +2152,7 @@
         </div>
     </footer>
 
-    <div class="music-button-container">
+    {{-- <div class="music-button-container">
         <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
         <audio id="musicPlayer">
             <source
@@ -2150,7 +2160,7 @@
                 type="audio/mpeg" />
             Your browser does not support the audio element.
         </audio>
-    </div>
+    </div> --}}
 
 
 
