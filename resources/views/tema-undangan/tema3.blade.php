@@ -417,7 +417,7 @@
             left: 15px;
             width: 150px;
             height: 150px;
-            background-image: url("{{ asset('tema2/img/element1.png') }}");
+            background-image: url("{{ asset('tema3/img/left.png') }}");
             animation: float-subtle 6s ease-in-out infinite;
         }
 
@@ -426,7 +426,7 @@
             right: 15px;
             width: 150px;
             height: 150px;
-            background-image: url("{{ asset('tema2/img/element1.png') }}");
+            background-image: url("{{ asset('tema3/img/right.png') }}");
             transform: rotate(180deg);
             animation: float-subtle-rotated 6s ease-in-out infinite .5s;
         }
@@ -1557,8 +1557,8 @@
             <div class="container">
                 <p class="wedding-title" data-aos="fade-up" data-aos-delay="50">THE WEDDING OF</p>
                 <div class="couple-frame-container" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="{{ asset('tema2/img/bingkai.png') }}" alt="Decorative Frame"
-                        class="rotating-frame-image" />
+                    {{-- <img src="{{ asset('tema2/img/bingkai.png') }}" alt="Decorative Frame"
+                        class="rotating-frame-image" /> --}}
                     <div class="couple-circle">
                         <div class="couple-illustration">
                             <img src="{{ $informasiacara && $informasiacara->pembuka ? asset('images/pembuka/' . $informasiacara->pembuka) : asset('images/default/default_couple_photo.jpg') }}"
@@ -2110,13 +2110,9 @@
     <nav class="bottom-nav">
         <a href="#home" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="#akad" class="nav-item"><i class="fas fa-calendar-check"></i><span>Acara</span></a>
-        @if ($ceritacinta && ($ceritacinta->judulcerita1 || $ceritacinta->judulcerita2 || $ceritacinta->judulcerita3))
-            <a href="#love-story" class="nav-item"><i class="fas fa-heart"></i><span>Kisah</span></a>
-        @endif
-        @if (isset($galeri) && $galeri->count() > 0)<a href="#gallery" class="nav-item"><i
-                    class="fas fa-images"></i><span>Gallery</span></a>@endif
-        @if ($prewed && $prewed->vidio)<a href="#video" class="nav-item"><i
-                    class="fas fa-video"></i><span>Video</span></a>@endif
+
+
+
         @if ($weddingfilter && $weddingfilter->link)<a href="#ig-filter" class="nav-item"><i
                     class="fab fa-instagram"></i><span>Filter</span></a>@endif
         <a href="#guestbook" class="nav-item"><i class="fas fa-comments"></i><span>Ucapan</span></a>
