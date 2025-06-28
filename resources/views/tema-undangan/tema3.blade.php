@@ -146,8 +146,22 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
-            background: linear-gradient(to bottom, var(--primary-color) 0%, white 100%);
+            background: linear-gradient(135deg, var(--cover-gradient-start) 0%, var(--cover-gradient-end) 100%);
             opacity: 1;
+        }
+
+        /* Overlay Gradient dengan Warna Primary */
+        .color-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,
+                    rgba(46, 64, 83, 0.15) 0%,
+                    rgba(255, 255, 255, 0.85) 50%,
+                    rgba(46, 64, 83, 0.15) 100%);
+            z-index: -1;
         }
 
         #cover-container.hidden {
@@ -163,6 +177,13 @@
             align-items: center;
             width: 100%;
             max-width: 450px;
+            background-color: var(--app-bg-soft);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(46, 64, 83, 0.1);
         }
 
         .cover-image-and-frame-wrapper {
@@ -181,6 +202,7 @@
             object-fit: contain;
             position: relative;
             z-index: 2;
+            filter: drop-shadow(0 5px 15px rgba(46, 64, 83, 0.2));
         }
 
         .rotating-frame-overlay-cover {
@@ -194,6 +216,7 @@
             animation: spin-frame 35s linear infinite;
             z-index: 1;
             pointer-events: none;
+            opacity: 0.7;
         }
 
         @keyframes spin-frame {
@@ -228,6 +251,7 @@
             margin-top: 0;
             margin-bottom: 15px;
             color: var(--primary-color);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .cover-couple-names span {
@@ -248,12 +272,12 @@
             font-weight: 600;
             display: block;
             margin-top: 4px;
-            color: var(--cover-text-color);
+            color: var(--primary-color);
         }
 
         #open-invitation.open-invitation-button {
-            background-color: var(--primary-color);
-            color: var(--text-on-primary);
+            background-color: var(--cover-button-bg);
+            color: var(--cover-button-text);
             font-family: var(--font-primary);
             border: none;
             border-radius: 25px;
@@ -262,7 +286,8 @@
             font-weight: 500;
             letter-spacing: 0.5px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         #open-invitation.open-invitation-button i {
@@ -270,13 +295,20 @@
         }
 
         #open-invitation.open-invitation-button:hover {
-            background-color: var(--accent-color-1);
+            background-color: var(--cover-button-hover-bg);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* Responsive Design */
         @media (max-width: 480px) {
+            .cover-content-wrapper {
+                padding: 20px;
+                max-width: 90%;
+            }
+
             .cover-couple-names {
-                font-size: 2.4rem;
+                font-size: 2.2rem;
             }
 
             .cover-couple-illustration {
@@ -427,7 +459,7 @@
             width: 250px;
             height: 250px;
             background-image: url("{{ asset('tema3/img/right.png') }}");
-            /* transform: rotate(180deg); */
+            transform: rotate(180deg);
             animation: float-subtle-rotated 6s ease-in-out infinite .5s;
         }
 
@@ -1507,9 +1539,16 @@
 <body>
 
     <div id="cover-container">
+        <!-- Overlay Warna Gradient -->
+        <div class="color-overlay"></div>
+
+        <!-- Ornamen Dekoratif -->
         <div class="header-ornament ornament-bottom-right cover-ornament" data-aos="fade-up-left" data-aos-delay="150">
         </div>
+
+        <!-- Konten Utama -->
         <div class="cover-content-wrapper">
+            <!-- Gambar Pasangan dengan Bingkai -->
             <div class="cover-image-and-frame-wrapper" data-aos="zoom-in" data-aos-delay="100">
                 <img src="{{ $informasiacara && $informasiacara->sampul ? asset('images/sampul/' . $informasiacara->sampul) : asset('images/default/default_couple_illustration_transparent.png') }}"
                     alt="Ilustrasi Pasangan" class="cover-couple-illustration" />
@@ -1517,29 +1556,20 @@
                     class="rotating-frame-overlay-cover" />
             </div>
 
+            <!-- Teks Undangan -->
             <div class="cover-text-content">
                 <p class="cover-intro-text" data-aos="fade-down" data-aos-delay="200">THE WEDDING OF</p>
                 <h1 class="cover-couple-names" data-aos="zoom-in" data-aos-delay="300">
-                    {{-- Menampilkan nama mempelai, tidak ada perubahan di sini --}}
                     {{ $mempelai ? $mempelai->namalaki ?? 'Nama Pria' : 'Nama Pria' }}
                     <span>&</span>
                     {{ $mempelai ? $mempelai->namaperempuan ?? 'Nama Wanita' : 'Nama Wanita' }}
                 </h1>
 
-                {{-- PENJELASAN PERBAIKAN: --}}
-                {{-- Blok ini menggantikan @if/@else yang kompleks dengan logika yang lebih bersih. --}}
                 <div class="cover-guest-name" data-aos="fade-up" data-aos-delay="400">
                     <p>Kepada Yth.<br>Bapak/Ibu/Saudara/i</p>
-
-                    {{-- Logika utama ada di sini. --}}
-                    {{-- Cek jika variabel $namaTamu ada dan BUKAN 'Tamu Undangan' (nilai default). --}}
                     @if (isset($namaTamu) && $namaTamu !== 'Tamu Undangan')
-                        {{-- Jika ada nama tamu spesifik, tampilkan namanya di dalam tag <strong> --}}
-                        <p>
-                            <strong>{{ $namaTamu ?? 'Tamu' }}</strong>
-                        </p>
+                        <p><strong>{{ $namaTamu ?? 'Tamu' }}</strong></p>
                     @else
-                        {{-- Jika tidak ada nama tamu, tampilkan "di Tempat" --}}
                         <p>di Tempat</p>
                     @endif
                 </div>
@@ -1550,7 +1580,6 @@
             </div>
         </div>
     </div>
-
     <main>
         <section class="section header-section py-5" id="home">
             <div class="header-ornament ornament-top-left" data-aos="fade-down-right" data-aos-delay="150"></div>
