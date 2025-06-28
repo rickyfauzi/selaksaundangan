@@ -1570,12 +1570,7 @@
         <!-- Konten Utama -->
         <div class="cover-content-wrapper">
             <!-- Gambar Pasangan dengan Bingkai -->
-            <div class="cover-image-and-frame-wrapper" data-aos="zoom-in" data-aos-delay="100">
-                <img src="{{ asset('tema2/img/bingkai.png') }}" alt="Decorative Frame Cover"
-                    class="rotating-frame-overlay-cover" />
-                <img src="{{ $informasiacara && $informasiacara->sampul ? asset('images/sampul/' . $informasiacara->sampul) : asset('images/default/default_couple_illustration_transparent.png') }}"
-                    alt="Ilustrasi Pasangan" class="cover-couple-illustration" />
-            </div>
+
 
             <!-- Teks Undangan -->
             <div class="cover-text-content">
