@@ -476,7 +476,7 @@
         }
 
         .ornament-bottom-right {
-            top: 5px;
+            bottom: 0px;
             right: 0px;
             width: 250px;
             height: 250px;
