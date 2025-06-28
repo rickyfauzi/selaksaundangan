@@ -344,43 +344,6 @@
             }
         }
 
-        /*Section 5 (Galery Photo)*/
-        .section-5 {
-            color: white;
-            padding: 10px;
-            background: rgb(142, 177, 147);
-            background: linear-gradient(90deg,
-                    rgba(142, 177, 147, 1) 35%,
-                    rgba(107, 128, 114, 1) 100%);
-        }
-
-        .img-hm {
-            width: 80%;
-        }
-
-        .img-galery .col img {
-            width: 90%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .img-galery .col {
-            padding: 2px;
-        }
-
-        .img-galery-viewer {
-            width: 100%;
-            margin-bottom: 30px;
-            height: 600px;
-            object-fit: cover;
-        }
-
-        .text-hm {
-            margin-top: 80px;
-            margin-bottom: 80px;
-        }
-
-
         /* --- MAIN CONTENT STYLING --- */
         .section {
             position: relative;
@@ -941,37 +904,68 @@
             background-color: #8a9798;
         }
 
+        .gallery-section {
+            background-color: #f9f9f9;
+        }
+
+        .section-title-custom {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #333;
+            position: relative;
+        }
+
         .gallery-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
         }
 
         .gallery-item {
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            transition: transform .3s ease, box-shadow .3s ease;
-            aspect-ratio: 1 / 1;
+            position: relative;
+            transition: transform 0.3s ease;
         }
 
-        .gallery-item img {
+        .gallery-thumb {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .gallery-thumb img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
             display: block;
-            transition: transform .3s ease;
+            transition: transform 0.4s ease;
         }
 
-        .gallery-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .gallery-item:hover img {
+        .gallery-thumb:hover img {
             transform: scale(1.1);
+        }
+
+        .gallery-thumb .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease;
+            border-radius: 12px;
+        }
+
+        .gallery-thumb:hover .overlay {
+            opacity: 1;
+        }
+
+        .gallery-thumb .overlay i {
+            color: #fff;
+            font-size: 2rem;
         }
 
         #galleryModal .modal-content {
@@ -1862,265 +1856,215 @@
             </div>
         </section>
 
-        <div class="container-fluid section-5 text-center  animated" anim="slide-up" delay="1">
-            @if ($count > 0)
-                <div class="container galery-photo">
-                    <div class="container-text-gf py-4">
-                        <h3 class="animated" anim="slide-up" delay="3">Galery Photo</h3>
-                        <p class="animated" anim="slide-up" delay="4">A memory that we will treasure
-                            forever
-                        </p>
-                    </div>
-                    <div class="container-photo">
-                        <div class="container">
-                            <div class="row  animated" anim="slide-up" delay="1.2">
-                                @if ($count > 0)
-                                    <div class="col-12 p-0">
-                                        <img class="img-galery-viewer"
-                                            src="{{ asset('images/galeri/' . $galeri[0]->foto) }}" alt="" />
+        @if (isset($galeri) && $galeri->count() > 0)
+            <section class="section gallery-section section-bg-light py-5" id="gallery">
+                <div class="container">
+                    <h2 class="section-title-custom text-center mb-5" data-aos="fade-down">Gallery</h2>
+                    <div class="gallery-container row g-4 justify-content-center">
+                        @foreach ($galeri as $item)
+                            <div class="gallery-item col-6 col-md-4 col-lg-3" data-aos="zoom-in"
+                                data-aos-delay="{{ ($loop->index % 6) * 50 }}" data-bs-toggle="modal"
+                                data-bs-target="#galleryModal"
+                                data-img-src="{{ asset('images/galeri/' . $item->foto) }}">
+                                <div class="gallery-thumb">
+                                    <img src="{{ asset('images/galeri/' . $item->foto) }}"
+                                        alt="Gallery Image {{ $loop->iteration }}"
+                                        class="img-fluid rounded shadow-sm">
+                                    <div class="overlay">
+                                        <i class='bx bx-search-alt-2'></i>
                                     </div>
-                                @endif
+                                </div>
                             </div>
-                            <div class="row img-galery">
-                                @if ($count > 0)
-                                    <div class="col">
-                                        <img class="img-select animated" anim="slide-up" delay="1.4"
-                                            src="{{ asset('images/galeri/' . $galeri[0]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                                @if ($count > 1)
-                                    <div class="col">
-                                        <img class="img-select  animated" anim="slide-left" delay="1.6"
-                                            src="{{ asset('images/galeri/' . $galeri[1]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                                @if ($count > 2)
-                                    <div class="col">
-                                        <img class="img-select  animated" anim="slide-right" delay="1.8"
-                                            src="{{ asset('images/galeri/' . $galeri[2]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                                @if ($count > 3)
-                                    <div class="col">
-                                        <img class="img-select  animated" anim="slide-left" delay="2"
-                                            src="{{ asset('images/galeri/' . $galeri[3]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                                @if ($count > 4)
-                                    <div class="col">
-                                        <img class="img-select  animated" anim="slide-right" delay="2.2"
-                                            src="{{ asset('images/galeri/' . $galeri[4]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                                @if ($count > 5)
-                                    <div class="col">
-                                        <img class="img-select  animated" anim="slide-right" delay="2.2"
-                                            src="{{ asset('images/galeri/' . $galeri[5]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                                @if ($count > 6)
-                                    <div class="col">
-                                        <img class="img-select  animated" anim="slide-right" delay="2.2"
-                                            src="{{ asset('images/galeri/' . $galeri[6]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                                @if ($count > 7)
-                                    <div class="col">
-                                        <img class="img-select  animated" anim="slide-right" delay="2.2"
-                                            src="{{ asset('images/galeri/' . $galeri[7]->foto) }}" alt="" />
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-            @endif
+            </section>
+        @endif
 
-            @if ($prewed && $prewed->vidio)
-                <section class="section video-section section-bg-light py-5" id="video">
-                    <div class="container text-center">
-                        <h2 class="section-title-custom" data-aos="fade-down">Video Prewedding</h2>
-                        <div class="video-container mt-3" data-aos="fade-up" data-aos-delay="200">
-                            <video controls preload="metadata" class="rounded shadow-sm"
-                                poster="{{ $prewed->poster ? asset('images/poster/' . $prewed->poster) : '' }}">
-                                <source src="{{ asset('video/prewedding/' . $prewed->vidio) }}" type="video/mp4">Your
-                                browser does not support the video tag.
-                            </video>
-                        </div>
+
+        @if ($prewed && $prewed->vidio)
+            <section class="section video-section section-bg-light py-5" id="video">
+                <div class="container text-center">
+                    <h2 class="section-title-custom" data-aos="fade-down">Video Prewedding</h2>
+                    <div class="video-container mt-3" data-aos="fade-up" data-aos-delay="200">
+                        <video controls preload="metadata" class="rounded shadow-sm"
+                            poster="{{ $prewed->poster ? asset('images/poster/' . $prewed->poster) : '' }}">
+                            <source src="{{ asset('video/prewedding/' . $prewed->vidio) }}" type="video/mp4">Your
+                            browser does not support the video tag.
+                        </video>
                     </div>
-                </section>
-            @endif
+                </div>
+            </section>
+        @endif
 
 
-            @if ($weddingfilter && $weddingfilter->link)
-                <section class="section ig-filter-section section-bg-light py-5" id="ig-filter">
-                    <div class="container text-center">
-                        <h2 class="section-title-custom" data-aos="fade-down">Wedding Filter</h2>
-                        <div class="filter-box message-box" data-aos="fade-up" data-aos-delay="200">
-                            <p>Capture your moment while attending our wedding by using the Instagram filter below.</p>
-                            @if ($weddingfilter->judul)
-                                <p><strong>{{ $weddingfilter->judul }}</strong></p>
-                            @endif
-                            <a href="{{ $weddingfilter->link }}" target="_blank" class="btn btn-custom-primary mt-2"
-                                data-aos="zoom-in" data-aos-delay="300"><i class="fab fa-instagram me-1"></i> Coba
-                                Filter</a>
-                        </div>
+        @if ($weddingfilter && $weddingfilter->link)
+            <section class="section ig-filter-section section-bg-light py-5" id="ig-filter">
+                <div class="container text-center">
+                    <h2 class="section-title-custom" data-aos="fade-down">Wedding Filter</h2>
+                    <div class="filter-box message-box" data-aos="fade-up" data-aos-delay="200">
+                        <p>Capture your moment while attending our wedding by using the Instagram filter below.</p>
+                        @if ($weddingfilter->judul)
+                            <p><strong>{{ $weddingfilter->judul }}</strong></p>
+                        @endif
+                        <a href="{{ $weddingfilter->link }}" target="_blank" class="btn btn-custom-primary mt-2"
+                            data-aos="zoom-in" data-aos-delay="300"><i class="fab fa-instagram me-1"></i> Coba
+                            Filter</a>
                     </div>
-                </section>
-            @endif
+                </div>
+            </section>
+        @endif
 
-            @if ($amplopdigital)
-                <section class="section section-bg-light py-5" id="digital-gift-dropdown-section">
-                    <div class="container text-center">
-                        <h2 class="section-title-custom" data-aos="fade-down">Kirim Kado</h2>
-                        <div class="message-box semi-transparent-card" data-aos="fade-up" data-aos-delay="100">
-                            <p>Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Jika memberi adalah
-                                ungkapan
-                                tanda kasih, Anda dapat memberikan kado secara cashless melalui opsi di bawah ini.</p>
-                            <button class="btn btn-custom-primary mt-3" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#giftCardCollapse" aria-expanded="false"
-                                aria-controls="giftCardCollapse" data-aos="zoom-in" data-aos-delay="200">
-                                <i class="fas fa-gift me-2"></i>Kirim Hadiah
-                            </button>
-                        </div>
+        @if ($amplopdigital)
+            <section class="section section-bg-light py-5" id="digital-gift-dropdown-section">
+                <div class="container text-center">
+                    <h2 class="section-title-custom" data-aos="fade-down">Kirim Kado</h2>
+                    <div class="message-box semi-transparent-card" data-aos="fade-up" data-aos-delay="100">
+                        <p>Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Jika memberi adalah ungkapan
+                            tanda kasih, Anda dapat memberikan kado secara cashless melalui opsi di bawah ini.</p>
+                        <button class="btn btn-custom-primary mt-3" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#giftCardCollapse" aria-expanded="false" aria-controls="giftCardCollapse"
+                            data-aos="zoom-in" data-aos-delay="200">
+                            <i class="fas fa-gift me-2"></i>Kirim Hadiah
+                        </button>
+                    </div>
 
-                        <div class="collapse mt-4" id="giftCardCollapse">
-                            <div class="gift-card-wrapper" data-aos="fade-up" data-aos-delay="50">
-                                <div class="row justify-content-center g-3">
-                                    {{-- Card 1 (Primary Account) --}}
-                                    @if ($amplopdigital->paymentvendor && $amplopdigital->namaakun && $amplopdigital->noakun)
-                                        <div class="col-md-8 col-lg-6">
-                                            <div
-                                                class="gift-card-item @if (strtolower($amplopdigital->paymentvendor) == 'bca') bca @elseif(strtolower($amplopdigital->paymentvendor) == 'mandiri') mandiri @elseif(strtolower($amplopdigital->paymentvendor) == 'bri') bri @elseif(strtolower($amplopdigital->paymentvendor) == 'bni') bni @endif">
-                                                <div class="gift-card-bank-info">
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png"
-                                                        style="width:50px;"
-                                                        @if (file_exists(public_path('images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor)) . '.png'))) <img src="{{ asset('images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor)) . '.png') }}" alt="{{ $amplopdigital->paymentvendor }} Logo" class="bank-logo">
+                    <div class="collapse mt-4" id="giftCardCollapse">
+                        <div class="gift-card-wrapper" data-aos="fade-up" data-aos-delay="50">
+                            <div class="row justify-content-center g-3">
+                                {{-- Card 1 (Primary Account) --}}
+                                @if ($amplopdigital->paymentvendor && $amplopdigital->namaakun && $amplopdigital->noakun)
+                                    <div class="col-md-8 col-lg-6">
+                                        <div
+                                            class="gift-card-item @if (strtolower($amplopdigital->paymentvendor) == 'bca') bca @elseif(strtolower($amplopdigital->paymentvendor) == 'mandiri') mandiri @elseif(strtolower($amplopdigital->paymentvendor) == 'bri') bri @elseif(strtolower($amplopdigital->paymentvendor) == 'bni') bni @endif">
+                                            <div class="gift-card-bank-info">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png"
+                                                    style="width:50px;"
+                                                    @if (file_exists(public_path('images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor)) . '.png'))) <img src="{{ asset('images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor)) . '.png') }}" alt="{{ $amplopdigital->paymentvendor }} Logo" class="bank-logo">
                                         @else
                                             <i class="fas fa-landmark bank-logo-placeholder @if (strtolower($amplopdigital->paymentvendor) == 'bca') bca @elseif(strtolower($amplopdigital->paymentvendor) == 'mandiri') mandiri @elseif(strtolower($amplopdigital->paymentvendor) == 'bri') bri @elseif(strtolower($amplopdigital->paymentvendor) == 'bni') bni @endif"></i>
-                                    @endif
-                                </div>
-                                <div class="gift-card-account-number">
-                                    @php
-                                        $noAkun1 = $amplopdigital->noakun;
-                                        $noAkun1Formatted = '';
-                                        for ($i = 0; $i < strlen($noAkun1); $i++) {
-                                            if ($i > 0 && $i % 4 == 0) {
-                                                $noAkun1Formatted .= ' ';
-                                            }
-                                            $noAkun1Formatted .= $noAkun1[$i];
-                                        }
-                                    @endphp
-                                    <span>{{ $noAkun1Formatted }}</span>
-                                </div>
-                                <div class="gift-card-holder-details">
-                                    <div class="account-holder-name">
-                                        <h5>Atas Nama</h5><span>{{ $amplopdigital->namaakun }}</span>
-                                    </div>
-                                    <div class="copy-action"><button class="btn btn-sm btn-copy-account"
-                                            data-text="{{ $amplopdigital->noakun }}"><i class="fas fa-copy"></i>
-                                            Salin</button></div>
-                                </div>
-                                <div class="gift-card-dummy-validity">
-                                    <div class="row">
-                                        <div class="col-6 item-valid-col">
-                                            <div class="item-valid-content">
-                                                <h5>Valid From</h5><span>12/23</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 item-valid-col">
-                                            <div class="item-valid-content">
-                                                <h5>Valid Thru</h5><span>12/28</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="gift-card-type-info">
-                                    <h6>Digital Gift</h6><i class="fas fa-credit-card generic-card-icon"></i>
-                                </div>
-                                @if ($amplopdigital->qrcode)
-                                    <div class="gift-card-qr">
-                                        <p>Scan QR Code</p>
-                                        <img src="{{ asset('qrcodes/' . $amplopdigital->qrcode) }}"
-                                            alt="QR Code {{ $amplopdigital->paymentvendor }}" class="qr-code-image">
-                                    </div>
                                 @endif
                             </div>
-                        </div>
-            @endif
-
-            {{-- Card 2 (Secondary Account, if exists) --}}
-            @if ($amplopdigital->paymentvendor_dua && $amplopdigital->namaakun_dua && $amplopdigital->noakun_dua)
-                <div class="col-md-8 col-lg-6">
-                    <div
-                        class="gift-card-item @if (strtolower($amplopdigital->paymentvendor_dua) == 'bca') bca @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'mandiri') mandiri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bri') bri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bni') bni @endif">
-                        <div class="gift-card-bank-info">
-                            <h3 class="bank-vendor-name">{{ $amplopdigital->paymentvendor_dua }}</h3>
-                            @if (file_exists(public_path(
-                                        'images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor_dua)) . '.png')))
-                                <img src="{{ asset('images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor_dua)) . '.png') }}"
-                                    alt="{{ $amplopdigital->paymentvendor_dua }} Logo" class="bank-logo">
-                            @else
-                                <i
-                                    class="fas fa-landmark bank-logo-placeholder @if (strtolower($amplopdigital->paymentvendor_dua) == 'bca') bca @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'mandiri') mandiri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bri') bri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bni') bni @endif"></i>
+                            <div class="gift-card-account-number">
+                                @php
+                                    $noAkun1 = $amplopdigital->noakun;
+                                    $noAkun1Formatted = '';
+                                    for ($i = 0; $i < strlen($noAkun1); $i++) {
+                                        if ($i > 0 && $i % 4 == 0) {
+                                            $noAkun1Formatted .= ' ';
+                                        }
+                                        $noAkun1Formatted .= $noAkun1[$i];
+                                    }
+                                @endphp
+                                <span>{{ $noAkun1Formatted }}</span>
+                            </div>
+                            <div class="gift-card-holder-details">
+                                <div class="account-holder-name">
+                                    <h5>Atas Nama</h5><span>{{ $amplopdigital->namaakun }}</span>
+                                </div>
+                                <div class="copy-action"><button class="btn btn-sm btn-copy-account"
+                                        data-text="{{ $amplopdigital->noakun }}"><i class="fas fa-copy"></i>
+                                        Salin</button></div>
+                            </div>
+                            <div class="gift-card-dummy-validity">
+                                <div class="row">
+                                    <div class="col-6 item-valid-col">
+                                        <div class="item-valid-content">
+                                            <h5>Valid From</h5><span>12/23</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 item-valid-col">
+                                        <div class="item-valid-content">
+                                            <h5>Valid Thru</h5><span>12/28</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gift-card-type-info">
+                                <h6>Digital Gift</h6><i class="fas fa-credit-card generic-card-icon"></i>
+                            </div>
+                            @if ($amplopdigital->qrcode)
+                                <div class="gift-card-qr">
+                                    <p>Scan QR Code</p>
+                                    <img src="{{ asset('qrcodes/' . $amplopdigital->qrcode) }}"
+                                        alt="QR Code {{ $amplopdigital->paymentvendor }}" class="qr-code-image">
+                                </div>
                             @endif
                         </div>
-                        <div class="gift-card-account-number">
-                            @php
-                                $noAkun2 = $amplopdigital->noakun_dua;
-                                $noAkun2Formatted = '';
-                                for ($i = 0; $i < strlen($noAkun2); $i++) {
-                                    if ($i > 0 && $i % 4 == 0) {
-                                        $noAkun2Formatted .= ' ';
-                                    }
-                                    $noAkun2Formatted .= $noAkun2[$i];
-                                }
-                            @endphp
-                            <span>{{ $noAkun2Formatted }}</span>
-                        </div>
-                        <div class="gift-card-holder-details">
-                            <div class="account-holder-name">
-                                <h5>Atas Nama</h5><span>{{ $amplopdigital->namaakun_dua }}</span>
-                            </div>
-                            <div class="copy-action"><button class="btn btn-sm btn-copy-account"
-                                    data-text="{{ $amplopdigital->noakun_dua }}"><i class="fas fa-copy"></i>
-                                    Salin</button></div>
-                        </div>
-                        <div class="gift-card-dummy-validity">
-                            <div class="row">
-                                <div class="col-6 item-valid-col">
-                                    <div class="item-valid-content">
-                                        <h5>Valid From</h5><span>01/24</span>
-                                    </div>
-                                </div>
-                                <div class="col-6 item-valid-col">
-                                    <div class="item-valid-content">
-                                        <h5>Valid Thru</h5><span>01/29</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="gift-card-type-info">
-                            <h6>Digital Gift</h6><i class="fas fa-credit-card generic-card-icon"></i>
-                        </div>
-                        @if ($amplopdigital->qrcode_dua)
-                            <div class="gift-card-qr">
-                                <p>Scan QR Code</p>
-                                <img src="{{ asset('qrcodes/' . $amplopdigital->qrcode_dua) }}"
-                                    alt="QR Code {{ $amplopdigital->paymentvendor_dua }}" class="qr-code-image">
-                            </div>
+                    </div>
+        @endif
+
+        {{-- Card 2 (Secondary Account, if exists) --}}
+        @if ($amplopdigital->paymentvendor_dua && $amplopdigital->namaakun_dua && $amplopdigital->noakun_dua)
+            <div class="col-md-8 col-lg-6">
+                <div
+                    class="gift-card-item @if (strtolower($amplopdigital->paymentvendor_dua) == 'bca') bca @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'mandiri') mandiri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bri') bri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bni') bni @endif">
+                    <div class="gift-card-bank-info">
+                        <h3 class="bank-vendor-name">{{ $amplopdigital->paymentvendor_dua }}</h3>
+                        @if (file_exists(public_path(
+                                    'images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor_dua)) . '.png')))
+                            <img src="{{ asset('images/default/logo_' . strtolower(str_replace(' ', '_', $amplopdigital->paymentvendor_dua)) . '.png') }}"
+                                alt="{{ $amplopdigital->paymentvendor_dua }} Logo" class="bank-logo">
+                        @else
+                            <i
+                                class="fas fa-landmark bank-logo-placeholder @if (strtolower($amplopdigital->paymentvendor_dua) == 'bca') bca @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'mandiri') mandiri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bri') bri @elseif(strtolower($amplopdigital->paymentvendor_dua) == 'bni') bni @endif"></i>
                         @endif
                     </div>
+                    <div class="gift-card-account-number">
+                        @php
+                            $noAkun2 = $amplopdigital->noakun_dua;
+                            $noAkun2Formatted = '';
+                            for ($i = 0; $i < strlen($noAkun2); $i++) {
+                                if ($i > 0 && $i % 4 == 0) {
+                                    $noAkun2Formatted .= ' ';
+                                }
+                                $noAkun2Formatted .= $noAkun2[$i];
+                            }
+                        @endphp
+                        <span>{{ $noAkun2Formatted }}</span>
+                    </div>
+                    <div class="gift-card-holder-details">
+                        <div class="account-holder-name">
+                            <h5>Atas Nama</h5><span>{{ $amplopdigital->namaakun_dua }}</span>
+                        </div>
+                        <div class="copy-action"><button class="btn btn-sm btn-copy-account"
+                                data-text="{{ $amplopdigital->noakun_dua }}"><i class="fas fa-copy"></i>
+                                Salin</button></div>
+                    </div>
+                    <div class="gift-card-dummy-validity">
+                        <div class="row">
+                            <div class="col-6 item-valid-col">
+                                <div class="item-valid-content">
+                                    <h5>Valid From</h5><span>01/24</span>
+                                </div>
+                            </div>
+                            <div class="col-6 item-valid-col">
+                                <div class="item-valid-content">
+                                    <h5>Valid Thru</h5><span>01/29</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gift-card-type-info">
+                        <h6>Digital Gift</h6><i class="fas fa-credit-card generic-card-icon"></i>
+                    </div>
+                    @if ($amplopdigital->qrcode_dua)
+                        <div class="gift-card-qr">
+                            <p>Scan QR Code</p>
+                            <img src="{{ asset('qrcodes/' . $amplopdigital->qrcode_dua) }}"
+                                alt="QR Code {{ $amplopdigital->paymentvendor_dua }}" class="qr-code-image">
+                        </div>
+                    @endif
                 </div>
-            @endif
+            </div>
+        @endif
 
-            @if (
-                !($amplopdigital->paymentvendor && $amplopdigital->namaakun && $amplopdigital->noakun) &&
-                    !($amplopdigital->paymentvendor_dua && $amplopdigital->namaakun_dua && $amplopdigital->noakun_dua))
-                <p class="text-center col-12" style="color: var(--text-on-light);">Informasi kado digital belum
-                    tersedia.
-                </p>
-            @endif
+        @if (
+            !($amplopdigital->paymentvendor && $amplopdigital->namaakun && $amplopdigital->noakun) &&
+                !($amplopdigital->paymentvendor_dua && $amplopdigital->namaakun_dua && $amplopdigital->noakun_dua))
+            <p class="text-center col-12" style="color: var(--text-on-light);">Informasi kado digital belum tersedia.
+            </p>
+        @endif
         </div>
         <p class="text-center mt-4" style="font-size: 0.85rem; color: #555;">Terima kasih atas niat baik dan doa restu
             Anda.</p>
