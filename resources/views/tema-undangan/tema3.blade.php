@@ -1506,6 +1506,25 @@
             content: "\f001";
         }
 
+        .music-button-container {
+            position: relative;
+        }
+
+        .music-button-rotating {
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -2145,7 +2164,7 @@
     <div class="music-button-container">
         <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
         <audio id="musicPlayer" loop
-            src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema5/music/sample-music.mp3') : '/tema5/music/sample-music.mp3' }}">
+            src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema3/music/sepatu.mp3') : '/tema3/music/sepatu.mp3' }}">
         </audio>
     </div>
 
@@ -2193,23 +2212,20 @@
             var musicPlayer = $("#musicPlayer")[0];
             var musicToggleButton = $("#music-toggle-button");
 
-            // Set volume to 50% by default to prevent loud surprises
+            // Set volume to 50% by default
             musicPlayer.volume = 0.5;
 
-            // Function to toggle music with improved handling
             function toggleMusic() {
                 if (musicPlayer.paused) {
-                    // Try to play with promise handling
                     var playPromise = musicPlayer.play();
 
                     if (playPromise !== undefined) {
                         playPromise.then(_ => {
-                                // Successfully started playback
+                                // Mulai animasi rotasi saat musik diputar
+                                musicToggleButton.addClass('music-button-rotating');
                                 musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
-                                console.log("Music playback started successfully");
                             })
                             .catch(error => {
-                                // Auto-play was prevented, show user feedback
                                 console.error("Playback prevented:", error);
                                 $.toast({
                                     heading: 'Info',
@@ -2223,22 +2239,25 @@
                     }
                 } else {
                     musicPlayer.pause();
+                    // Hentikan animasi rotasi saat musik dipause
+                    musicToggleButton.removeClass('music-button-rotating');
                     musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
                 }
             }
 
-            // Click handler for music button
+            // Event listeners
             musicToggleButton.on('click', function(e) {
                 e.preventDefault();
                 toggleMusic();
             });
 
-            // Event listeners for player state changes
             $(musicPlayer).on('play playing', function() {
+                musicToggle Button.addClass('music-button-rotating');
                 musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
             });
 
             $(musicPlayer).on('pause ended', function() {
+                musicToggleButton.removeClass('music-button-rotating');
                 musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
             });
 
