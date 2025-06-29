@@ -1496,6 +1496,38 @@
 
         .music-button:hover {
             background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Animasi rotasi untuk ketika musik sedang play */
+        .music-button.rotating {
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Efek hover tetap berfungsi saat rotasi */
+        .music-button.rotating:hover {
+            background-color: var(--primary-color);
+            animation: rotateHover 3s linear infinite;
+        }
+
+        @keyframes rotateHover {
+            from {
+                transform: rotate(0deg) scale(1.1);
+            }
+
+            to {
+                transform: rotate(360deg) scale(1.1);
+            }
         }
 
         .music-button.playing i::before {
@@ -2188,246 +2220,290 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            var musicPlayer = $("#musicPlayer")[0];
-            var musicToggleButton = $("#music-toggle-button");
-            var hasStarted = false; // untuk memastikan currentTime hanya diset sekali di awal
+        var musicPlayer = $("#musicPlayer")[0];
+        var musicToggleButton = $("#music-toggle-button");
+        var hasStarted = false;
 
-            // Set volume to 50% by default
-            musicPlayer.volume = 0.5;
+        // Set volume to 50% by default
+        musicPlayer.volume = 0.5;
 
-            // Function to toggle music with improved handling
-            function toggleMusic() {
+        // Function to start rotation animation
+        function startRotation() {
+            musicToggleButton.addClass('rotating');
+        }
+
+        // Function to stop rotation animation
+        function stopRotation() {
+            musicToggleButton.removeClass('rotating');
+        }
+
+        // Function to toggle music with improved handling
+        function toggleMusic() {
+            if (musicPlayer.paused) {
+                // Set currentTime hanya jika belum pernah dimainkan
+                if (!hasStarted) {
+                    musicPlayer.currentTime = 19; // Mulai dari detik ke-19
+                    hasStarted = true;
+                }
+
+                var playPromise = musicPlayer.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                            musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+                            startRotation(); // Start rotation when playing
+                            console.log("Music playback started successfully");
+                        })
+                        .catch(error => {
+                            console.error("Playback prevented:", error);
+                            $.toast({
+                                heading: 'Info',
+                                text: 'Klik tombol musik lagi untuk memulai audio',
+                                position: 'top-right',
+                                loaderBg: 'var(--warning-color)',
+                                icon: 'info',
+                                hideAfter: 3000
+                            });
+                        });
+                }
+            } else {
+                musicPlayer.pause();
+                musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
+                stopRotation(); // Stop rotation when paused
+            }
+        }
+
+        // Auto-play music when page loads (with user interaction fallback)
+        function attemptAutoPlay() {
+            if (!hasStarted) {
+                musicPlayer.currentTime = 19;
+                hasStarted = true;
+            }
+
+            var playPromise = musicPlayer.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                        musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+                        startRotation();
+                        console.log("Auto-play started successfully");
+                    })
+                    .catch(error => {
+                        console.log("Auto-play prevented by browser policy, waiting for user interaction");
+                        // Show a subtle notification that user needs to click to start music
+                        setTimeout(() => {
+                            if (musicPlayer.paused) {
+                                $.toast({
+                                    heading: 'Musik',
+                                    text: 'Klik tombol musik untuk memulai audio',
+                                    position: 'top-right',
+                                    loaderBg: 'var(--primary-color)',
+                                    icon: 'info',
+                                    hideAfter: 4000
+                                });
+                            }
+                        }, 2000);
+                    });
+            }
+        }
+
+        // Try auto-play after a short delay
+        setTimeout(() => {
+            attemptAutoPlay();
+        }, 1000);
+
+        // Click handler for music button
+        musicToggleButton.on('click', function(e) {
+            e.preventDefault();
+            toggleMusic();
+        });
+
+        // Event listeners for player state changes
+        $(musicPlayer).on('play playing', function() {
+            musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+            startRotation();
+        });
+
+        $(musicPlayer).on('pause ended', function() {
+            musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
+            stopRotation();
+        });
+
+        // Auto-play when invitation is opened (if user interacts)
+        const openButton = $('#open-invitation');
+        const coverContainer = $('#cover-container');
+
+        if (openButton.length && coverContainer.length) {
+            openButton.on('click', function() {
+                // Try to play music when opening invitation
                 if (musicPlayer.paused) {
-
-                    // Set currentTime hanya jika belum pernah dimainkan
-                    if (!hasStarted) {
-                        musicPlayer.currentTime = 19; // Mulai dari detik ke-19
-                        hasStarted = true;
-                    }
-
                     var playPromise = musicPlayer.play();
 
                     if (playPromise !== undefined) {
                         playPromise.then(_ => {
                                 musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
-                                console.log("Music playback started successfully");
+                                startRotation();
                             })
                             .catch(error => {
-                                console.error("Playback prevented:", error);
-                                $.toast({
-                                    heading: 'Info',
-                                    text: 'Klik tombol musik lagi untuk memulai audio',
-                                    position: 'top-right',
-                                    loaderBg: 'var(--warning-color)',
-                                    icon: 'info',
-                                    hideAfter: 3000
-                                });
-                            });
-                    }
-                } else {
-                    musicPlayer.pause();
-                    musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
-                }
-            }
-
-
-            // Click handler for music button
-            musicToggleButton.on('click', function(e) {
-                e.preventDefault();
-                toggleMusic();
-            });
-
-            // Event listeners for player state changes
-            $(musicPlayer).on('play playing', function() {
-                musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
-            });
-
-            $(musicPlayer).on('pause ended', function() {
-                musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
-            });
-
-            // Auto-play when invitation is opened (if user interacts)
-            const openButton = $('#open-invitation');
-            const coverContainer = $('#cover-container');
-
-            if (openButton.length && coverContainer.length) {
-                openButton.on('click', function() {
-                    // Try to play music when opening invitation
-                    if (musicPlayer.paused) {
-                        var playPromise = musicPlayer.play();
-
-                        if (playPromise !== undefined) {
-                            playPromise.catch(error => {
                                 console.log("Auto-play prevented, will require button click");
                             });
-                        }
                     }
-
-                    coverContainer.css('top', '-100vh');
-                    setTimeout(() => {
-                        coverContainer.hide();
-                        $('body').css('overflow-y', 'auto');
-                        AOS.refresh();
-                        $(window).trigger('scroll');
-                    }, 1000);
-                });
-            }
-
-            // Rest of your existing code (AOS, countdown, navigation, guestbook, etc.)
-            AOS.init({
-                duration: 800,
-                once: false,
-                mirror: false,
-                offset: 30
-            });
-
-            const targetDateString = $('#ori_tanggal_acara').val();
-            if (targetDateString) {
-                const targetDate = new Date(targetDateString.replace(/-/g, '/')).getTime();
-                if (!isNaN(targetDate)) {
-                    const countdownInterval = setInterval(() => {
-                        const now = new Date().getTime();
-                        const gap = targetDate - now;
-                        if (gap > 0) {
-                            $('#days').text(Math.floor(gap / (1000 * 60 * 60 * 24)));
-                            $('#hours').text(Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-                            $('#minutes').text(Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60)));
-                            $('#seconds').text(Math.floor((gap % (1000 * 60)) / 1000));
-                        } else {
-                            $('#days, #hours, #minutes, #seconds').text(0);
-                            $('.countdown-container').html(
-                                "<p class='text-center my-2' style='font-size:1.1em; color: var(--accent-color-1);'>Acara Telah Selesai</p>"
-                            );
-                            clearInterval(countdownInterval);
-                        }
-                    }, 1000);
-                } else {
-                    $('.countdown-container').hide();
                 }
+
+                coverContainer.css('top', '-100vh');
+                setTimeout(() => {
+                    coverContainer.hide();
+                    $('body').css('overflow-y', 'auto');
+                    AOS.refresh();
+                    $(window).trigger('scroll');
+                }, 1000);
+            });
+        }
+        });
+
+        // Rest of your existing code (AOS, countdown, navigation, guestbook, etc.)
+        AOS.init({
+            duration: 800,
+            once: false,
+            mirror: false,
+            offset: 30
+        });
+
+        const targetDateString = $('#ori_tanggal_acara').val();
+        if (targetDateString) {
+            const targetDate = new Date(targetDateString.replace(/-/g, '/')).getTime();
+            if (!isNaN(targetDate)) {
+                const countdownInterval = setInterval(() => {
+                    const now = new Date().getTime();
+                    const gap = targetDate - now;
+                    if (gap > 0) {
+                        $('#days').text(Math.floor(gap / (1000 * 60 * 60 * 24)));
+                        $('#hours').text(Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+                        $('#minutes').text(Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60)));
+                        $('#seconds').text(Math.floor((gap % (1000 * 60)) / 1000));
+                    } else {
+                        $('#days, #hours, #minutes, #seconds').text(0);
+                        $('.countdown-container').html(
+                            "<p class='text-center my-2' style='font-size:1.1em; color: var(--accent-color-1);'>Acara Telah Selesai</p>"
+                        );
+                        clearInterval(countdownInterval);
+                    }
+                }, 1000);
             } else {
                 $('.countdown-container').hide();
             }
+        } else {
+            $('.countdown-container').hide();
+        }
 
-            var lastId;
-            const bottomNav = $(".bottom-nav");
-            const navMenuItemsForScroll = bottomNav.find("a[href^='#']").not('[data-bs-toggle="collapse"]');
-            let navScrollItems = [];
-            if (navMenuItemsForScroll.length > 0) {
-                navScrollItems = navMenuItemsForScroll.map(function() {
-                    var item = $($(this).attr("href"));
-                    if (item.length) {
-                        return item;
-                    }
-                    return undefined;
-                }).get().filter(item => item !== undefined);
+        var lastId;
+        const bottomNav = $(".bottom-nav");
+        const navMenuItemsForScroll = bottomNav.find("a[href^='#']").not('[data-bs-toggle="collapse"]');
+        let navScrollItems = [];
+        if (navMenuItemsForScroll.length > 0) {
+            navScrollItems = navMenuItemsForScroll.map(function() {
+                var item = $($(this).attr("href"));
+                if (item.length) {
+                    return item;
+                }
+                return undefined;
+            }).get().filter(item => item !== undefined);
+        }
+
+        bottomNav.on('click', 'a[href^="#"]', function(e) {
+            if ($(this).data('bs-toggle') === 'collapse') {
+                return;
             }
+            e.preventDefault();
+            var targetId = $(this).attr("href");
+            var targetElement = $(targetId);
+            if (targetElement.length) {
+                $('html, body').animate({
+                    scrollTop: targetElement.offset().top - 30
+                }, 800);
+            }
+        });
 
-            bottomNav.on('click', 'a[href^="#"]', function(e) {
-                if ($(this).data('bs-toggle') === 'collapse') {
-                    return;
-                }
-                e.preventDefault();
-                var targetId = $(this).attr("href");
-                var targetElement = $(targetId);
-                if (targetElement.length) {
-                    $('html, body').animate({
-                        scrollTop: targetElement.offset().top - 30
-                    }, 800);
-                }
-            });
-
-            $(window).scroll(function() {
-                let fromTop = $(this).scrollTop() + (bottomNav.is(':visible') ? bottomNav.outerHeight() :
-                    0) + 75;
-                let currentSectionId = "home";
-                if (navScrollItems.length > 0) {
-                    let activeItems = navScrollItems.filter(function(item) {
-                        return $(item).offset().top < fromTop;
-                    });
-                    if (activeItems.length > 0) {
-                        currentSectionId = $(activeItems[activeItems.length - 1]).attr("id");
-                    } else {
-                        if ($(this).scrollTop() < ($(navScrollItems[0]).offset().top - ((bottomNav.is(
-                                ':visible') ? bottomNav.outerHeight() : 0) + 75))) {
-                            currentSectionId = "home";
-                        } else {
-                            currentSectionId = $(navScrollItems[0]).attr("id");
-                        }
-                    }
-                    if ($(this).scrollTop() < 50) {
+        $(window).scroll(function() {
+            let fromTop = $(this).scrollTop() + (bottomNav.is(':visible') ? bottomNav.outerHeight() :
+                0) + 75;
+            let currentSectionId = "home";
+            if (navScrollItems.length > 0) {
+                let activeItems = navScrollItems.filter(function(item) {
+                    return $(item).offset().top < fromTop;
+                });
+                if (activeItems.length > 0) {
+                    currentSectionId = $(activeItems[activeItems.length - 1]).attr("id");
+                } else {
+                    if ($(this).scrollTop() < ($(navScrollItems[0]).offset().top - ((bottomNav.is(
+                            ':visible') ? bottomNav.outerHeight() : 0) + 75))) {
                         currentSectionId = "home";
+                    } else {
+                        currentSectionId = $(navScrollItems[0]).attr("id");
                     }
                 }
-                if (lastId !== currentSectionId) {
-                    lastId = currentSectionId;
-                    bottomNav.find("a[href^='#']").removeClass("active");
-                    bottomNav.find("a[href='#" + currentSectionId + "']").addClass("active");
+                if ($(this).scrollTop() < 50) {
+                    currentSectionId = "home";
                 }
-            }).trigger('scroll');
+            }
+            if (lastId !== currentSectionId) {
+                lastId = currentSectionId;
+                bottomNav.find("a[href^='#']").removeClass("active");
+                bottomNav.find("a[href='#" + currentSectionId + "']").addClass("active");
+            }
+        }).trigger('scroll');
 
-            function copyToClipboard(text) {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        $.toast({
-                            heading: 'Berhasil',
-                            text: 'Nomor rekening disalin!',
-                            position: 'top-right',
-                            loaderBg: 'var(--primary-color)',
-                            icon: 'success',
-                            hideAfter: 2000,
-                            stack: 5
-                        });
-                    }).catch(err => {
-                        console.warn('Copy fallback: ', err);
-                        fallbackCopyTextToClipboard(text);
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    $.toast({
+                        heading: 'Berhasil',
+                        text: 'Nomor rekening disalin!',
+                        position: 'top-right',
+                        loaderBg: 'var(--primary-color)',
+                        icon: 'success',
+                        hideAfter: 2000,
+                        stack: 5
+                    });
+                }).catch(err => {
+                    console.warn('Copy fallback: ', err);
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            Object.assign(textArea.style, {
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "2em",
+                height: "2em",
+                padding: 0,
+                border: "none",
+                outline: "none",
+                boxShadow: "none",
+                background: "transparent"
+            });
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                if (document.execCommand('copy')) {
+                    $.toast({
+                        heading: 'Berhasil',
+                        text: 'Nomor rekening disalin!',
+                        position: 'top-right',
+                        loaderBg: 'var(--primary-color)',
+                        icon: 'success',
+                        hideAfter: 2000,
+                        stack: 5
                     });
                 } else {
-                    fallbackCopyTextToClipboard(text);
-                }
-            }
-
-            function fallbackCopyTextToClipboard(text) {
-                var textArea = document.createElement("textarea");
-                textArea.value = text;
-                Object.assign(textArea.style, {
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "2em",
-                    height: "2em",
-                    padding: 0,
-                    border: "none",
-                    outline: "none",
-                    boxShadow: "none",
-                    background: "transparent"
-                });
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    if (document.execCommand('copy')) {
-                        $.toast({
-                            heading: 'Berhasil',
-                            text: 'Nomor rekening disalin!',
-                            position: 'top-right',
-                            loaderBg: 'var(--primary-color)',
-                            icon: 'success',
-                            hideAfter: 2000,
-                            stack: 5
-                        });
-                    } else {
-                        $.toast({
-                            heading: 'Gagal',
-                            text: 'Gagal menyalin.',
-                            position: 'top-right',
-                            loaderBg: '#ff6849',
-                            icon: 'error',
-                            hideAfter: 3000,
-                            stack: 5
-                        });
-                    }
-                } catch (err) {
                     $.toast({
                         heading: 'Gagal',
                         text: 'Gagal menyalin.',
@@ -2438,381 +2514,392 @@
                         stack: 5
                     });
                 }
-                document.body.removeChild(textArea);
-            }
-            $('body').on('click', '.btn-copy-account', function(e) {
-                e.preventDefault();
-                copyToClipboard($(this).data('text'));
-            });
-
-            $('#galleryModal').on('show.bs.modal', function(event) {
-                $(this).find('#galleryModalImage').attr('src', $(event.relatedTarget).data('img-src'));
-            });
-
-            const ucapanUndangan = () => {
-                const userId = $('#user_id').val();
-                if (!userId) {
-                    $('#guestbookForm').hide();
-                    $('#dynamic-comment-list').html(
-                        '<p class="text-center" style="color: rgba(255,255,255,0.7);">Fitur ucapan tidak tersedia.</p>'
-                    ).css('max-height', '60px');
-                    $('#comment-count, #rsvp-hadir-count, #rsvp-tidak-hadir-count').text(0);
-                    $('.rsvp-summary').hide();
-                    return;
-                }
-                $('#guestbookForm').show();
-                $('.rsvp-summary').show();
-                const showUrl = `{{ route('ucapan.show', ['id' => ':id']) }}`.replace(':id', userId);
-                $.ajax({
-                    url: showUrl,
-                    type: 'GET',
-                    success: function(res) {
-                        const commentListContainer = $('#dynamic-comment-list');
-                        commentListContainer.html('');
-                        const comments = res.ucapan;
-                        let totalCount = 0,
-                            hadirCount = 0,
-                            tidakHadirCount = 0;
-                        if (comments && Array.isArray(comments) && comments.length > 0) {
-                            totalCount = comments.length;
-                            comments.forEach(item => {
-                                if (item.attendance === 'hadir') hadirCount++;
-                                else if (item.attendance === 'tidak-hadir')
-                                    tidakHadirCount++;
-                            });
-                            comments.sort((a, b) => new Date(b.created_at) - new Date(a
-                                .created_at));
-                            comments.forEach((item, index) => {
-                                let attendanceBadge = '';
-                                if (item.attendance === 'hadir') {
-                                    attendanceBadge =
-                                        '<span class="attendance-badge attendance-hadir">Hadir</span>';
-                                } else if (item.attendance === 'tidak-hadir') {
-                                    attendanceBadge =
-                                        '<span class="attendance-badge attendance-tidak-hadir">Tidak Hadir</span>';
-                                }
-                                let formattedDate = item.created_at ? new Date(item
-                                    .created_at).toLocaleString('id-ID', {
-                                    day: 'numeric',
-                                    month: 'long',
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }) : '';
-                                commentListContainer.append(
-                                    `<div class="comment-item-layout"><div class="row"><div class="col comment-details-col"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div></div></div>`
-                                );
-                            });
-                        } else {
-                            commentListContainer.html(
-                                '<p class="text-center" style="color: rgba(255,255,255,0.7); padding: 10px 0;">Belum ada ucapan.</p>'
-                            );
-                        }
-                        const numRenderedComments = commentListContainer.children(
-                            '.comment-item-layout').length;
-                        if (numRenderedComments === 0) {
-                            commentListContainer.css('max-height', '70px');
-                        } else if (numRenderedComments <= 3) {
-                            commentListContainer.css('max-height', 'none');
-                        } else {
-                            commentListContainer.css('max-height', '400px');
-                        }
-                        $('#comment-count').text(totalCount);
-                        $('#rsvp-hadir-count').text(hadirCount);
-                        $('#rsvp-tidak-hadir-count').text(tidakHadirCount);
-                    },
-                    error: function(xhr) {
-                        console.error("Error fetching comments:", xhr.responseText);
-                        $('#dynamic-comment-list').html(
-                            '<p class="text-center" style="color: rgba(255,255,255,0.7);">Gagal memuat ucapan.</p>'
-                        ).css('max-height', '60px');
-                    }
+            } catch (err) {
+                $.toast({
+                    heading: 'Gagal',
+                    text: 'Gagal menyalin.',
+                    position: 'top-right',
+                    loaderBg: '#ff6849',
+                    icon: 'error',
+                    hideAfter: 3000,
+                    stack: 5
                 });
-            };
-            $('#guestbookForm').on('submit', function(e) {
-                e.preventDefault();
-                const userId = $('#user_id').val(),
-                    nama = $('#nama-ucapan').val().trim(),
-                    ucapan = $('#pesan-ucapan').val().trim(),
-                    attendance = $('select[name="attendance"]').val();
-                if (!userId) {
-                    $.toast({
-                        heading: 'Error',
-                        text: 'User ID tidak ditemukan.',
-                        position: 'top-right',
-                        loaderBg: '#ff6849',
-                        icon: 'error',
-                        hideAfter: 3500
-                    });
-                    return;
+            }
+            document.body.removeChild(textArea);
+        }
+        $('body').on('click', '.btn-copy-account', function(e) {
+            e.preventDefault();
+            copyToClipboard($(this).data('text'));
+        });
+
+        $('#galleryModal').on('show.bs.modal', function(event) {
+            $(this).find('#galleryModalImage').attr('src', $(event.relatedTarget).data('img-src'));
+        });
+
+        const ucapanUndangan = () => {
+            const userId = $('#user_id').val();
+            if (!userId) {
+                $('#guestbookForm').hide();
+                $('#dynamic-comment-list').html(
+                    '<p class="text-center" style="color: rgba(255,255,255,0.7);">Fitur ucapan tidak tersedia.</p>'
+                ).css('max-height', '60px');
+                $('#comment-count, #rsvp-hadir-count, #rsvp-tidak-hadir-count').text(0);
+                $('.rsvp-summary').hide();
+                return;
+            }
+            $('#guestbookForm').show();
+            $('.rsvp-summary').show();
+            const showUrl = `{{ route('ucapan.show', ['id' => ':id']) }}`.replace(':id', userId);
+            $.ajax({
+                url: showUrl,
+                type: 'GET',
+                success: function(res) {
+                    const commentListContainer = $('#dynamic-comment-list');
+                    commentListContainer.html('');
+                    const comments = res.ucapan;
+                    let totalCount = 0,
+                        hadirCount = 0,
+                        tidakHadirCount = 0;
+                    if (comments && Array.isArray(comments) && comments.length > 0) {
+                        totalCount = comments.length;
+                        comments.forEach(item => {
+                            if (item.attendance === 'hadir') hadirCount++;
+                            else if (item.attendance === 'tidak-hadir')
+                                tidakHadirCount++;
+                        });
+                        comments.sort((a, b) => new Date(b.created_at) - new Date(a
+                            .created_at));
+                        comments.forEach((item, index) => {
+                            let attendanceBadge = '';
+                            if (item.attendance === 'hadir') {
+                                attendanceBadge =
+                                    '<span class="attendance-badge attendance-hadir">Hadir</span>';
+                            } else if (item.attendance === 'tidak-hadir') {
+                                attendanceBadge =
+                                    '<span class="attendance-badge attendance-tidak-hadir">Tidak Hadir</span>';
+                            }
+                            let formattedDate = item.created_at ? new Date(item
+                                .created_at).toLocaleString('id-ID', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }) : '';
+                            commentListContainer.append(
+                                `<div class="comment-item-layout"><div class="row"><div class="col comment-details-col"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div></div></div>`
+                            );
+                        });
+                    } else {
+                        commentListContainer.html(
+                            '<p class="text-center" style="color: rgba(255,255,255,0.7); padding: 10px 0;">Belum ada ucapan.</p>'
+                        );
+                    }
+                    const numRenderedComments = commentListContainer.children(
+                        '.comment-item-layout').length;
+                    if (numRenderedComments === 0) {
+                        commentListContainer.css('max-height', '70px');
+                    } else if (numRenderedComments <= 3) {
+                        commentListContainer.css('max-height', 'none');
+                    } else {
+                        commentListContainer.css('max-height', '400px');
+                    }
+                    $('#comment-count').text(totalCount);
+                    $('#rsvp-hadir-count').text(hadirCount);
+                    $('#rsvp-tidak-hadir-count').text(tidakHadirCount);
+                },
+                error: function(xhr) {
+                    console.error("Error fetching comments:", xhr.responseText);
+                    $('#dynamic-comment-list').html(
+                        '<p class="text-center" style="color: rgba(255,255,255,0.7);">Gagal memuat ucapan.</p>'
+                    ).css('max-height', '60px');
                 }
-                if (!nama) {
-                    $.toast({
-                        heading: 'Perhatian',
-                        text: 'Nama tidak boleh kosong.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'warning',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                if (!ucapan) {
-                    $.toast({
-                        heading: 'Perhatian',
-                        text: 'Ucapan tidak boleh kosong.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'warning',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                if (!attendance) {
-                    $.toast({
-                        heading: 'Perhatian',
-                        text: 'Pilih status kehadiran.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'warning',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                const storeUrl = `{{ route('ucapan.store', ['id' => ':id']) }}`.replace(':id', userId);
-                $.ajax({
-                    url: storeUrl,
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: () => $('#kirim-ucapan').prop('disabled', true).html(
-                        '<span class="spinner-border spinner-border-sm"></span> Mengirim...'),
-                    success: function(response) {
-                        if (response.code === 1) {
-                            $('#guestbookForm')[0].reset();
-                            const prefilledName = "";
-                            if (prefilledName) $('#nama-ucapan').val(prefilledName);
-                            ucapanUndangan();
-                        } else {
-                            $.toast({
-                                heading: 'Gagal',
-                                text: response.message || 'Gagal mengirim ucapan.',
-                                position: 'top-right',
-                                loaderBg: '#ff6849',
-                                icon: 'error',
-                                hideAfter: 3500,
-                                stack: 5
-                            });
-                        }
-                    },
-                    error: (xhr) => {
-                        let errMsg = 'Gagal mengirim ucapan.';
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            errMsg = xhr.responseJSON.message;
-                        } else if (xhr.status === 419) {
-                            errMsg = 'Sesi berakhir. Segarkan halaman.';
-                        }
+            });
+        };
+        $('#guestbookForm').on('submit', function(e) {
+            e.preventDefault();
+            const userId = $('#user_id').val(),
+                nama = $('#nama-ucapan').val().trim(),
+                ucapan = $('#pesan-ucapan').val().trim(),
+                attendance = $('select[name="attendance"]').val();
+            if (!userId) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'User ID tidak ditemukan.',
+                    position: 'top-right',
+                    loaderBg: '#ff6849',
+                    icon: 'error',
+                    hideAfter: 3500
+                });
+                return;
+            }
+            if (!nama) {
+                $.toast({
+                    heading: 'Perhatian',
+                    text: 'Nama tidak boleh kosong.',
+                    position: 'top-right',
+                    loaderBg: 'var(--warning-color)',
+                    icon: 'warning',
+                    hideAfter: 3000
+                });
+                return;
+            }
+            if (!ucapan) {
+                $.toast({
+                    heading: 'Perhatian',
+                    text: 'Ucapan tidak boleh kosong.',
+                    position: 'top-right',
+                    loaderBg: 'var(--warning-color)',
+                    icon: 'warning',
+                    hideAfter: 3000
+                });
+                return;
+            }
+            if (!attendance) {
+                $.toast({
+                    heading: 'Perhatian',
+                    text: 'Pilih status kehadiran.',
+                    position: 'top-right',
+                    loaderBg: 'var(--warning-color)',
+                    icon: 'warning',
+                    hideAfter: 3000
+                });
+                return;
+            }
+            const storeUrl = `{{ route('ucapan.store', ['id' => ':id']) }}`.replace(':id', userId);
+            $.ajax({
+                url: storeUrl,
+                method: 'POST',
+                data: $(this).serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: () => $('#kirim-ucapan').prop('disabled', true).html(
+                    '<span class="spinner-border spinner-border-sm"></span> Mengirim...'),
+                success: function(response) {
+                    if (response.code === 1) {
+                        $('#guestbookForm')[0].reset();
+                        const prefilledName = "";
+                        if (prefilledName) $('#nama-ucapan').val(prefilledName);
+                        ucapanUndangan();
+                    } else {
                         $.toast({
-                            heading: 'Error',
-                            text: errMsg,
+                            heading: 'Gagal',
+                            text: response.message || 'Gagal mengirim ucapan.',
                             position: 'top-right',
                             loaderBg: '#ff6849',
                             icon: 'error',
-                            hideAfter: 4500,
+                            hideAfter: 3500,
                             stack: 5
                         });
-                    },
-                    complete: () => $('#kirim-ucapan').prop('disabled', false).text('KIRIM')
-                });
-            });
-            ucapanUndangan();
-
-            $('.save-date-btn').on('click', function() {
-                const eventName =
-                    "Pernikahan {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}";
-                const eventDateVal = $('#ori_tanggal_acara').val();
-                if (!eventDateVal) {
-                    $.toast({
-                        heading: 'Info',
-                        text: 'Tanggal acara belum ditentukan.',
-                        position: 'top-right',
-                        loaderBg: 'var(--warning-color)',
-                        icon: 'info',
-                        hideAfter: 3000
-                    });
-                    return;
-                }
-                const formattedDateVal = eventDateVal.replace(/-/g, '/');
-                const eventDate = new Date(formattedDateVal);
-                if (isNaN(eventDate.getTime())) {
+                    }
+                },
+                error: (xhr) => {
+                    let errMsg = 'Gagal mengirim ucapan.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errMsg = xhr.responseJSON.message;
+                    } else if (xhr.status === 419) {
+                        errMsg = 'Sesi berakhir. Segarkan halaman.';
+                    }
                     $.toast({
                         heading: 'Error',
-                        text: 'Format tanggal tidak valid.',
+                        text: errMsg,
                         position: 'top-right',
                         loaderBg: '#ff6849',
                         icon: 'error',
-                        hideAfter: 3000
+                        hideAfter: 4500,
+                        stack: 5
                     });
-                    return;
-                }
-                const startTime = eventDate.toISOString().replace(/-|:|\.\d{3}/g, '');
-                const endDate = new Date(eventDate.getTime() + (2 * 60 * 60 * 1000));
-                const endTime = endDate.toISOString().replace(/-|:|\.\d{3}/g, '');
-                const location =
-                    "{{ $informasiacara->lokasiakadnikah ?? ($informasiacara->lokasiresepsi ?? 'Detail Lokasi Menyusul') }}";
-                const description =
-                    "Jangan lupa datang ke acara pernikahan kami! {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}.";
-                const icsContent =
-                    `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SelaksaDigital//WeddingInvitation//EN\nBEGIN:VEVENT\nUID:${new Date().getTime()}@selaksadigital.com\nDTSTAMP:${new Date().toISOString().replace(/-|:|\.\d{3}/g, '')}\nDTSTART:${startTime}\nDTEND:${endTime}\nSUMMARY:${eventName}\nDESCRIPTION:${description}\nLOCATION:${location}\nEND:VEVENT\nEND:VCALENDAR`;
-                const blob = new Blob([icsContent], {
-                    type: 'text/calendar;charset=utf-8'
-                });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'save-the-date-pernikahan.ics';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                },
+                complete: () => $('#kirim-ucapan').prop('disabled', false).text('KIRIM')
+            });
+        });
+        ucapanUndangan();
+
+        $('.save-date-btn').on('click', function() {
+            const eventName =
+                "Pernikahan {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}";
+            const eventDateVal = $('#ori_tanggal_acara').val();
+            if (!eventDateVal) {
                 $.toast({
-                    heading: 'Berhasil',
-                    text: 'File kalender (ICS) telah diunduh.',
+                    heading: 'Info',
+                    text: 'Tanggal acara belum ditentukan.',
                     position: 'top-right',
-                    loaderBg: 'var(--primary-color)',
-                    icon: 'success',
+                    loaderBg: 'var(--warning-color)',
+                    icon: 'info',
                     hideAfter: 3000
                 });
-            });
-
-            var giftCardCollapseElement = document.getElementById('giftCardCollapse');
-            if (giftCardCollapseElement) {
-                giftCardCollapseElement.addEventListener('shown.bs.collapse', function() {
-                    AOS.refresh();
+                return;
+            }
+            const formattedDateVal = eventDateVal.replace(/-/g, '/');
+            const eventDate = new Date(formattedDateVal);
+            if (isNaN(eventDate.getTime())) {
+                $.toast({
+                    heading: 'Error',
+                    text: 'Format tanggal tidak valid.',
+                    position: 'top-right',
+                    loaderBg: '#ff6849',
+                    icon: 'error',
+                    hideAfter: 3000
                 });
+                return;
+            }
+            const startTime = eventDate.toISOString().replace(/-|:|\.\d{3}/g, '');
+            const endDate = new Date(eventDate.getTime() + (2 * 60 * 60 * 1000));
+            const endTime = endDate.toISOString().replace(/-|:|\.\d{3}/g, '');
+            const location =
+                "{{ $informasiacara->lokasiakadnikah ?? ($informasiacara->lokasiresepsi ?? 'Detail Lokasi Menyusul') }}";
+            const description =
+                "Jangan lupa datang ke acara pernikahan kami! {{ $mempelai ? ($mempelai->namalaki ?? 'Pria') . ' & ' . ($mempelai->namaperempuan ?? 'Wanita') : 'Pasangan Mempelai' }}.";
+            const icsContent =
+                `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SelaksaDigital//WeddingInvitation//EN\nBEGIN:VEVENT\nUID:${new Date().getTime()}@selaksadigital.com\nDTSTAMP:${new Date().toISOString().replace(/-|:|\.\d{3}/g, '')}\nDTSTART:${startTime}\nDTEND:${endTime}\nSUMMARY:${eventName}\nDESCRIPTION:${description}\nLOCATION:${location}\nEND:VEVENT\nEND:VCALENDAR`;
+            const blob = new Blob([icsContent], {
+                type: 'text/calendar;charset=utf-8'
+            });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'save-the-date-pernikahan.ics';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            $.toast({
+                heading: 'Berhasil',
+                text: 'File kalender (ICS) telah diunduh.',
+                position: 'top-right',
+                loaderBg: 'var(--primary-color)',
+                icon: 'success',
+                hideAfter: 3000
+            });
+        });
+
+        var giftCardCollapseElement = document.getElementById('giftCardCollapse');
+        if (giftCardCollapseElement) {
+            giftCardCollapseElement.addEventListener('shown.bs.collapse', function() {
+                AOS.refresh();
+            });
+        }
+
+        let allComments = []; // Variabel global untuk menyimpan SEMUA komentar dari server
+        const commentsPerPage = 10; // Atur jumlah komentar per halaman
+        let currentPage = 1; // Halaman yang sedang aktif
+
+        // Fungsi untuk menampilkan komentar pada halaman tertentu
+        function displayComments(page) {
+            currentPage = page;
+            const commentListContainer = $('#dynamic-comment-list');
+            const paginationContainer = $('#pagination-container');
+            commentListContainer.html(''); // Kosongkan daftar sebelum diisi
+            paginationContainer.html(''); // Kosongkan tombol paginasi
+
+            if (!allComments || allComments.length === 0) {
+                commentListContainer.html(
+                    '<p class="text-center" style="color: rgba(255,255,255,0.7);">Belum ada ucapan.</p>');
+                return;
             }
 
-            let allComments = []; // Variabel global untuk menyimpan SEMUA komentar dari server
-            const commentsPerPage = 10; // Atur jumlah komentar per halaman
-            let currentPage = 1; // Halaman yang sedang aktif
+            // Memotong array `allComments` sesuai halaman yang aktif
+            const startIndex = (page - 1) * commentsPerPage;
+            const endIndex = startIndex + commentsPerPage;
+            const paginatedComments = allComments.slice(startIndex, endIndex);
 
-            // Fungsi untuk menampilkan komentar pada halaman tertentu
-            function displayComments(page) {
-                currentPage = page;
-                const commentListContainer = $('#dynamic-comment-list');
-                const paginationContainer = $('#pagination-container');
-                commentListContainer.html(''); // Kosongkan daftar sebelum diisi
-                paginationContainer.html(''); // Kosongkan tombol paginasi
-
-                if (!allComments || allComments.length === 0) {
-                    commentListContainer.html(
-                        '<p class="text-center" style="color: rgba(255,255,255,0.7);">Belum ada ucapan.</p>');
-                    return;
-                }
-
-                // Memotong array `allComments` sesuai halaman yang aktif
-                const startIndex = (page - 1) * commentsPerPage;
-                const endIndex = startIndex + commentsPerPage;
-                const paginatedComments = allComments.slice(startIndex, endIndex);
-
-                // Menampilkan komentar yang sudah dipotong
-                paginatedComments.forEach(item => {
-                    let attendanceBadge = item.attendance === 'hadir' ?
-                        '<span class="attendance-badge attendance-hadir">Hadir</span>' : (item
-                            .attendance === 'tidak-hadir' ?
-                            '<span class="attendance-badge attendance-tidak-hadir">Tidak Hadir</span>' : ''
-                        );
-                    let formattedDate = new Date(item.created_at).toLocaleString('id-ID', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    commentListContainer.append(
-                        `<div class="comment-item-layout"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div>`
+            // Menampilkan komentar yang sudah dipotong
+            paginatedComments.forEach(item => {
+                let attendanceBadge = item.attendance === 'hadir' ?
+                    '<span class="attendance-badge attendance-hadir">Hadir</span>' : (item
+                        .attendance === 'tidak-hadir' ?
+                        '<span class="attendance-badge attendance-tidak-hadir">Tidak Hadir</span>' : ''
                     );
+                let formattedDate = new Date(item.created_at).toLocaleString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
                 });
-
-                // Membuat dan menampilkan tombol-tombol paginasi
-                displayPagination();
-            }
-
-            // Fungsi untuk membuat tombol-tombol paginasi berdasarkan jumlah total komentar
-            function displayPagination() {
-                const paginationContainer = $('#pagination-container');
-                const pageCount = Math.ceil(allComments.length / commentsPerPage);
-
-                if (pageCount <= 1) return; // Jangan tampilkan paginasi jika hanya 1 halaman
-
-                let paginationHTML = '<nav><ul class="pagination">';
-                // Tombol "Previous"
-                paginationHTML +=
-                    `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage - 1}">«</a></li>`;
-
-                // Tombol nomor halaman
-                for (let i = 1; i <= pageCount; i++) {
-                    paginationHTML +=
-                        `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
-                }
-
-                // Tombol "Next"
-                paginationHTML +=
-                    `<li class="page-item ${currentPage === pageCount ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage + 1}">»</a></li>`;
-                paginationHTML += '</ul></nav>';
-
-                paginationContainer.html(paginationHTML);
-            }
-
-            // Fungsi untuk mengambil SEMUA data ucapan dari server SEKALI SAJA
-            const fetchInitialData = () => {
-                const userId = $('#user_id').val();
-                if (!userId) {
-                    /* ... handle no user id ... */
-                    return;
-                }
-
-                const showUrl = `{{ route('ucapan.show', ['id' => ':id']) }}`.replace(':id', userId);
-
-                $.ajax({
-                    url: showUrl,
-                    type: 'GET',
-                    success: function(res) {
-                        // Simpan SEMUA ucapan ke variabel global
-                        allComments = res.ucapan || [];
-
-                        // Mengurutkan komentar dari yang terbaru
-                        allComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-                        // Menghitung total hadir/tidak hadir dari semua data
-                        const totalCount = allComments.length;
-                        const hadirCount = allComments.filter(c => c.attendance === 'hadir').length;
-                        const tidakHadirCount = allComments.filter(c => c.attendance ===
-                            'tidak-hadir').length;
-
-                        $('#comment-count').text(totalCount);
-                        $('#rsvp-hadir-count').text(hadirCount);
-                        $('#rsvp-tidak-hadir-count').text(tidakHadirCount);
-
-                        // Setelah semua data didapat, tampilkan halaman pertama
-                        displayComments(1);
-                    },
-                    error: (xhr) => console.error("Error fetching comments:", xhr.responseText)
-                });
-            };
-
-            // Event listener untuk klik pada tombol paginasi
-            $('body').on('click', '#pagination-container .page-link', function(e) {
-                e.preventDefault();
-                const page = $(this).data('page');
-                const pageCount = Math.ceil(allComments.length / commentsPerPage);
-                if (page && page > 0 && page <= pageCount) {
-                    displayComments(page);
-                }
+                commentListContainer.append(
+                    `<div class="comment-item-layout"><p class="comment-name mb-0">${item.nama || 'Anonim'} ${attendanceBadge}</p><small class="comment-date">${formattedDate} WIB</small><div class="comment-message mt-1"><p>${item.ucapan || ''}</p></div></div>`
+                );
             });
 
-            // Panggilan awal untuk memulai semuanya
-            fetchInitialData();
+            // Membuat dan menampilkan tombol-tombol paginasi
+            displayPagination();
+        }
+
+        // Fungsi untuk membuat tombol-tombol paginasi berdasarkan jumlah total komentar
+        function displayPagination() {
+            const paginationContainer = $('#pagination-container');
+            const pageCount = Math.ceil(allComments.length / commentsPerPage);
+
+            if (pageCount <= 1) return; // Jangan tampilkan paginasi jika hanya 1 halaman
+
+            let paginationHTML = '<nav><ul class="pagination">';
+            // Tombol "Previous"
+            paginationHTML +=
+                `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage - 1}">«</a></li>`;
+
+            // Tombol nomor halaman
+            for (let i = 1; i <= pageCount; i++) {
+                paginationHTML +=
+                    `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+            }
+
+            // Tombol "Next"
+            paginationHTML +=
+                `<li class="page-item ${currentPage === pageCount ? 'disabled' : ''}"><a class="page-link" href="#" data-page="${currentPage + 1}">»</a></li>`;
+            paginationHTML += '</ul></nav>';
+
+            paginationContainer.html(paginationHTML);
+        }
+
+        // Fungsi untuk mengambil SEMUA data ucapan dari server SEKALI SAJA
+        const fetchInitialData = () => {
+            const userId = $('#user_id').val();
+            if (!userId) {
+                /* ... handle no user id ... */
+                return;
+            }
+
+            const showUrl = `{{ route('ucapan.show', ['id' => ':id']) }}`.replace(':id', userId);
+
+            $.ajax({
+                url: showUrl,
+                type: 'GET',
+                success: function(res) {
+                    // Simpan SEMUA ucapan ke variabel global
+                    allComments = res.ucapan || [];
+
+                    // Mengurutkan komentar dari yang terbaru
+                    allComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                    // Menghitung total hadir/tidak hadir dari semua data
+                    const totalCount = allComments.length;
+                    const hadirCount = allComments.filter(c => c.attendance === 'hadir').length;
+                    const tidakHadirCount = allComments.filter(c => c.attendance ===
+                        'tidak-hadir').length;
+
+                    $('#comment-count').text(totalCount);
+                    $('#rsvp-hadir-count').text(hadirCount);
+                    $('#rsvp-tidak-hadir-count').text(tidakHadirCount);
+
+                    // Setelah semua data didapat, tampilkan halaman pertama
+                    displayComments(1);
+                },
+                error: (xhr) => console.error("Error fetching comments:", xhr.responseText)
+            });
+        };
+
+        // Event listener untuk klik pada tombol paginasi
+        $('body').on('click', '#pagination-container .page-link', function(e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            const pageCount = Math.ceil(allComments.length / commentsPerPage);
+            if (page && page > 0 && page <= pageCount) {
+                displayComments(page);
+            }
+        });
+
+        // Panggilan awal untuk memulai semuanya
+        fetchInitialData();
         });
     </script>
 </body>
