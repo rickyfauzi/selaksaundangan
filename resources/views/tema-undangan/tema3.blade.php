@@ -1555,30 +1555,6 @@
         .aos-animate {
             visibility: visible;
         }
-
-        #music-toggle-button {
-            transition: transform 0.3s ease;
-        }
-
-        #music-toggle-button.playing {
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Pastikan tombol invitation tetap visible */
-        #open-invitation {
-            display: block !important;
-            /* Tambahkan styling lainnya sesuai kebutuhan */
-        }
     </style>
 </head>
 
@@ -2210,12 +2186,61 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="/tema3/js/index.js"></script>
-
 
     <script>
         $(document).ready(function() {
+            // Music Setup - Updated Version
+            var musicPlayer = $("#musicPlayer")[0];
+            var musicToggleButton = $("#music-toggle-button");
 
+            // Set volume to 50% by default to prevent loud surprises
+            musicPlayer.volume = 0.5;
+
+            // Function to toggle music with improved handling
+            function toggleMusic() {
+                if (musicPlayer.paused) {
+                    // Try to play with promise handling
+                    var playPromise = musicPlayer.play();
+
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                                // Successfully started playback
+                                musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+                                console.log("Music playback started successfully");
+                            })
+                            .catch(error => {
+                                // Auto-play was prevented, show user feedback
+                                console.error("Playback prevented:", error);
+                                $.toast({
+                                    heading: 'Info',
+                                    text: 'Klik tombol musik lagi untuk memulai audio',
+                                    position: 'top-right',
+                                    loaderBg: 'var(--warning-color)',
+                                    icon: 'info',
+                                    hideAfter: 3000
+                                });
+                            });
+                    }
+                } else {
+                    musicPlayer.pause();
+                    musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
+                }
+            }
+
+            // Click handler for music button
+            musicToggleButton.on('click', function(e) {
+                e.preventDefault();
+                toggleMusic();
+            });
+
+            // Event listeners for player state changes
+            $(musicPlayer).on('play playing', function() {
+                musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+            });
+
+            $(musicPlayer).on('pause ended', function() {
+                musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
+            });
 
             // Auto-play when invitation is opened (if user interacts)
             const openButton = $('#open-invitation');
