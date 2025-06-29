@@ -2189,27 +2189,31 @@
 
     <script>
         $(document).ready(function() {
-            // Music Setup - Updated Version
             var musicPlayer = $("#musicPlayer")[0];
             var musicToggleButton = $("#music-toggle-button");
+            var hasStarted = false; // untuk memastikan currentTime hanya diset sekali di awal
 
-            // Set volume to 50% by default to prevent loud surprises
+            // Set volume to 50% by default
             musicPlayer.volume = 0.5;
 
             // Function to toggle music with improved handling
             function toggleMusic() {
                 if (musicPlayer.paused) {
-                    // Try to play with promise handling
+
+                    // Set currentTime hanya jika belum pernah dimainkan
+                    if (!hasStarted) {
+                        musicPlayer.currentTime = 19; // Mulai dari detik ke-19
+                        hasStarted = true;
+                    }
+
                     var playPromise = musicPlayer.play();
 
                     if (playPromise !== undefined) {
                         playPromise.then(_ => {
-                                // Successfully started playback
                                 musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
                                 console.log("Music playback started successfully");
                             })
                             .catch(error => {
-                                // Auto-play was prevented, show user feedback
                                 console.error("Playback prevented:", error);
                                 $.toast({
                                     heading: 'Info',
@@ -2226,6 +2230,7 @@
                     musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
                 }
             }
+
 
             // Click handler for music button
             musicToggleButton.on('click', function(e) {
