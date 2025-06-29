@@ -2144,11 +2144,8 @@
 
     <div class="music-button-container">
         <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
-        <audio controls autoplay class="d-none" id="music-audio">
-            <source
-                src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '') : '' }}"
-                type="audio/mpeg" />
-            Your browser does not support the audio element.
+        <audio id="musicPlayer" loop
+            src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema5/music/sample-music.mp3') : '/tema5/music/sample-music.mp3' }}">
         </audio>
     </div>
 
@@ -2182,14 +2179,7 @@
         </div>
     </div>
 
-    {{-- <section style="position: fixed; bottom: 0; left: 0; z-index: 9999;" class="music-outer" data-aos="fade-up"
-        data-aos-duration="1000" data-aos-delay="300">
-        <!-- <div class="music-box auto" id="music-box"></div> -->
-        <img class="music-box" src="/tema5/img/musicPlayer.png" alt="">
-    </section>
-    <audio id="musicPlayer" class="d-none"
-        src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema5/music/sample-music.mp3') : '/tema5/music/sample-music.mp3' }}">
-    </audio> --}}
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/assets/vendors/jquery-toast-plugin-master/src/jquery.toast.js"></script>
@@ -2199,51 +2189,76 @@
 
     <script>
         $(document).ready(function() {
-            AOS.init({
-                duration: 800,
-                once: false,
-                mirror: false,
-                offset: 30
-            });
+            // Music Setup - Updated Version
+            var musicPlayer = $("#musicPlayer")[0];
+            var musicToggleButton = $("#music-toggle-button");
 
-            const openButton = $('#open-invitation');
-            const coverContainer = $('#cover-container');
-            const audio = $('#music-audio')[0];
-            const musicToggleButton = $('#music-toggle-button');
+            // Set volume to 50% by default to prevent loud surprises
+            musicPlayer.volume = 0.5;
 
-            function playAudio() {
-                if (audio && audio.paused) {
-                    // Cek dulu apakah src ada
-                    if (!audio.src || audio.src === '') {
-                        console.error("Music source is empty");
-                        return;
+            // Function to toggle music with improved handling
+            function toggleMusic() {
+                if (musicPlayer.paused) {
+                    // Try to play with promise handling
+                    var playPromise = musicPlayer.play();
+
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                                // Successfully started playback
+                                musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+                                console.log("Music playback started successfully");
+                            })
+                            .catch(error => {
+                                // Auto-play was prevented, show user feedback
+                                console.error("Playback prevented:", error);
+                                $.toast({
+                                    heading: 'Info',
+                                    text: 'Klik tombol musik lagi untuk memulai audio',
+                                    position: 'top-right',
+                                    loaderBg: 'var(--warning-color)',
+                                    icon: 'info',
+                                    hideAfter: 3000
+                                });
+                            });
                     }
-
-                    // Coba play dengan promise
-                    audio.play().then(() => {
-                        if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-music')
-                            .addClass('fa-pause');
-                    }).catch(error => {
-                        console.warn("Autoplay prevented:", error);
-                        // Tampilkan pesan ke user bahwa mereka perlu interaksi
-                        $.toast({
-                            heading: 'Info',
-                            text: 'Klik tombol musik untuk memulai audio',
-                            position: 'top-right',
-                            loaderBg: 'var(--warning-color)',
-                            icon: 'info',
-                            hideAfter: 3000
-                        });
-
-                        if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-pause')
-                            .addClass('fa-music');
-                    });
+                } else {
+                    musicPlayer.pause();
+                    musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
                 }
             }
 
+            // Click handler for music button
+            musicToggleButton.on('click', function(e) {
+                e.preventDefault();
+                toggleMusic();
+            });
+
+            // Event listeners for player state changes
+            $(musicPlayer).on('play playing', function() {
+                musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+            });
+
+            $(musicPlayer).on('pause ended', function() {
+                musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
+            });
+
+            // Auto-play when invitation is opened (if user interacts)
+            const openButton = $('#open-invitation');
+            const coverContainer = $('#cover-container');
+
             if (openButton.length && coverContainer.length) {
                 openButton.on('click', function() {
-                    playAudio();
+                    // Try to play music when opening invitation
+                    if (musicPlayer.paused) {
+                        var playPromise = musicPlayer.play();
+
+                        if (playPromise !== undefined) {
+                            playPromise.catch(error => {
+                                console.log("Auto-play prevented, will require button click");
+                            });
+                        }
+                    }
+
                     coverContainer.css('top', '-100vh');
                     setTimeout(() => {
                         coverContainer.hide();
@@ -2254,24 +2269,13 @@
                 });
             }
 
-            if (musicToggleButton.length && audio) {
-                musicToggleButton.on('click', () => {
-                    if (audio.paused) {
-                        playAudio();
-                    } else {
-                        audio.pause();
-                        musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
-                    }
-                });
-                $(audio).on('pause ended', function() {
-                    if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-pause')
-                        .addClass('fa-music');
-                });
-                $(audio).on('play playing', function() {
-                    if (musicToggleButton.length) musicToggleButton.find('i').removeClass('fa-music')
-                        .addClass('fa-pause');
-                });
-            }
+            // Rest of your existing code (AOS, countdown, navigation, guestbook, etc.)
+            AOS.init({
+                duration: 800,
+                once: false,
+                mirror: false,
+                offset: 30
+            });
 
             const targetDateString = $('#ori_tanggal_acara').val();
             if (targetDateString) {
@@ -2582,7 +2586,6 @@
                         '<span class="spinner-border spinner-border-sm"></span> Mengirim...'),
                     success: function(response) {
                         if (response.code === 1) {
-                            // $.toast({ heading: 'Berhasil', text: response.message || 'Ucapan berhasil dikirim!', position: 'top-right', loaderBg: 'var(--primary-color)', icon: 'success', hideAfter: 3000, stack: 5 });
                             $('#guestbookForm')[0].reset();
                             const prefilledName = "";
                             if (prefilledName) $('#nama-ucapan').val(prefilledName);
@@ -2803,52 +2806,8 @@
                 }
             });
 
-            // Event listener untuk submit form
-            $('#guestbookForm').on('submit', function(e) {
-                e.preventDefault();
-                // ... (validasi form)
-
-                const storeUrl = `{{ route('ucapan.store', ['id' => ':id']) }}`.replace(':id', $(
-                    '#user_id').val());
-                $.ajax({
-                    url: storeUrl,
-                    method: 'POST',
-                    data: $(this).serialize(),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: () => $('#kirim-ucapan').prop('disabled', true).html(
-                        '<span class="spinner-border spinner-border-sm"></span>'),
-                    success: function(response) {
-                        if (response.code === 1) {
-                            $.toast({
-                                heading: 'Berhasil',
-                                text: 'Ucapan Anda telah terkirim!',
-                                position: 'top-right',
-                                loaderBg: 'var(--primary-color)',
-                                icon: 'success'
-                            });
-                            $('#guestbookForm')[0].reset();
-                            const prefilledName = "{{ $kodeTamu->nama ?? '' }}";
-                            if (prefilledName) $('#nama-ucapan').val(prefilledName);
-
-                            // Ambil ulang SEMUA data agar komentar baru masuk dan tampil di halaman pertama
-                            fetchInitialData();
-                        } else {
-                            /* ... handle error ... */
-                        }
-                    },
-                    error: (xhr) => {
-                        /* ... handle error ... */
-                    },
-                    complete: () => $('#kirim-ucapan').prop('disabled', false).text('KIRIM')
-                });
-            });
-
             // Panggilan awal untuk memulai semuanya
             fetchInitialData();
-
-
         });
     </script>
 </body>
