@@ -1506,25 +1506,6 @@
             content: "\f001";
         }
 
-        .music-button-container {
-            position: relative;
-        }
-
-        .music-button-rotating {
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -2212,20 +2193,23 @@
             var musicPlayer = $("#musicPlayer")[0];
             var musicToggleButton = $("#music-toggle-button");
 
-            // Set volume to 50% by default
+            // Set volume to 50% by default to prevent loud surprises
             musicPlayer.volume = 0.5;
 
+            // Function to toggle music with improved handling
             function toggleMusic() {
                 if (musicPlayer.paused) {
+                    // Try to play with promise handling
                     var playPromise = musicPlayer.play();
 
                     if (playPromise !== undefined) {
                         playPromise.then(_ => {
-                                // Mulai animasi rotasi saat musik diputar
-                                musicToggleButton.addClass('music-button-rotating');
+                                // Successfully started playback
                                 musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
+                                console.log("Music playback started successfully");
                             })
                             .catch(error => {
+                                // Auto-play was prevented, show user feedback
                                 console.error("Playback prevented:", error);
                                 $.toast({
                                     heading: 'Info',
@@ -2239,25 +2223,22 @@
                     }
                 } else {
                     musicPlayer.pause();
-                    // Hentikan animasi rotasi saat musik dipause
-                    musicToggleButton.removeClass('music-button-rotating');
                     musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
                 }
             }
 
-            // Event listeners
+            // Click handler for music button
             musicToggleButton.on('click', function(e) {
                 e.preventDefault();
                 toggleMusic();
             });
 
+            // Event listeners for player state changes
             $(musicPlayer).on('play playing', function() {
-                musicToggle Button.addClass('music-button-rotating');
                 musicToggleButton.find('i').removeClass('fa-music').addClass('fa-pause');
             });
 
             $(musicPlayer).on('pause ended', function() {
-                musicToggleButton.removeClass('music-button-rotating');
                 musicToggleButton.find('i').removeClass('fa-pause').addClass('fa-music');
             });
 
