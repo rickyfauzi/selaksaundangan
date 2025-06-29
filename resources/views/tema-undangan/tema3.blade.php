@@ -2359,7 +2359,7 @@
                 }, 1000);
             });
         }
-        });
+
 
         // Rest of your existing code (AOS, countdown, navigation, guestbook, etc.)
         AOS.init({
