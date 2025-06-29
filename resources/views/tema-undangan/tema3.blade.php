@@ -2586,10 +2586,13 @@
                         '<span class="spinner-border spinner-border-sm"></span> Mengirim...'),
                     success: function(response) {
                         if (response.code === 1) {
-                            $('#guestbookForm')[0].reset();
-                            const prefilledName = "";
-                            if (prefilledName) $('#nama-ucapan').val(prefilledName);
-                            ucapanUndangan();
+                            $.toast({
+                                heading: 'Berhasil',
+                                text: 'Ucapan Anda telah terkirim!',
+                                position: 'top-right',
+                                loaderBg: 'var(--primary-color)',
+                                icon: 'success'
+                            });
                         } else {
                             $.toast({
                                 heading: 'Gagal',
