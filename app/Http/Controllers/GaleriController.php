@@ -16,11 +16,11 @@ class GaleriController extends Controller
         $qtyFotoMax = 0;
         $checkingPaket = OrderModel::where('user_id', $idUser)->first();
         if ($checkingPaket->paket === 'Paket 1') {
-            $qtyFotoMax = 4;
+            $qtyFotoMax = 10;
         } elseif ($checkingPaket->paket === 'Paket 2') {
-            $qtyFotoMax = 6;
+            $qtyFotoMax = 12;
         } elseif ($checkingPaket->paket === 'Paket 3') {
-            $qtyFotoMax = 8;
+            $qtyFotoMax = 15;
         }
         return view('undangan/galeri', compact('qtyFotoMax'));
     }
