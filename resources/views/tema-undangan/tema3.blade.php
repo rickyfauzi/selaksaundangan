@@ -418,7 +418,7 @@
             color: var(--accent-color-1);
             position: relative;
             z-index: 1;
-            background-image: url("{{ asset('tema3/img/left.png') }}");
+            background-image: url("{{ asset('tema3/img/bg.png') }}");
             background-size: cover;
             padding-top: 80px;
             padding-bottom: 40px;
