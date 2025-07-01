@@ -2251,20 +2251,52 @@
             });
 
             // Auto-play when invitation is opened (if user interacts)
-            // Hapus class sembunyi dan tambahkan animasi setelah cover hilang
-            $('.hidden-before-start').each(function() {
-                const $el = $(this);
-                $el.removeClass('hidden-before-start');
+            >
+            const openButton = $('#open-invitation');
+            const coverContainer = $('#cover-container');
+            const musicPlayer = document.getElementById('musicPlayer'); // Pastikan ID ini sesuai audio kamu
 
-                // Tambahkan kelas animasi Animate.css jika diperlukan
-                if ($el.hasClass('ornament-top-left')) {
-                    $el.addClass('animate__fadeInLeft');
-                }
-                if ($el.hasClass('ornament-bottom-right')) {
-                    $el.addClass('animate__fadeInRight');
-                }
-            });
+            if (openButton.length && coverContainer.length) {
+                openButton.on('click', function() {
+                    // 🔊 Mainkan musik
+                    if (musicPlayer && musicPlayer.paused) {
+                        const playPromise = musicPlayer.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(error => {
+                                console.log("Auto-play prevented. User interaction required.");
+                            });
+                        }
+                    }
 
+                    // ⬆️ Geser cover ke atas
+                    coverContainer.css('top', '-100vh');
+
+                    // ⏳ Tunggu 1 detik, lalu sembunyikan dan aktifkan konten utama
+                    setTimeout(() => {
+                        coverContainer.hide();
+                        $('body').css('overflow-y', 'auto');
+
+                        // ⬇️ Tampilkan elemen tersembunyi + tambahkan animasi manual
+                        $('.hidden-before-start').each(function() {
+                            const $el = $(this);
+                            $el.removeClass('hidden-before-start');
+
+                            // Tambah animasi jika menggunakan animate.css
+                            if ($el.hasClass('ornament-top-left')) {
+                                $el.addClass('animate__fadeInLeft');
+                            }
+
+                            if ($el.hasClass('ornament-bottom-right')) {
+                                $el.addClass('animate__fadeInRight');
+                            }
+                        });
+
+                        // 🔄 Refresh AOS dan picu scroll agar animasi jalan
+                        AOS.refresh();
+                        $(window).trigger('scroll');
+                    }, 1000);
+                });
+            }
 
             // Rest of your existing code (AOS, countdown, navigation, guestbook, etc.)
             AOS.init({
