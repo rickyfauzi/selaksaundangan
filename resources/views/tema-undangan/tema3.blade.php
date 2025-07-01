@@ -61,6 +61,8 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="/assets/vendors/jquery-toast-plugin-master/src/jquery.toast.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <style>
         html {
             font-size: 90%;
@@ -468,82 +470,25 @@
         }
 
         .ornament-top-left {
-            position: absolute;
             top: 5px;
             left: 0;
             width: 250px;
             height: 250px;
             background-image: url("{{ asset('tema3/img/left.png') }}");
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0;
-            animation:
-                fadeIn 1s ease-out forwards,
-                float-subtle 6s ease-in-out infinite;
+            animation: float-subtle 6s ease-in-out infinite;
         }
 
         .ornament-bottom-right {
-            position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 0px;
+            right: 0px;
             width: 250px;
             height: 250px;
             background-image: url("{{ asset('tema3/img/left.png') }}");
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0;
-            animation:
-                fadeIn 1s ease-out forwards 0.3s,
-                /* delay fade sedikit */
-                float-subtle-rotated 6s ease-in-out infinite .5s;
+            /* transform: rotate(180deg); */
+            animation: float-subtle-rotated 6s ease-in-out infinite .5s;
         }
 
 
-        .ornament-top-left {
-            position: absolute;
-            top: 5px;
-            left: 0;
-            width: 250px;
-            height: 250px;
-            background-image: url("{{ asset('tema3/img/left.png') }}");
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0;
-            animation:
-                fadeIn 1s ease-out forwards,
-                float-subtle 6s ease-in-out infinite;
-        }
-
-        .ornament-bottom-right {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 250px;
-            height: 250px;
-            background-image: url("{{ asset('tema3/img/left.png') }}");
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0;
-            animation:
-                fadeIn 1s ease-out forwards 0.3s,
-                /* delay fade sedikit */
-                float-subtle-rotated 6s ease-in-out infinite .5s;
-        }
-
-
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-                /* Efek sedikit geser ke bawah */
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
 
         .wedding-title {
@@ -1660,8 +1605,9 @@
 
     <main>
         <section class="section header-section py-5" id="home">
-            <div class="header-ornament ornament-top-left" data-aos="fade-down-right" data-aos-delay="150"></div>
-            <div class="header-ornament ornament-bottom-right" data-aos="fade-up-left" data-aos-delay="150"></div>
+            <div class="ornament-top-left animate__animated animate__fadeInLeft"></div>
+            <div class="ornament-bottom-right animate__animated animate__fadeInRight animate__delay-1s"></div>
+
             <div class="container">
                 <p class="wedding-title" data-aos="fade-up" data-aos-delay="50">THE WEDDING OF</p>
                 <div class="couple-frame-container" data-aos="zoom-in" data-aos-delay="100">
