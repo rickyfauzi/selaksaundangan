@@ -2251,47 +2251,26 @@
             });
 
             // Auto-play when invitation is opened (if user interacts)
-            >
             const openButton = $('#open-invitation');
             const coverContainer = $('#cover-container');
-            const musicPlayer = document.getElementById('musicPlayer'); // Pastikan ID ini sesuai audio kamu
 
             if (openButton.length && coverContainer.length) {
                 openButton.on('click', function() {
-                    // 🔊 Mainkan musik
-                    if (musicPlayer && musicPlayer.paused) {
-                        const playPromise = musicPlayer.play();
+                    // Try to play music when opening invitation
+                    if (musicPlayer.paused) {
+                        var playPromise = musicPlayer.play();
+
                         if (playPromise !== undefined) {
                             playPromise.catch(error => {
-                                console.log("Auto-play prevented. User interaction required.");
+                                console.log("Auto-play prevented, will require button click");
                             });
                         }
                     }
 
-                    // ⬆️ Geser cover ke atas
                     coverContainer.css('top', '-100vh');
-
-                    // ⏳ Tunggu 1 detik, lalu sembunyikan dan aktifkan konten utama
                     setTimeout(() => {
                         coverContainer.hide();
                         $('body').css('overflow-y', 'auto');
-
-                        // ⬇️ Tampilkan elemen tersembunyi + tambahkan animasi manual
-                        $('.hidden-before-start').each(function() {
-                            const $el = $(this);
-                            $el.removeClass('hidden-before-start');
-
-                            // Tambah animasi jika menggunakan animate.css
-                            if ($el.hasClass('ornament-top-left')) {
-                                $el.addClass('animate__fadeInLeft');
-                            }
-
-                            if ($el.hasClass('ornament-bottom-right')) {
-                                $el.addClass('animate__fadeInRight');
-                            }
-                        });
-
-                        // 🔄 Refresh AOS dan picu scroll agar animasi jalan
                         AOS.refresh();
                         $(window).trigger('scroll');
                     }, 1000);
