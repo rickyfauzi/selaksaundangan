@@ -1605,9 +1605,10 @@
 
     <main>
         <section class="section header-section py-5" id="home">
-            <div class="ornament-top-left animate__animated animate__fadeInLeft"></div>
-            <div class="ornament-bottom-right animate__animated animate__fadeInRight animate__delay-1s"></div>
-
+            <div class="header-ornament ornament-top-left animate__animated animate__fadeInLeft"
+                data-aos="fade-down-right" data-aos-delay="150"></div>
+            <div class="header-ornament ornament-bottom-right animate__animated animate__fadeInRight animate"
+                data-aos="fade-up-left" data-aos-delay="150"></div>
             <div class="container">
                 <p class="wedding-title" data-aos="fade-up" data-aos-delay="50">THE WEDDING OF</p>
                 <div class="couple-frame-container" data-aos="zoom-in" data-aos-delay="100">
