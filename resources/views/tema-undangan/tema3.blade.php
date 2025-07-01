@@ -1566,7 +1566,7 @@
 
 <body>
 
-    <div id="cover-container">
+    {{-- <div id="cover-container">
         <!-- Background Image -->
         <div class="cover-background-image"></div>
 
@@ -1601,7 +1601,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <main>
         <section class="section header-section py-5" id="home">
