@@ -1566,7 +1566,7 @@
 
 <body>
 
-    {{-- <div id="cover-container">
+    <div id="cover-container">
         <!-- Background Image -->
         <div class="cover-background-image"></div>
 
@@ -1601,7 +1601,7 @@
                 </button>
             </div>
         </div>
-    </div> --}}
+    </div>
 
     <main>
         <section class="section header-section py-5" id="home">
@@ -2251,31 +2251,20 @@
             });
 
             // Auto-play when invitation is opened (if user interacts)
-            const openButton = $('#open-invitation');
-            const coverContainer = $('#cover-container');
+            // Hapus class sembunyi dan tambahkan animasi setelah cover hilang
+            $('.hidden-before-start').each(function() {
+                const $el = $(this);
+                $el.removeClass('hidden-before-start');
 
-            if (openButton.length && coverContainer.length) {
-                openButton.on('click', function() {
-                    // Try to play music when opening invitation
-                    if (musicPlayer.paused) {
-                        var playPromise = musicPlayer.play();
+                // Tambahkan kelas animasi Animate.css jika diperlukan
+                if ($el.hasClass('ornament-top-left')) {
+                    $el.addClass('animate__fadeInLeft');
+                }
+                if ($el.hasClass('ornament-bottom-right')) {
+                    $el.addClass('animate__fadeInRight');
+                }
+            });
 
-                        if (playPromise !== undefined) {
-                            playPromise.catch(error => {
-                                console.log("Auto-play prevented, will require button click");
-                            });
-                        }
-                    }
-
-                    coverContainer.css('top', '-100vh');
-                    setTimeout(() => {
-                        coverContainer.hide();
-                        $('body').css('overflow-y', 'auto');
-                        AOS.refresh();
-                        $(window).trigger('scroll');
-                    }, 1000);
-                });
-            }
 
             // Rest of your existing code (AOS, countdown, navigation, guestbook, etc.)
             AOS.init({
