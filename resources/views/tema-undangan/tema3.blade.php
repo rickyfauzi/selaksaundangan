@@ -468,23 +468,83 @@
         }
 
         .ornament-top-left {
+            position: absolute;
             top: 5px;
             left: 0;
             width: 250px;
             height: 250px;
             background-image: url("{{ asset('tema3/img/left.png') }}");
-            animation: float-subtle 6s ease-in-out infinite;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation:
+                fadeIn 1s ease-out forwards,
+                float-subtle 6s ease-in-out infinite;
         }
 
         .ornament-bottom-right {
-            bottom: 0px;
-            right: 0px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
             width: 250px;
             height: 250px;
             background-image: url("{{ asset('tema3/img/left.png') }}");
-            /* transform: rotate(180deg); */
-            animation: float-subtle-rotated 6s ease-in-out infinite .5s;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation:
+                fadeIn 1s ease-out forwards 0.3s,
+                /* delay fade sedikit */
+                float-subtle-rotated 6s ease-in-out infinite .5s;
         }
+
+
+        .ornament-top-left {
+            position: absolute;
+            top: 5px;
+            left: 0;
+            width: 250px;
+            height: 250px;
+            background-image: url("{{ asset('tema3/img/left.png') }}");
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation:
+                fadeIn 1s ease-out forwards,
+                float-subtle 6s ease-in-out infinite;
+        }
+
+        .ornament-bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 250px;
+            height: 250px;
+            background-image: url("{{ asset('tema3/img/left.png') }}");
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation:
+                fadeIn 1s ease-out forwards 0.3s,
+                /* delay fade sedikit */
+                float-subtle-rotated 6s ease-in-out infinite .5s;
+        }
+
+
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+                /* Efek sedikit geser ke bawah */
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
 
         .wedding-title {
             font-family: var(--font-primary);
