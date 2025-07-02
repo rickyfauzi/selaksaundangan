@@ -2112,13 +2112,21 @@
         </div>
     </footer>
 
-    <div class="music-button-container">
+    {{-- <div class="music-button-container">
         <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
         <audio id="musicPlayer">
             <source
                 src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '') : '' }}"
                 type="audio/mpeg" />
             Your browser does not support the audio element.
+        </audio>
+    </div> --}}
+
+
+    <div class="music-button-container">
+        <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
+        <audio id="musicPlayer" loop
+            src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema3/music/sepatu.mp3') : '/tema3/music/sepatu.mp3' }}">
         </audio>
     </div>
 
