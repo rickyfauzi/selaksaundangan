@@ -471,8 +471,8 @@
         .ornament-top-left {
             top: 0;
             /* left: 0; */
-            width: 250px;
-            height: 250px;
+            width: 500px;
+            height: 500px;
             background-image: url("{{ asset('tema3/img/left2.png') }}");
             animation: float-subtle 6s ease-in-out infinite;
         }
