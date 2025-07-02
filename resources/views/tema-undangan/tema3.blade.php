@@ -69,14 +69,14 @@
         }
 
         :root {
-            --primary-color: #2e4053;
+            --primary-color: #0f2165;
             --accent-color-1: #aab7b8;
             --app-bg-light: #d5d8dc;
             --app-bg-soft: #ffffff;
             --text-on-dark: #ffffff;
             --text-on-light: #495057;
             --text-on-primary: #ffffff;
-            --warning-color: #ffc107;
+            --warning-color: #cab58b;
             --font-primary: "Poppins", sans-serif;
             --font-decorative: "Great Vibes", cursive;
             --font-script: "Dancing Script", cursive;
