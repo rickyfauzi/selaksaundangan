@@ -469,11 +469,11 @@
         }
 
         .ornament-top-left {
-            top: 5px;
-            left: 0;
+            top: 0;
+            /* left: 0; */
             width: 250px;
             height: 250px;
-            background-image: url("{{ asset('tema3/img/left.png') }}");
+            background-image: url("{{ asset('tema3/img/element3.png') }}");
             animation: float-subtle 6s ease-in-out infinite;
         }
 
