@@ -471,7 +471,7 @@
         .ornament-top-left {
             position: absolute;
             /* pastikan ini ada */
-            top: -30px;
+            top: -15px;
             /* left: 0; */
             width: 500px;
             height: 500px;
@@ -2151,9 +2151,9 @@
 
     <div class="music-button-container">
         <button class="music-button" id="music-toggle-button"><i class="fas fa-music"></i></button>
-        <audio id="musicPlayer" loop
+        {{-- <audio id="musicPlayer" loop
             src="{{ $musik ? ($musik->musikMaster->musik ? asset('musik/' . $musik->musikMaster->musik) : '/tema3/music/sepatu.mp3') : '/tema3/music/sepatu.mp3' }}">
-        </audio>
+        </audio> --}}
     </div>
 
 
