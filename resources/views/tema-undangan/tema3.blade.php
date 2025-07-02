@@ -469,7 +469,9 @@
         }
 
         .ornament-top-left {
-            top: 10px;
+            position: absolute;
+            /* pastikan ini ada */
+            top: -50px;
             /* left: 0; */
             width: 500px;
             height: 500px;
