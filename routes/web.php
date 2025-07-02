@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Administrator\FiturController;
 use App\Http\Controllers\AmplopDigitalController;
 use App\Http\Controllers\BukuTamuController;
 use App\Http\Controllers\CeritaCintaController;
@@ -62,11 +63,16 @@ Route::middleware('auth')->group(function () {
     Route::prefix('administrator')->group(function () {
         Route::resource('order', OrderController::class);
         Route::get('get', [OrderController::class, 'get'])->name('order.get');
+        // === TAMBAHKAN DUA BARIS INI UNTUK MENGELOLA FITUR ===
+        Route::get('user/{user}/fitur', [FiturController::class, 'edit'])->name('administrator.fitur.edit');
+        Route::post('user/{user}/fitur', [FiturController::class, 'update'])->name('administrator.fitur.update');
+        // =======================================================
+
     });
 
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('ucapan', [DashboardController::class, 'listUcapan'])->name('list.ucapan'); 
+        Route::get('ucapan', [DashboardController::class, 'listUcapan'])->name('list.ucapan');
     });
 
     Route::prefix('undangan')->group(function () {

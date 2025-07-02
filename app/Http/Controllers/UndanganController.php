@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AmplopDigitalModel;
 use App\Models\BukuTamuModel;
 use App\Models\CeritaCintaModel;
+use App\Models\FiturUndangan;
 use App\Models\GaleriModel;
 use App\Models\InformasiAcaraModel;
 use App\Models\InstagramFilterModel;
@@ -28,19 +29,46 @@ use Illuminate\Validation\Rule;
 
 class UndanganController extends Controller
 {
-   public function index()
-{
-    $user = Auth::user();
-    $idUser = $user->id;
-    
-    $data = ProtokolModel::where('user_id', $idUser)->first();
-    $order = OrderModel::where('user_id', $idUser)->first(); // Get specific order for user
-    $mempelai = MempelaiModel::where('user_id', $idUser)->first();
-    $paymentvendor = PaymentVendorModel::all();
-    $pvcustomer = AmplopDigitalModel::where('user_id', $idUser)->first();
-    
-    return view('undangan.index', compact('data', 'mempelai', 'paymentvendor', 'pvcustomer', 'order'));
-}
+    public function index()
+    {
+        $user = Auth::user();
+        $idUser = $user->id;
+
+        // === LOGIKA BARU: Ambil fitur yang aktif untuk customer ini ===
+        $fiturAktif = FiturUndangan::where('user_id', $idUser)
+            ->where('is_active', true)
+            ->pluck('nama_fitur')
+            ->toArray();
+
+        // Fallback: Jika admin belum mengatur fitur untuk user ini, anggap semua fitur aktif.
+        if (!FiturUndangan::where('user_id', $idUser)->exists()) {
+            $fiturAktif = [
+                'tema',
+                'musik',
+                'galeri',
+                'mempelai',
+                'informasi_acara',
+                'video_prewedd',
+                'cerita_cinta',
+                'quotes',
+                'buku_tamu',
+                'amplop_digital',
+                'protokol',
+                'rsvp'
+            ];
+        }
+        // === AKHIR LOGIKA BARU ===
+
+        // Data yang sudah ada sebelumnya
+        $data = ProtokolModel::where('user_id', $idUser)->first();
+        $order = OrderModel::where('user_id', $idUser)->first();
+        $mempelai = MempelaiModel::where('user_id', $idUser)->first();
+        $paymentvendor = PaymentVendorModel::all();
+        $pvcustomer = AmplopDigitalModel::where('user_id', $idUser)->first();
+
+        // Kirim semua data, TERMASUK '$fiturAktif' ke view
+        return view('undangan.index', compact('data', 'mempelai', 'paymentvendor', 'pvcustomer', 'order', 'fiturAktif'));
+    }
 
     public function protokolStore(Request $request)
     {
@@ -125,6 +153,11 @@ class UndanganController extends Controller
     {
         $getUser = OrderModel::where('domain', $domain)->first();
 
+        // Pengecekan Keamanan: Jika domain tidak ditemukan atau tidak ada data user, tampilkan 404
+        if (!$getUser) {
+            abort(404);
+        }
+
         if ($getUser->status != '0') {
 
             $getIP = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
@@ -137,87 +170,131 @@ class UndanganController extends Controller
                     'alamatip' => $getIP->ip
                 ]);
             }
-            //Tema
+
+            // BARU: Ambil daftar fitur yang aktif untuk undangan ini
+            $fiturAktif = \App\Models\FiturUndangan::where('user_id', $getUser->user_id)
+                ->where('is_active', true)
+                ->pluck('nama_fitur')
+                ->toArray();
+
+            // BARU: Fallback jika admin belum mengatur fitur, anggap semua aktif
+            if (!\App\Models\FiturUndangan::where('user_id', $getUser->user_id)->exists()) {
+                $fiturAktif = ['galeri', 'cerita_cinta', 'amplop_digital', 'protokol', 'video_prewedd', 'quotes', 'buku_tamu', 'rsvp', 'wedding_filter'];
+            }
+
+            //Tema (Wajib, tidak perlu if)
             $tema = TemaTransaksiModel::where('user_id', $getUser->user_id)->with('temaMaster')->first();
 
-            //Musik
+            //Musik (Wajib, tidak perlu if)
             $musik = MusikTransaksiModel::where('user_id', $getUser->user_id)->with('musikMaster')->first();
 
-            //Mempelai  
+            //Mempelai (Wajib, tidak perlu if)  
             $mempelai = MempelaiModel::where('user_id', $getUser->user_id)->first();
 
-            //Quotes
-            $quotes = QuotesModel::where('user_id', $getUser->user_id)->first();
+            // Pengecekan Keamanan Data Inti
+            if (!$tema || !$mempelai) {
+                return response("Data undangan inti belum lengkap.", 404);
+            }
 
-            //Informasi Acara
+            // BARU: Inisialisasi semua variabel fitur opsional ke null/kosong
+            $quotes = null;
+            $informasiacara = null;
+            $galeri = collect();
+            $count = 0;
+            $ceritacinta = null;
+            $amplopdigital = null;
+            $protokol = null;
+            $prewed = null;
+            $weddingfilter = null;
+            $tanggalAcara = null;
+            $oriTanggalAcara = null;
+            $afterConvertDay = null;
+
+
+            // BARU: Bungkus query dengan pengecekan fitur
+            if (in_array('quotes', $fiturAktif)) {
+                $quotes = QuotesModel::where('user_id', $getUser->user_id)->first();
+            }
+
+            //Informasi Acara dan Logika Tanggal (Dianggap sebagai satu fitur)
             $informasiacara = InformasiAcaraModel::where('user_id', $getUser->user_id)->first();
-            $tanggalPernikahan = $informasiacara->tanggalpernikahan;
-            $datetime = new DateTime($tanggalPernikahan);
-            $oriTanggalAcara = $datetime->format('Y-m-d');
-            $day = Carbon::instance($datetime)->locale('id')->format('l');
+            if ($informasiacara) {
+                // Kode tanggal Anda yang sudah ada, tidak diubah
+                $tanggalPernikahan = $informasiacara->tanggalpernikahan;
+                $datetime = new DateTime($tanggalPernikahan);
+                $oriTanggalAcara = $datetime->format('Y-m-d');
+                $day = Carbon::instance($datetime)->locale('id')->format('l');
+                $convertDay = [
+                    'Sunday' => 'Minggu',
+                    'Monday' => 'Senin',
+                    'Tuesday' => 'Selasa',
+                    'Wednesday' => 'Rabu',
+                    'Thursday' => 'Kamis',
+                    'Friday' => 'Jumat',
+                    'Saturday' => 'Sabtu',
+                ];
+                $convertMonth = [
+                    '01' => 'Januari',
+                    '02' => 'Februari',
+                    '03' => 'Maret',
+                    '04' => 'April',
+                    '05' => 'Mei',
+                    '06' => 'Juni',
+                    '07' => 'Juli',
+                    '08' => 'Agustus',
+                    '09' => 'September',
+                    '10' => 'Oktober',
+                    '11' => 'November',
+                    '12' => 'Desember',
+                ];
+                $afterConvertDay = $convertDay[$day];
+                $day = $datetime->format('d');
+                $month = $datetime->format('m');
+                $year = $datetime->format('Y');
+                $afterConvertMonth = $convertMonth[$month];
+                $tanggalAcara =  $day . ' ' . $afterConvertMonth . ' ' . $year;
+            }
 
-            $convertDay = [
-                'Sunday' => 'Minggu',
-                'Monday' => 'Senin',
-                'Tuesday' => 'Selasa',
-                'Wednesday' => 'Rabu',
-                'Thursday' => 'Kamis',
-                'Friday' => 'Jumat',
-                'Saturday' => 'Sabtu',
-            ];
+            // BARU: Bungkus query dengan pengecekan fitur
+            if (in_array('galeri', $fiturAktif)) {
+                $galeri = GaleriModel::where('user_id', $getUser->user_id)->get();
+                $count = $galeri->count();
+            }
 
-            $convertMonth = [
-                '01' => 'Januari',
-                '02' => 'Februari',
-                '03' => 'Maret',
-                '04' => 'April',
-                '05' => 'Mei',
-                '06' => 'Juni',
-                '07' => 'Juli',
-                '08' => 'Agustus',
-                '09' => 'September',
-                '10' => 'Oktober',
-                '11' => 'November',
-                '12' => 'Desember',
-            ];
+            // BARU: Bungkus query dengan pengecekan fitur
+            if (in_array('cerita_cinta', $fiturAktif)) {
+                $ceritacinta = CeritaCintaModel::where('user_id', $getUser->user_id)->first();
+            }
 
-            $afterConvertDay = $convertDay[$day];
+            // BARU: Bungkus query dengan pengecekan fitur
+            if (in_array('amplop_digital', $fiturAktif)) {
+                $amplopdigital = AmplopDigitalModel::where('user_id', $getUser->user_id)->first();
+            }
 
-            $day = $datetime->format('d');
-            $month = $datetime->format('m');
-            $year = $datetime->format('Y');
-            $afterConvertMonth = $convertMonth[$month];
-            $tanggalAcara =  $day . ' ' . $afterConvertMonth . ' ' . $year;
-
-            //Galeri
-            $galeri = GaleriModel::where('user_id', $getUser->user_id)->get();
-            $count = $galeri->count();
-
-            //Cerita Cinta
-            $ceritacinta = CeritaCintaModel::where('user_id', $getUser->user_id)->first();
-
-            //Amplop Digital
-            $amplopdigital = AmplopDigitalModel::where('user_id', $getUser->user_id)->first();
-
-
-            //Nama Tamu
+            //Nama Tamu (Tidak diubah)
             $kodeTamu = null;
             $namaTamu = 'Tamu Undangan';
             if ($request->to != null) {
-                $namaTamu = $request->to;
+                $namaTamu = str_replace(['+', '_'], ' ', $request->to);
                 $kodeTamu = BukuTamuModel::where('nama', $namaTamu)->where('user_id', $getUser->user_id)->first();
             }
 
-            //Protokol 
-            $protokol = ProtokolModel::where('user_id', $getUser->user_id)->where('is_protokol', '1')->first();
+            // BARU: Bungkus query dengan pengecekan fitur
+            if (in_array('protokol', $fiturAktif)) {
+                $protokol = ProtokolModel::where('user_id', $getUser->user_id)->where('is_protokol', '1')->first();
+            }
 
-            //Vidio PreWedd
-            $prewed = VidioModel::where('user_id', $getUser->user_id)->first();
+            // BARU: Bungkus query dengan pengecekan fitur
+            if (in_array('video_prewedd', $fiturAktif)) {
+                $prewed = VidioModel::where('user_id', $getUser->user_id)->first();
+            }
 
-            //Wedding Filter
-            $weddingfilter = InstagramFilterModel::where('user_id', $getUser->user_id)->first();
+            // BARU: Bungkus query dengan pengecekan fitur
+            if (in_array('wedding_filter', $fiturAktif)) {
+                $weddingfilter = InstagramFilterModel::where('user_id', $getUser->user_id)->first();
+            }
 
-
+            // BARU: Kirim $fiturAktif ke view
             return view($tema->temaMaster->url_tema, compact(
                 'getUser',
                 'namaTamu',
@@ -236,6 +313,7 @@ class UndanganController extends Controller
                 'weddingfilter',
                 'musik',
                 'kodeTamu',
+                'fiturAktif' // <--- Tambahan
             ));
         } else {
             return view('errors.404');
@@ -252,18 +330,18 @@ class UndanganController extends Controller
 
     public function ucapanStore(Request $request, $id)
     {
-       $request->validate([
-    'nama' => 'required|string|max:255',
-    'ucapan' => 'required|string',
-    'attendance' => ['required', Rule::in(['hadir', 'tidak-hadir', 'ragu'])],
-]);
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'ucapan' => 'required|string',
+            'attendance' => ['required', Rule::in(['hadir', 'tidak-hadir', 'ragu'])],
+        ]);
 
-$query = UcapanModel::create([
-    'user_id' => $id,
-    'nama' => $request->nama,
-    'ucapan' => $request->ucapan,
-    'attendance' => $request->attendance,
-]);
+        $query = UcapanModel::create([
+            'user_id' => $id,
+            'nama' => $request->nama,
+            'ucapan' => $request->ucapan,
+            'attendance' => $request->attendance,
+        ]);
 
         if ($query) {
             return response()->json(['code' => 1]);

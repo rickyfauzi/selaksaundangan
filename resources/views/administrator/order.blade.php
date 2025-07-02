@@ -11,6 +11,7 @@
 @endsection
 
 @section('content')
+@section('content')
     <section class="content">
         <div class="row">
             <div class="col-lg-12">
@@ -33,6 +34,7 @@
                         <div class="tab-content" id="myTabContent" style="margin-top: 30px;">
                             <div class="tab-pane fade show active" id="order" role="tabpanel"
                                 aria-labelledby="order-tab">
+                                {{-- Form order tidak ada perubahan --}}
                                 <form id="order-submit">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -107,6 +109,7 @@
                                 aria-labelledby="daftarorder-tab">
                                 <div class="row">
                                     <div class="col-lg-12">
+                                        {{-- Form pencarian tidak ada perubahan --}}
                                         <form class="row mt-2" id="cari">
                                             <div class="col-lg-11 d-flex justify-content-end">
                                                 <div class="row">
@@ -156,9 +159,13 @@
                                                         <th>Email</th>
                                                         <th>Domain</th>
                                                         <th>Expired</th>
+                                                        <!-- ================= KOLOM BARU ================== -->
+                                                        <th>Aksi</th>
+                                                        <!-- ============================================= -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    {{-- Biarkan kosong, akan diisi oleh DataTables --}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -176,90 +183,36 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            // Bagian ini tidak ada perubahan
             $('.select2').select2()
-
             $('#order-submit').on('submit', function(e) {
-                e.preventDefault()
-                $.ajax({
-                    url: `{{ route('order.store') }}`,
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        if (data.code === 1) {
-                            Swal.fire({
-                                title: 'Berhasil!',
-                                icon: 'success',
-                                text: 'Order ditambahkan.',
-                                didClose: () => {
-                                    $('#order-submit').trigger('reset')
-                                    $('#paket').val('Pilih Paket').change()
-                                    $('#order-table').DataTable().ajax.reload()
-                                }
-                            })
-                        } else {
-                            Swal.fire({
-                                title: 'Error!',
-                                icon: 'error',
-                                didClose: () => {}
-                            })
-                        }
-                    },
-                    error: function(res) {
-                        try {
-                            const errors = JSON.parse(res.responseText).errors;
-                            for (const fieldName in errors) {
-                                const input = $(`[name="${fieldName}"]`);
-                                const errorMessage = errors[fieldName][0];
-                                input.addClass('is-invalid');
-                                input.siblings('.invalid-feedback').text(errorMessage);
-                            }
-                        } catch (e) {
-                            alert('Terjadi kesalahan: ' + res.responseText);
-                        }
-                    }
-                })
+                /* ... kode ... */
             })
-
             $('#paket').on('change', function() {
-                var harga = $('#paket option:selected').attr('data-harga');
-                $('#harga').val(harga);
-
-                var paket = $('#paket').val()
+                /* ... kode ... */
             })
-
             $('#password').on('click', function() {
-                var randomPassword = generateRandomPassword(16);
-                $('#password').val(randomPassword).prop('readonly', true);
-                $('#password_confirmation').val(randomPassword).prop('readonly', true);
+                /* ... kode ... */
             })
 
             function generateRandomPassword(length) {
-                var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-#*";
-                var password = "";
-                for (var i = 0; i < length; i++) {
-                    var randomIndex = Math.floor(Math.random() * charset.length);
-                    password += charset.charAt(randomIndex);
-                }
-                return password;
+                /* ... kode ... */
             }
+            // ------------------------------------------------------------------
 
             showOrder()
         })
 
         const showOrder = () => {
+            // === AWAL PERUBAHAN PADA KONFIGURASI DATATABLES ===
             const columns = [{
                     data: "tanggal_order"
                 },
                 {
-                    data: "user.name"
+                    data: "user.name" // Pastikan response AJAX Anda memiliki relasi user
                 },
                 {
-                    data: "user.email"
+                    data: "user.email" // Pastikan response AJAX Anda memiliki relasi user
                 },
                 {
                     data: "domain",
@@ -267,7 +220,25 @@
                 {
                     data: "expired"
                 },
+                {
+                    // Kolom baru untuk tombol Aksi
+                    data: null, // Tidak terikat pada satu kolom data
+                    orderable: false, // Tidak bisa di-sort
+                    searchable: false, // Tidak bisa di-search
+                    render: function(data, type, row) {
+                        // 'row' berisi seluruh data untuk baris saat ini
+                        // row.user.id adalah ID customer yang kita butuhkan
+
+                        // Membuat URL dengan route Blade dan mengganti placeholder
+                        let url = '{{ route('administrator.fitur.edit', ['user' => ':id']) }}';
+                        url = url.replace(':id', row.user.id);
+
+                        // Mengembalikan HTML untuk tombol
+                        return `<a href="${url}" class="btn btn-sm btn-info">Kelola Fitur</a>`;
+                    }
+                }
             ];
+            // === AKHIR PERUBAHAN PADA KONFIGURASI DATATABLES ===
 
             var table = $('#order-table').DataTable({
                 destroy: true,
@@ -278,7 +249,7 @@
                     url: "{{ route('order.get') }}",
                     // data: filterData
                 },
-                columns: columns
+                columns: columns // Menggunakan konfigurasi kolom yang sudah kita ubah
             });
         }
         OrderSelected = ''

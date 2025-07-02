@@ -41,6 +41,14 @@
                         <a href="{{ route('order.index') }}"><i class="bi bi-circle-fill me-2"
                                 style="font-size: 7px;"></i>Order</a>
                     </li>
+
+                    <li
+                        class="submenu-item {{ request()->is('administrator/fitur') || request()->is('administrator/user*') ? 'active' : '' }}">
+                        <a href="{{ route('order.index') }}">
+                            <i class="fa-solid fa-list-check me-2" style="font-size: 11px;"></i>
+                            Kelola Fitur
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endif
