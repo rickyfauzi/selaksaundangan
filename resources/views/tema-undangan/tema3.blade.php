@@ -2090,7 +2090,7 @@
             </div>
             <div class="container text-center">
                 <div class="couple-frame-container" data-aos="zoom-in" data-aos-delay="100"> {{-- Added Frame for Closing --}}
-                    <img src="{{ asset('tema2/img/bingkai.png') }}" alt="Decorative Frame"
+                    <img src="{{ asset('tema2/img/bingkai3.png') }}" alt="Decorative Frame"
                         class="rotating-frame-image" />
                     <div class="couple-circle">
                         <div class="couple-illustration">
