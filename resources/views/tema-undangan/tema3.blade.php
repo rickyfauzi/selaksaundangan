@@ -473,7 +473,7 @@
             /* left: 0; */
             width: 250px;
             height: 250px;
-            background-image: url("{{ asset('tema3/img/element3.png') }}");
+            background-image: url("{{ asset('tema3/img/left1.png') }}");
             animation: float-subtle 6s ease-in-out infinite;
         }
 
