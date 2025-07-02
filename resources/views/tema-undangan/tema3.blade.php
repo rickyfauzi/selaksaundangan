@@ -61,7 +61,6 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="/assets/vendors/jquery-toast-plugin-master/src/jquery.toast.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <style>
         html {
@@ -1605,15 +1604,13 @@
 
     <main>
         <section class="section header-section py-5" id="home">
-            <div class="header-ornament ornament-top-left animate__animated animate__fadeInLeft"
-                data-aos="fade-down-right" data-aos-delay="150"></div>
-            <div class="header-ornament ornament-bottom-right animate__animated animate__fadeInRight animate"
-                data-aos="fade-up-left" data-aos-delay="150"></div>
+            <div class="header-ornament ornament-top-left" data-aos="fade-down-right" data-aos-delay="150"></div>
+            <div class="header-ornament ornament-bottom-right" data-aos="fade-up-left" data-aos-delay="150"></div>
             <div class="container">
                 <p class="wedding-title" data-aos="fade-up" data-aos-delay="50">THE WEDDING OF</p>
                 <div class="couple-frame-container" data-aos="zoom-in" data-aos-delay="100">
-                    {{-- <img src="{{ asset('tema2/img/bingkai.png') }}" alt="Decorative Frame"
-                        class="rotating-frame-image" /> --}}
+                    <img src="{{ asset('tema2/img/bingkai3.png') }}" alt="Decorative Frame"
+                        class="rotating-frame-image" />
                     <div class="couple-circle">
                         <div class="couple-illustration">
                             <img src="{{ $informasiacara && $informasiacara->pembuka ? asset('images/pembuka/' . $informasiacara->pembuka) : asset('images/default/default_couple_photo.jpg') }}"
