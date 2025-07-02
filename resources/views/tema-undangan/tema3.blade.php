@@ -1609,7 +1609,7 @@
             <div class="container">
                 <p class="wedding-title" data-aos="fade-up" data-aos-delay="50">THE WEDDING OF</p>
                 <div class="couple-frame-container" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="{{ asset('tema2/img/bingkai3.png') }}" alt="Decorative Frame"
+                    <img src="{{ asset('tema3/img/bingkai3.png') }}" alt="Decorative Frame"
                         class="rotating-frame-image" />
                     <div class="couple-circle">
                         <div class="couple-illustration">
@@ -2090,7 +2090,7 @@
             </div>
             <div class="container text-center">
                 <div class="couple-frame-container" data-aos="zoom-in" data-aos-delay="100"> {{-- Added Frame for Closing --}}
-                    <img src="{{ asset('tema2/img/bingkai3.png') }}" alt="Decorative Frame"
+                    <img src="{{ asset('tema3/img/bingkai3.png') }}" alt="Decorative Frame"
                         class="rotating-frame-image" />
                     <div class="couple-circle">
                         <div class="couple-illustration">
