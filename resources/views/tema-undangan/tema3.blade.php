@@ -419,7 +419,7 @@
             color: var(--accent-color-1);
             position: relative;
             z-index: 1;
-            background-image: url("{{ asset('tema3/img/bgnew.png') }}");
+            /* background-image: url("{{ asset('tema3/img/bgnew.png') }}"); */
             background-size: cover;
             padding-top: 80px;
             padding-bottom: 40px;
@@ -469,7 +469,7 @@
         }
 
         .ornament-top-left {
-            top: 0;
+            top: -3;
             /* left: 0; */
             width: 500px;
             height: 500px;
