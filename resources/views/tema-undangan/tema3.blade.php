@@ -439,7 +439,7 @@
             }
 
             50% {
-                transform: translateY(-6px)
+                transform: translateY(-2px)
             }
         }
 
@@ -469,7 +469,7 @@
         }
 
         .ornament-top-left {
-            top: -3;
+            top: 0;
             /* left: 0; */
             width: 500px;
             height: 500px;
